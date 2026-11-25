@@ -8,7 +8,8 @@
 # and that the 4 pages have the page banner with its picture, and that
 # llms.txt and robots.txt are built and allow indexing, and that a
 # production build (JEKYLL_ENV=production, into _site_prod) keeps their lines
-# and has the Google Analytics tag on every page, while the dev build has none.
+# and has the Google Analytics tag on every page, while the dev build has none,
+# and that the footer is only "© <year> George Kour. All Rights Reserved.".
 # It also builds the github.io preview (_config.preview.yml) into _site_preview
 # and checks that its local links all start with /website/ and work.
 # Needs Homebrew Ruby (see the PATH below) and the gems from the Gemfile.
@@ -235,6 +236,23 @@ else
   echo "$ws_text" | grep -Eq '(\+972|\b0[2-9])[- ]?[0-9]{1,2}[- ]?[0-9]{3}[- ]?[0-9]{4}|[0-9]{9,}' &&
     err "teaching/index.html: workshop section has a phone/ID-number-like string"
 fi
+
+# 17. Footer (from _includes/footer.liquid, a copy of al-folio's): on the 4
+# pages it reads "© <year> George Kour. All Rights Reserved." and has no
+# theme or hosting credit.
+YEAR="$(date +%Y)"
+for f in $PAGES; do
+  footer="$(flat "$f" | grep -o '<footer[ >].*</footer>' | sed 's:</footer>.*::')"
+  [ -n "$footer" ] || { err "$f: no <footer>"; continue; }
+  ftext="$(echo "$footer" | sed 's/<[^>]*>/ /g' | tr -s ' ')"
+  echo "$ftext" | grep -Fq "George Kour. All Rights Reserved." ||
+    err "$f: footer has no 'George Kour. All Rights Reserved.' (got: $ftext)"
+  echo "$ftext" | grep -Eq "(&copy;|©) $YEAR George Kour\. All Rights Reserved\." ||
+    err "$f: footer is not '© $YEAR George Kour. All Rights Reserved.' (got: $ftext)"
+  for bad in "Powered by" "al-folio" "Hosted by"; do
+    echo "$footer" | grep -Fq "$bad" && err "$f: footer still has '$bad'"
+  done
+done
 
 # 14. llms.txt (from llms.txt at the repo root, https://llmstxt.org) for AI
 # search tools: it starts with "# George Kour", links to the 4 pages with
