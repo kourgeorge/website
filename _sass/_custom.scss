@@ -37,3 +37,61 @@
     }
   }
 }
+
+// Selected publications on Home (the about page): a compact list.
+// The wrapper class "selected-papers" comes from _includes/selected_papers.liquid;
+// the full Publications page uses plain ".publications" and is not changed.
+// Theme defaults -> here: text 1rem (16px), line-height 1.5 -> 0.875rem, 1.3;
+// space between items 1rem -> 0.4rem; badge 0.75em + 0.5rem below it -> 0.7rem, none.
+// On Home the button row (ABS / ARXIV / PDF / BIB / HTML ...), the hidden
+// abstract/BibTeX blocks, badges and preview images are hidden.
+.publications.selected-papers {
+  margin-top: 0.75rem;
+
+  ol.bibliography li {
+    margin-bottom: 0.4rem;
+    font-size: 0.875rem;
+    line-height: 1.3;
+
+    .row {
+      align-items: baseline;
+    }
+
+    .abbr {
+      flex: 0 0 auto;
+      max-width: none;
+      width: 5.5rem;
+      margin-bottom: 0;
+
+      abbr {
+        font-size: 0.7rem;
+        padding: 0.15rem 0.3rem;
+        margin-bottom: 0;
+      }
+    }
+
+    .title {
+      font-size: 0.875rem;
+    }
+
+    .author,
+    .periodical {
+      font-size: 0.8rem;
+    }
+
+    // Let the text use the room the narrower badge column leaves.
+    .col-sm-8 {
+      flex: 1 1 0;
+      max-width: none;
+    }
+
+    .links,
+    .badges,
+    .hidden,
+    .preview,
+    img,
+    video {
+      display: none;
+    }
+  }
+}

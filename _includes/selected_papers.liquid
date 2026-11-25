@@ -1,0 +1,6 @@
+<!-- Local copy of al-folio's selected_papers.liquid (used only by the Home/about
+     page). The extra "selected-papers" class lets _sass/_custom.scss make this
+     list compact without changing the full Publications page. -->
+<div class="publications selected-papers">
+  {% bibliography --group_by none --query @*[selected=true]* %}
+</div>

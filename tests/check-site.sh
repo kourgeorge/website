@@ -134,7 +134,26 @@ else
   elif ! echo "$icon_rules" | grep -Eq '(^|[{;])[[:space:]]*font-size:[[:space:]]*1\.75rem[[:space:]]*(;|})'; then
     err "main.css: '.social .contact-icons' rule has no font-size:1.75rem (got: $icon_rules)"
   fi
+  # 10b. Compact selected publications on Home: the built CSS has a
+  # ".publications.selected-papers ol.bibliography li" rule with font-size
+  # .875rem, and hides the button row there.
+  sel_css="$(tr '\n\r' '  ' <"$CSS")"
+  sel_rule="$(echo "$sel_css" | grep -o '\.publications\.selected-papers ol\.bibliography li *{[^}]*}')"
+  if [ -z "$sel_rule" ]; then
+    err "main.css: no '.publications.selected-papers ol.bibliography li' rule"
+  elif ! echo "$sel_rule" | grep -Eq '(^|[{;])[[:space:]]*font-size:[[:space:]]*0?\.875rem[[:space:]]*(;|})'; then
+    err "main.css: selected-papers item rule has no font-size .875rem (got: $sel_rule)"
+  fi
+  echo "$sel_css" | grep -Eq '\.publications\.selected-papers ol\.bibliography li \.links[^{]*\{[^}]*display:[[:space:]]*none' ||
+    err "main.css: the button row (.links) is not hidden in the Home selected publications"
 fi
+# The Home list uses the compact wrapper and still lists at least 1 paper;
+# the Publications page does not use it.
+n_sel_c="$(echo "$home_html" | grep -o '<div class="publications selected-papers">.*' |
+  grep -o '<div class="row">' | wc -l | tr -d ' ')"
+[ "$n_sel_c" -ge 1 ] || err "home/index.html: no papers inside <div class=\"publications selected-papers\">"
+grep -q 'selected-papers' "$SITE/publications/index.html" &&
+  err "publications/index.html: uses the Home-only 'selected-papers' class"
 
 # 11. Preview build for https://kourgeorge.github.io/website/ (what the Deploy
 # action builds when the repo variable SITE_PREVIEW is 'true'). Built into
