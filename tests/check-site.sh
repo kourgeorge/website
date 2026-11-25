@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# Checks the static site: page files, titles, local links, stylesheet, nav order
-# and the root redirect. Needs only standard macOS/Linux tools.
+# Checks the static site: page files, titles, local links, stylesheet, nav order,
+# the root redirect, the 404 page and the GitHub Pages files (CNAME, .nojekyll). Needs only standard macOS/Linux tools.
 # Usage: bash tests/check-site.sh   (from anywhere)
 
 set -u
@@ -15,7 +15,8 @@ err() {
 }
 
 PAGES="home/index.html publications/index.html teaching/index.html links-resources/index.html"
-ALL_HTML="index.html $PAGES"
+NAV_PAGES="$PAGES 404.html"
+ALL_HTML="index.html $NAV_PAGES"
 EXPECTED_NAV="/home/|Home;/publications/|Publications;/teaching/|Teaching;/links-resources/|Links &amp; Resources;"
 
 # 1. Files exist.
@@ -89,7 +90,7 @@ $css_refs
 EOF
 
 # 5. Nav on every page lists the 4 pages in order.
-for f in $PAGES; do
+for f in $NAV_PAGES; do
   nav="$(tr '\n\r' '  ' < "$f" | grep -Eo '<nav[^>]*>.*</nav>' | head -n 1)"
   if [ -z "$nav" ]; then
     err "$f has no <nav>"
@@ -114,6 +115,19 @@ printf '%s' "$root_flat" | grep -Eq '<a href="/home/"' \
   || err "index.html has no plain link to /home/"
 printf '%s' "$root_flat" | grep -Eq '<link rel="canonical" href="https://www\.kour\.me/home">' \
   || err "index.html has no canonical link to https://www.kour.me/home"
+
+# 7. GitHub Pages files.
+if [ -f CNAME ]; then
+  cname="$(tr -d ' \t\r\n' < CNAME)"
+  [ "$cname" = "www.kour.me" ] || err "CNAME should contain www.kour.me, but contains '$cname'"
+else
+  err "missing CNAME file"
+fi
+[ -f .nojekyll ] || err "missing .nojekyll file"
+
+# 8. 404.html links back to the Home page (root-relative, so it works at any address).
+tr '\n\r' '  ' < 404.html | grep -Eq '<main[^>]*>.*<a href="/home/"' \
+  || err "404.html has no link to /home/ in its main content"
 
 if [ "$fail" -ne 0 ]; then
   echo "check-site: FAILED" >&2
