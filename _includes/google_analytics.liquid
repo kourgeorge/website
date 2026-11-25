@@ -1,0 +1,20 @@
+{%- comment -%}
+  Google Analytics 4 (gtag.js), local addition. The measurement ID comes from
+  analytics.google in _config.yml. Only added to production builds
+  (JEKYLL_ENV=production, as the Deploy action does), so local dev builds do
+  not send visits. The page's Content-Security-Policy (from the theme's
+  head.liquid) already allows it: script-src 'unsafe-inline' https:,
+  img-src https: and connect-src https:.
+{%- endcomment -%}
+{%- if jekyll.environment == 'production' and site.analytics.google -%}
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id={{ site.analytics.google }}"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag('js', new Date());
+    gtag('config', '{{ site.analytics.google }}');
+  </script>
+{%- endif -%}

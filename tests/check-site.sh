@@ -7,7 +7,8 @@
 # that the built CSS keeps the small Home social icons (font-size 1.75rem),
 # and that the 4 pages have the page banner with its picture, and that
 # llms.txt and robots.txt are built and allow indexing, and that a
-# production build (JEKYLL_ENV=production, into _site_prod) keeps their lines.
+# production build (JEKYLL_ENV=production, into _site_prod) keeps their lines
+# and has the Google Analytics tag on every page, while the dev build has none.
 # It also builds the github.io preview (_config.preview.yml) into _site_preview
 # and checks that its local links all start with /website/ and work.
 # Needs Homebrew Ruby (see the PATH below) and the gems from the Gemfile.
@@ -307,6 +308,7 @@ fi
 # turns on jekyll-minifier) into _site_prod: the .txt files keep their line
 # breaks (they are in jekyll-minifier's exclude list in _config.yml).
 PROD="$ROOT/_site_prod"
+GA_ID="G-4Q9QNQR0H2"
 rm -rf "$PROD"
 if ! JEKYLL_ENV=production bundle exec jekyll build --quiet --destination "$PROD" \
   >/tmp/check-site-prod-build.log 2>&1; then
@@ -330,7 +332,22 @@ else
     grep -qx 'User-agent: \*' "$PROBOTS" || err "_site_prod/robots.txt: no 'User-agent: *' line of its own"
     grep -Eq '^Disallow:[[:space:]]*$' "$PROBOTS" || err "_site_prod/robots.txt: no 'Disallow:' line of its own"
   fi
+  # 16. Google Analytics (GA4, from analytics.google in _config.yml via
+  # _includes/google_analytics.liquid): the 4 pages and 404.html of the
+  # production build load gtag.js and call gtag('config', ...) with the ID.
+  for f in $PAGES 404.html; do
+    [ -f "$PROD/$f" ] || { err "missing page in _site_prod: $f"; continue; }
+    grep -q "googletagmanager.com/gtag/js?id=$GA_ID" "$PROD/$f" ||
+      err "_site_prod/$f: no googletagmanager.com/gtag/js?id=$GA_ID script"
+    grep -Eq "gtag\\(['\"]config['\"], *['\"]$GA_ID['\"]\\)" "$PROD/$f" ||
+      err "_site_prod/$f: no gtag('config', '$GA_ID') call"
+  done
 fi
+
+# 16b. The normal (dev) build has no Google Analytics, so local visits are
+# not counted.
+GA_DEV="$(grep -rl "$GA_ID" "$SITE" --include='*.html' 2>/dev/null | head -n 3)"
+[ -z "$GA_DEV" ] || err "dev build _site has the analytics ID $GA_ID in: $GA_DEV"
 
 if [ "$fail" -ne 0 ]; then
   echo "check-site: FAILED" >&2
