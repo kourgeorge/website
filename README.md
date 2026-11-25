@@ -65,6 +65,11 @@ The site rebuilds when you save a file. (Changes to `_config.yml` need a restart
 - **Papers:** add entries to `_bibliography/papers.bib`.
 - **Name and social links:** `_config.yml` for the name, and `_data/socials.yml` for the links.
 - **Photo:** put the new picture in `assets/img/`.
+- **Styles (CSS):** put your own style rules in `_sass/_custom.scss` (for example,
+  the size of the social icons on Home). `assets/css/main.scss` is a copy of the
+  theme's file (from the `al_folio_core` gem, version 1.0.15) with one line added
+  at the end: `@use "custom";`. After you upgrade the theme gem, copy the new
+  theme `main.scss` over it again and keep that `@use "custom";` line at the end.
 
 Preview it, then run the check:
 

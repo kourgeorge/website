@@ -3,7 +3,8 @@
 # the 4 page addresses, the root redirect to /home/, page titles, the nav
 # (Home, Publications, Teaching, Links & Resources, in that order), the CNAME,
 # the 404 page, that every local href/src points to a file in _site, and
-# that the publication list (from _bibliography/papers.bib) is shown.
+# that the publication list (from _bibliography/papers.bib) is shown, and
+# that the built CSS keeps the small Home social icons (font-size 1.75rem).
 # Needs Homebrew Ruby (see the PATH below) and the gems from the Gemfile.
 # Usage: bash tests/check-site.sh   (from anywhere)
 
@@ -117,6 +118,21 @@ home_html="$(flat home/index.html)"
 echo "$home_html" | grep -qi 'selected publications' || err "home/index.html: no \"selected publications\" heading"
 n_sel="$(echo "$home_html" | grep -o '<div class="row">' | wc -l | tr -d ' ')"
 [ "$n_sel" -ge 1 ] || err "home/index.html: no selected publications listed"
+
+# 10. The small social icons on Home (from _sass/_custom.scss, loaded by
+# assets/css/main.scss): the built CSS has a ".social .contact-icons" rule
+# with font-size 1.75rem.
+CSS="$SITE/assets/css/main.css"
+if [ ! -s "$CSS" ]; then
+  err "missing or empty _site/assets/css/main.css"
+else
+  icon_rules="$(tr '\n\r' '  ' <"$CSS" | grep -o '\.social \.contact-icons *{[^}]*}')"
+  if [ -z "$icon_rules" ]; then
+    err "main.css: no '.social .contact-icons' rule (is '@use \"custom\";' still in assets/css/main.scss?)"
+  elif ! echo "$icon_rules" | grep -Eq '(^|[{;])[[:space:]]*font-size:[[:space:]]*1\.75rem[[:space:]]*(;|})'; then
+    err "main.css: '.social .contact-icons' rule has no font-size:1.75rem (got: $icon_rules)"
+  fi
+fi
 
 if [ "$fail" -ne 0 ]; then
   echo "check-site: FAILED" >&2
