@@ -1,1 +1,34 @@
-# George Kour > Research Scientist at IBM Research working on evaluation, safety and security of large language models (LLMs) and AI agents; teaches machine learning and an autonomous agents workshop at the Academic College of Tel Aviv-Yaffo. George Kour is a senior researcher in the Language and Conversation Group at IBM Research. His work examines how AI systems make decisions, express preferences, and behave in complex or adversarial settings, with an emphasis on methods for assessing reliability, alignment, and risk. He also teaches in the Computer Science faculty at the Academic College of Tel Aviv-Yaffo. He holds a bachelor's degree in computer engineering from the Technion, a master's from Tel Aviv University, and a Ph.D. in computational neuroscience from Haifa University. Research interests: natural language processing, large language models, generative models, AI safety, computational neuroscience, cognitive modeling and reinforcement learning. ## Pages - [Home](https://www.kour.me/home/): About George Kour, research interests, online profiles and selected publications - [Publications](https://www.kour.me/publications/): Full list of papers and patents - [Teaching](https://www.kour.me/teaching/): Courses taught, including the Workshop in Learning Systems and Autonomous Agents and its student projects - [Links & Resources](https://www.kour.me/links-resources/): Projects, data sets, talks and presentations ## Profiles - [Google Scholar](https://scholar.google.com/citations?hl=en&user=Yx8ov1wAAAAJ): Papers and citations - [dblp](https://dblp.uni-trier.de/pers/hd/k/Kour:George): Computer science bibliography - [GitHub](https://github.com/kourgeorge): Code and projects - [LinkedIn](https://www.linkedin.com/in/georgekour/): Professional profile - [ResearchGate](https://www.researchgate.net/profile/George_Kour): Research profile - [IBM Research](http://researcher.watson.ibm.com/researcher/view.php?person=ibm-GKOUR): Researcher page at IBM Research ## Selected publications - [Think Again! The Effect of Test-Time Compute on Preferences, Opinions, and Beliefs of Large Language Models](https://doi.org/10.18653/v1/2025.acl-industry.45): ACL 2025 (Industry Track); arXiv: https://arxiv.org/abs/2505.19621 - [Effective Red-Teaming of Policy-Adherent Agents](https://doi.org/10.18653/v1/2025.emnlp-main.114): EMNLP 2025; arXiv: https://arxiv.org/abs/2506.09600 - [Exploring Straightforward Methods for Automatic Conversational Red-Teaming](https://doi.org/10.18653/v1/2025.naacl-industry.10): NAACL 2025 (Industry Track); arXiv: https://arxiv.org/abs/2409.04822 - [Breaking ReAct Agents: Foot-in-the-Door Attack Will Get You In](https://doi.org/10.18653/v1/2025.findings-naacl.363): Findings of NAACL 2025; arXiv: https://arxiv.org/abs/2410.16950 - [Unveiling Safety Vulnerabilities of Large Language Models](https://doi.org/10.48550/arXiv.2311.04124): arXiv preprint, 2023 - [Do Not Have Enough Data? Deep Learning to the Rescue!](https://doi.org/10.1609/aaai.v34i05.6233): AAAI 2020; arXiv: https://arxiv.org/abs/1911.03118 ## Optional - [Sitemap](https://www.kour.me/sitemap.xml): All pages of the site
+# George Kour
+
+> Research Scientist at IBM Research working on evaluation, safety and security of large language models (LLMs) and AI agents; teaches machine learning and an autonomous agents workshop at the Academic College of Tel Aviv-Yaffo.
+
+George Kour is a senior researcher in the Language and Conversation Group at IBM Research. His work examines how AI systems make decisions, express preferences, and behave in complex or adversarial settings, with an emphasis on methods for assessing reliability, alignment, and risk. He also teaches in the Computer Science faculty at the Academic College of Tel Aviv-Yaffo. He holds a bachelor's degree in computer engineering from the Technion, a master's from Tel Aviv University, and a Ph.D. in computational neuroscience from Haifa University. Research interests: natural language processing, large language models, generative models, AI safety, computational neuroscience, cognitive modeling and reinforcement learning.
+
+## Pages
+
+- [Home](https://www.kour.me/home/): About George Kour, research interests, online profiles and selected publications
+- [Publications](https://www.kour.me/publications/): Full list of papers and patents
+- [Teaching](https://www.kour.me/teaching/): Courses taught, including the Workshop in Learning Systems and Autonomous Agents and its student projects
+- [Links & Resources](https://www.kour.me/links-resources/): Projects, data sets, talks and presentations
+
+## Profiles
+
+- [Google Scholar](https://scholar.google.com/citations?hl=en&user=Yx8ov1wAAAAJ): Papers and citations
+- [dblp](https://dblp.uni-trier.de/pers/hd/k/Kour:George): Computer science bibliography
+- [GitHub](https://github.com/kourgeorge): Code and projects
+- [LinkedIn](https://www.linkedin.com/in/georgekour/): Professional profile
+- [ResearchGate](https://www.researchgate.net/profile/George_Kour): Research profile
+- [IBM Research](http://researcher.watson.ibm.com/researcher/view.php?person=ibm-GKOUR): Researcher page at IBM Research
+
+## Selected publications
+
+- [Think Again! The Effect of Test-Time Compute on Preferences, Opinions, and Beliefs of Large Language Models](https://doi.org/10.18653/v1/2025.acl-industry.45): ACL 2025 (Industry Track); arXiv: https://arxiv.org/abs/2505.19621
+- [Effective Red-Teaming of Policy-Adherent Agents](https://doi.org/10.18653/v1/2025.emnlp-main.114): EMNLP 2025; arXiv: https://arxiv.org/abs/2506.09600
+- [Exploring Straightforward Methods for Automatic Conversational Red-Teaming](https://doi.org/10.18653/v1/2025.naacl-industry.10): NAACL 2025 (Industry Track); arXiv: https://arxiv.org/abs/2409.04822
+- [Breaking ReAct Agents: Foot-in-the-Door Attack Will Get You In](https://doi.org/10.18653/v1/2025.findings-naacl.363): Findings of NAACL 2025; arXiv: https://arxiv.org/abs/2410.16950
+- [Unveiling Safety Vulnerabilities of Large Language Models](https://doi.org/10.48550/arXiv.2311.04124): arXiv preprint, 2023
+- [Do Not Have Enough Data? Deep Learning to the Rescue!](https://doi.org/10.1609/aaai.v34i05.6233): AAAI 2020; arXiv: https://arxiv.org/abs/1911.03118
+
+## Optional
+
+- [Sitemap](https://www.kour.me/sitemap.xml): All pages of the site
