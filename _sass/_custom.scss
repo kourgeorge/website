@@ -95,3 +95,117 @@
     }
   }
 }
+
+// Page banners, like the old Google Sites site (markup in
+// _includes/page_banner.liquid). Full width, right under the nav bar, with the
+// chalk-brain picture (assets/img/home-header-background.png, set inline so the
+// path follows baseurl) as a cover background and a dark layer on top so the
+// white text stays readable. The banner is dark in both light and dark mode.
+.page-banner {
+  position: relative;
+  overflow: hidden;
+  color: #fff;
+  background-color: #1b1f24;
+  background-position: center left;
+  background-size: cover;
+  background-repeat: no-repeat;
+  border-bottom: 1px solid var(--global-divider-color);
+
+  // The dark layer over the picture.
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.6));
+  }
+
+  .page-banner-inner {
+    position: relative; // above the dark layer
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    padding-top: 2.25rem;
+    padding-bottom: 2.25rem;
+  }
+
+  .page-banner-title {
+    margin: 0;
+    color: #fff;
+    font-weight: 600;
+    line-height: 1.15;
+    overflow-wrap: break-word;
+    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.6);
+  }
+
+  .page-banner-subtitle {
+    margin: 0.5rem 0 0;
+    color: #f0f3f6;
+    font-size: 1.2rem;
+    text-shadow: 0 1px 8px rgba(0, 0, 0, 0.6);
+  }
+}
+
+// Home: taller banner, round photo on the left, name in large text.
+.page-banner-home {
+  .page-banner-inner {
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+  }
+
+  .page-banner-photo {
+    flex: none;
+    width: 11rem;
+    height: 11rem;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: center 20%;
+    border: 4px solid #fff;
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.45);
+  }
+
+  .page-banner-title {
+    font-size: clamp(2.2rem, 7vw, 3.2rem);
+  }
+}
+
+// Publications, Teaching, Links & Resources: a shorter banner with the title.
+.page-banner-section {
+  .page-banner-inner {
+    min-height: 9rem;
+  }
+
+  .page-banner-title {
+    font-size: clamp(1.9rem, 6vw, 2.6rem);
+  }
+}
+
+// Less space between the banner and the page text than the theme's mt-5.
+.page-banner + .container.mt-5 {
+  margin-top: 2rem !important;
+}
+
+// Phones: on Home, the photo goes above the name, everything centred.
+@media (max-width: 576px) {
+  .page-banner-home .page-banner-inner {
+    flex-direction: column;
+    text-align: center;
+    gap: 1.25rem;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+  }
+
+  .page-banner-home .page-banner-photo {
+    width: 9rem;
+    height: 9rem;
+  }
+
+  .page-banner-section .page-banner-inner {
+    min-height: 7rem;
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+  }
+
+  .page-banner .page-banner-subtitle {
+    font-size: 1.05rem;
+  }
+}

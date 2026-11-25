@@ -1,0 +1,39 @@
+{%- comment -%}
+  Full-width banner at the top of a page, like the old Google Sites site.
+  Called from _layouts/default.liquid, right under the nav bar.
+  - Home (layout "about"): the chalk-brain picture, the round profile photo,
+    the name in large white text and page.subtitle under it.
+  - Other "page" layout pages (except the 404 page): a shorter banner with
+    the page title in white over the same picture.
+  The picture path goes through relative_url, so the github.io preview
+  build (baseurl /website) finds it too.
+{%- endcomment -%}
+{%- assign banner_img = 'assets/img/home-header-background.png' | relative_url -%}
+{%- if page.layout == 'about' -%}
+  <div class="page-banner page-banner-home" style="background-image: url('{{ banner_img }}');">
+    <div class="container page-banner-inner">
+      {% if page.profile and page.profile.image %}
+        <img
+          class="page-banner-photo"
+          src="{{ page.profile.image | prepend: 'assets/img/' | relative_url }}"
+          alt="Photo of {{ site.first_name }} {{ site.last_name }}"
+          width="721"
+          height="745"
+          loading="eager"
+        >
+      {% endif %}
+      <div class="page-banner-text">
+        <h1 class="page-banner-title">
+          {% if site.title == 'blank' %}{{ site.first_name }} {{ site.last_name }}{% else %}{{ site.title }}{% endif %}
+        </h1>
+        {% if page.subtitle %}<p class="page-banner-subtitle">{{ page.subtitle }}</p>{% endif %}
+      </div>
+    </div>
+  </div>
+{%- elsif page.layout == 'page' and page.permalink != '/404.html' -%}
+  <div class="page-banner page-banner-section" style="background-image: url('{{ banner_img }}');">
+    <div class="container page-banner-inner">
+      <h1 class="page-banner-title">{{ page.title }}</h1>
+    </div>
+  </div>
+{%- endif -%}

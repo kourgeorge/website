@@ -4,7 +4,8 @@
 # (Home, Publications, Teaching, Links & Resources, in that order), the CNAME,
 # the 404 page, that every local href/src points to a file in _site, and
 # that the publication list (from _bibliography/papers.bib) is shown, and
-# that the built CSS keeps the small Home social icons (font-size 1.75rem).
+# that the built CSS keeps the small Home social icons (font-size 1.75rem),
+# and that the 4 pages have the page banner with its picture.
 # It also builds the github.io preview (_config.preview.yml) into _site_preview
 # and checks that its local links all start with /website/ and work.
 # Needs Homebrew Ruby (see the PATH below) and the gems from the Gemfile.
@@ -155,6 +156,29 @@ n_sel_c="$(echo "$home_html" | grep -o '<div class="publications selected-papers
 grep -q 'selected-papers' "$SITE/publications/index.html" &&
   err "publications/index.html: uses the Home-only 'selected-papers' class"
 
+# 12. Page banners (from _includes/page_banner.liquid): each of the 4 pages
+# has a <div class="page-banner ..."> with the chalk-brain picture as its
+# background, Home shows the name, subtitle and photo, the other pages show
+# their title, and the picture file is in _site.
+BANNER_IMG="assets/img/home-header-background.png"
+for f in $PAGES; do
+  flat "$f" | grep -Eq "<div class=\"page-banner [^\"]*\" style=\"background-image: url\('/$BANNER_IMG'\);\"" ||
+    err "$f: no page banner with background /$BANNER_IMG"
+done
+echo "$home_html" | grep -o '<div class="page-banner page-banner-home".*' | grep -Eq '<h1 class="page-banner-title">[[:space:]]*George Kour[[:space:]]*</h1>' ||
+  err "home/index.html: banner has no 'George Kour' title"
+echo "$home_html" | grep -q '<p class="page-banner-subtitle">Research Scientist, IBM Research Labs</p>' ||
+  err "home/index.html: banner has no 'Research Scientist, IBM Research Labs' line"
+echo "$home_html" | grep -Eq '<img[^>]*class="page-banner-photo"[^>]*src="/assets/img/prof_pic.png"' ||
+  err "home/index.html: banner has no profile photo"
+for pair in "publications/index.html|Publications" "teaching/index.html|Teaching" "links-resources/index.html|Links &amp; Resources"; do
+  f="${pair%%|*}"
+  t="${pair#*|}"
+  flat "$f" | grep -q "<h1 class=\"page-banner-title\">$t</h1>" || err "$f: banner has no title '$t'"
+done
+[ -s "$SITE/$BANNER_IMG" ] || err "missing _site/$BANNER_IMG"
+grep -q '\.page-banner' "$CSS" 2>/dev/null || err "main.css: no .page-banner rules"
+
 # 11. Preview build for https://kourgeorge.github.io/website/ (what the Deploy
 # action builds when the repo variable SITE_PREVIEW is 'true'). Built into
 # _site_preview. The 4 pages exist, and every local href/src that starts
@@ -186,6 +210,13 @@ else
   done
   grep -Eqi 'url=/website/home/"' "$PREVIEW/index.html" ||
     err "_site_preview/index.html: no meta refresh to /website/home/"
+  # 12b. The banner picture is in the preview build, and the banners point
+  # to it under /website/.
+  [ -s "$PREVIEW/$BANNER_IMG" ] || err "missing _site_preview/$BANNER_IMG"
+  for f in $PAGES; do
+    grep -q "url('/website/$BANNER_IMG')" "$PREVIEW/$f" 2>/dev/null ||
+      err "_site_preview/$f: banner background is not /website/$BANNER_IMG"
+  done
 fi
 
 if [ "$fail" -ne 0 ]; then

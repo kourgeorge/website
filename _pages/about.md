@@ -9,7 +9,7 @@ subtitle: Research Scientist, IBM Research Labs
 profile:
   align: right
   image: prof_pic.png
-  image_circular: false # crops the image to make it circular
+  image_circular: true # shown as a round photo in the Home banner
 
 selected_papers: true # a list of papers marked as "selected={true}" in _bibliography/papers.bib
 social: true # includes social icons at the bottom of the page
