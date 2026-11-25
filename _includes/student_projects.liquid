@@ -1,0 +1,29 @@
+{%- comment -%}
+  Supervised student projects (data: _data/student_projects.yml), grouped by
+  year, newest first. Used by _pages/teaching.md. Styles: _sass/_custom.scss
+  (.student-projects). markdown="0" keeps kramdown from changing the HTML.
+{%- endcomment -%}
+{%- assign sp_years = site.data.student_projects | group_by: "year" | sort: "name" | reverse -%}
+<section class="student-projects" markdown="0">
+{%- for group in sp_years %}
+<h4 class="sp-year">{{ group.name }}</h4>
+<ul class="sp-list">
+{%- for p in group.items %}
+<li class="sp-item">
+<div class="sp-title"><strong>{{ p.title }}</strong></div>
+{%- if p.students %}
+<div class="sp-students">{{ p.students | join: ", " }}</div>
+{%- endif %}
+<div class="sp-summary">{{ p.summary }}</div>
+<div class="sp-meta">
+{%- for t in p.tags %}<span class="sp-tag">{{ t }}</span>{% endfor -%}
+{%- if p.links.page %}<a class="sp-link" href="{{ p.links.page }}" target="_blank" rel="noopener noreferrer">[project page]</a>{% endif -%}
+{%- if p.links.github %}<a class="sp-link" href="{{ p.links.github }}" target="_blank" rel="noopener noreferrer">[code]</a>{% endif -%}
+{%- if p.links.demo %}<a class="sp-link" href="{{ p.links.demo }}" target="_blank" rel="noopener noreferrer">[demo]</a>{% endif -%}
+{%- if p.links.pypi %}<a class="sp-link" href="{{ p.links.pypi }}" target="_blank" rel="noopener noreferrer">[PyPI]</a>{% endif -%}
+</div>
+</li>
+{%- endfor %}
+</ul>
+{%- endfor %}
+</section>

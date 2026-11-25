@@ -1,0 +1,63 @@
+# Student projects supervised by George Kour, shown on the Teaching page
+# (_pages/teaching.md, drawn by _includes/student_projects.liquid, grouped by
+# year, newest first). Facts come from the MTA projects site and the projects'
+# GitHub pages. Never add students' phone numbers, emails or ID numbers.
+# To add a new year, just add more entries with that year.
+#
+# Fields: year, workshop, title, students (list), summary, tags (list),
+# links (page = MTA project page, github = code, demo = demo or registry,
+# pypi = Python package page). Leave out any link that does not exist.
+
+- year: 2026
+  workshop: "Workshop in Learning Systems and Autonomous Agents, MTA (course 150070)"
+  title: "AI Fitness Coach"
+  students: ["Alex Morozov", "Yarden Zur"]
+  summary: >-
+    A web app that watches your workout through the webcam, counts reps and
+    corrects your form in real time. An AI agent that knows your training
+    history builds your plan and adjusts it after each session.
+  tags: ["Computer vision", "AI agents", "Pose tracking"]
+  links:
+    page: "https://www.projects.mta.ac.il/projects/ai-fitness-coach"
+    github: "https://github.com/AlexMorozov324/Ai-Fitness-Coach"
+
+- year: 2026
+  workshop: "Workshop in Learning Systems and Autonomous Agents, MTA (course 150070)"
+  title: "Aptitude"
+  students: ["Ela Shaul", "Yonatan Csasznik", "Aviel Adika"]
+  summary: >-
+    A package manager for AI agent skills: small, versioned skills that can be
+    combined into bigger ones. Every skill passes a security and quality
+    check, and users can lock a version so its behavior does not change.
+  tags: ["AI agents", "Package registry", "Semantic search", "MCP"]
+  links:
+    page: "https://www.projects.mta.ac.il/projects/aptitude"
+    github: "https://github.com/aptitude-stack"
+    demo: "https://aptitude-registry.dev/"
+    pypi: "https://pypi.org/org/Aptitude/"
+
+- year: 2026
+  workshop: "Workshop in Learning Systems and Autonomous Agents, MTA (course 150070)"
+  title: "Code Bulls"
+  students: ["Noam Fishbain", "Omer Chomsky"]
+  summary: >-
+    A platform for building automatic stock-trading strategies and testing
+    them on past market data. Its parts (stock picking, timing, risk) are
+    separate, so each can be studied alone or mixed together.
+  tags: ["Backtesting", "AI agents", "Data science"]
+  links:
+    page: "https://www.projects.mta.ac.il/projects/code-bulls"
+    github: "https://github.com/HomieskiO/code-bulls"
+
+- year: 2026
+  workshop: "Workshop in Learning Systems and Autonomous Agents, MTA (course 150070)"
+  title: "LARA: Long-horizon Autonomous Reasoning Agent"
+  students: ["Lior Rusanovsky", "Gilad Poliker", "Omer Zilberberg"]
+  summary: >-
+    A team of AI agents that carries out long, multi-step tasks across many
+    apps: one agent plans, and one agent per app writes and runs code, then
+    checks the result. Top-3 on the AppWorld leaderboard (Nov 2026).
+  tags: ["Multi-agent", "LLM agents", "Code generation", "AppWorld"]
+  links:
+    page: "https://www.projects.mta.ac.il/projects/lara%3A-long-horizon-autonomous-reasoning-agent"
+    github: "https://github.com/Omer212111/LARA"

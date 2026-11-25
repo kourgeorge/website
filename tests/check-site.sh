@@ -179,6 +179,30 @@ done
 [ -s "$SITE/$BANNER_IMG" ] || err "missing _site/$BANNER_IMG"
 grep -q '\.page-banner' "$CSS" 2>/dev/null || err "main.css: no .page-banner rules"
 
+# 13. Supervised student projects on Teaching (from _data/student_projects.yml
+# via _includes/student_projects.liquid): the heading id="student-projects"
+# comes after the last course heading, the section lists 4 projects under a
+# year, and it shows no email addresses or phone-number-like strings.
+# (The 4 old course anchor ids are checked in step 6.)
+teach_html="$(flat teaching/index.html)"
+echo "$teach_html" | grep -q '<h3 id="student-projects">Supervised Student Projects</h3>' ||
+  err "teaching/index.html: no 'Supervised Student Projects' heading with id=\"student-projects\""
+echo "$teach_html" | grep -q 'id="h.hrj399f848kb".*id="student-projects"' ||
+  err "teaching/index.html: student projects are not after 'Deep learning for Sequential Data'"
+sp_html="$(echo "$teach_html" | grep -o '<section class="student-projects".*' | sed 's:</section>.*::')"
+if [ -z "$sp_html" ]; then
+  err "teaching/index.html: no <section class=\"student-projects\">"
+else
+  n_sp="$(echo "$sp_html" | grep -o '<li class="sp-item">' | wc -l | tr -d ' ')"
+  [ "$n_sp" -eq 4 ] || err "teaching/index.html: $n_sp student projects, expected 4"
+  echo "$sp_html" | grep -q '<h4 class="sp-year">2026</h4>' || err "teaching/index.html: no 2026 year heading"
+  sp_text="$(echo "$sp_html" | sed 's/<[^>]*>/ /g')"
+  echo "$sp_html" | grep -Eq '[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}|mailto:' &&
+    err "teaching/index.html: student projects section has an email address"
+  echo "$sp_text" | grep -Eq '(\+972|\b0[2-9])[- ]?[0-9]{1,2}[- ]?[0-9]{3}[- ]?[0-9]{4}|[0-9]{9,}' &&
+    err "teaching/index.html: student projects section has a phone/ID-number-like string"
+fi
+
 # 11. Preview build for https://kourgeorge.github.io/website/ (what the Deploy
 # action builds when the repo variable SITE_PREVIEW is 'true'). Built into
 # _site_preview. The 4 pages exist, and every local href/src that starts

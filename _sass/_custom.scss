@@ -209,3 +209,61 @@
     font-size: 1.05rem;
   }
 }
+
+// Supervised student projects on Teaching (_includes/student_projects.liquid):
+// a compact list like Home's selected publications (0.875rem text, 1.3 line
+// height). Colours use the theme's variables, so light and dark mode both work.
+.student-projects {
+  margin-top: 0.75rem;
+
+  .sp-year {
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 1rem 0 0.4rem;
+    color: var(--global-theme-color);
+  }
+
+  .sp-list {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+  }
+
+  .sp-item {
+    margin-bottom: 0.9rem;
+    font-size: 0.875rem;
+    line-height: 1.3;
+  }
+
+  .sp-title {
+    font-size: 0.9rem;
+  }
+
+  .sp-students {
+    font-size: 0.8rem;
+    color: var(--global-text-color-light);
+    margin-bottom: 0.15rem;
+  }
+
+  .sp-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.3rem 0.4rem;
+    margin-top: 0.3rem;
+  }
+
+  .sp-tag {
+    font-size: 0.7rem;
+    padding: 0.1rem 0.4rem;
+    border: 1px solid var(--global-divider-color);
+    border-radius: 0.25rem;
+    color: var(--global-text-color-light);
+    white-space: nowrap;
+  }
+
+  .sp-link {
+    font-size: 0.8rem;
+    white-space: nowrap;
+  }
+}
