@@ -1,0 +1,39 @@
+// Local style overrides for this site (loaded last from assets/css/main.scss).
+
+// Social icons at the bottom of Home: smaller than al-folio's default
+// (theme: font-size 4rem, img 3.2rem, svg 3.5rem x 4rem). Each icon is now
+// 1.75rem, with an even 0.5rem gap, and every link keeps a 2.5rem (40px)
+// tap target so it is still easy to hit on a phone.
+.social .contact-icons {
+  font-size: 1.75rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+
+  a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 2.5rem;
+    min-height: 2.5rem;
+
+    img {
+      width: 1.75rem;
+      height: 1.75rem;
+      margin-bottom: 0;
+    }
+
+    svg {
+      width: 1.75rem;
+      height: 1.75rem;
+      margin-bottom: 0;
+
+      image {
+        width: 1.75rem;
+        height: 1.75rem;
+      }
+    }
+  }
+}
