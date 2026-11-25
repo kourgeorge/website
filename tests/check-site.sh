@@ -1,9 +1,14 @@
 #!/usr/bin/env bash
-# Checks the static site: page files, titles, local links, stylesheet, nav order,
-# the root redirect, the 404 page and the GitHub Pages files (CNAME, .nojekyll). Needs only standard macOS/Linux tools.
+# Builds the al-folio (Jekyll) site into _site and checks the result:
+# the 4 page addresses, the root redirect to /home/, page titles, the nav
+# (Home, Publications, Teaching, Links & Resources, in that order), the CNAME,
+# the 404 page and that every local href/src points to a file in _site.
+# Needs Homebrew Ruby (see the PATH below) and the gems from the Gemfile.
 # Usage: bash tests/check-site.sh   (from anywhere)
 
 set -u
+
+export PATH="/opt/homebrew/opt/ruby/bin:/opt/homebrew/lib/ruby/gems/4.0.0/bin:$PATH"
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$ROOT" || exit 1
@@ -14,123 +19,95 @@ err() {
   fail=1
 }
 
-PAGES="home/index.html publications/index.html teaching/index.html links-resources/index.html"
-NAV_PAGES="$PAGES 404.html"
-ALL_HTML="index.html $NAV_PAGES"
-EXPECTED_NAV="/home/|Home;/publications/|Publications;/teaching/|Teaching;/links-resources/|Links &amp; Resources;"
+# 1. Build the site (quietly). Install the gems first if they are missing.
+if ! bundle check >/dev/null 2>&1; then
+  bundle install --quiet >/tmp/check-site-bundle.log 2>&1 || {
+    echo "FAIL: bundle install failed (see /tmp/check-site-bundle.log)" >&2
+    exit 1
+  }
+fi
+rm -rf _site
+if ! bundle exec jekyll build --quiet --destination _site >/tmp/check-site-build.log 2>&1; then
+  cat /tmp/check-site-build.log >&2
+  echo "FAIL: bundle exec jekyll build failed" >&2
+  exit 1
+fi
 
-# 1. Files exist.
-for f in $ALL_HTML; do
-  [ -f "$f" ] || err "missing page file: $f"
+SITE="$ROOT/_site"
+PAGES="home/index.html publications/index.html teaching/index.html links-resources/index.html"
+
+# 2. Page files exist.
+for f in $PAGES index.html 404.html; do
+  [ -f "$SITE/$f" ] || err "missing page in _site: $f"
 done
-[ -f assets/css/style.css ] || err "missing stylesheet: assets/css/style.css"
 [ "$fail" -eq 0 ] || { echo "check-site: FAILED" >&2; exit 1; }
 
-# Resolve a local address (as written in href/src/url()) to a file path.
-# $1 = address, $2 = file it appears in.
-resolve() {
-  local ref="$1" from="$2" path
-  path="${ref%%#*}"
-  path="${path%%\?*}"
-  [ -z "$path" ] && { echo ""; return; }
-  case "$path" in
-    /*) path="${path#/}" ;;
-    *) path="$(dirname "$from")/$path" ;;
-  esac
-  [ -z "$path" ] && path="index.html"
-  case "$path" in
-    */) path="${path}index.html" ;;
-  esac
-  if [ -d "$path" ]; then path="$path/index.html"; fi
-  echo "$path"
-}
+# Put a page on one line, so tags that span lines can be matched.
+flat() { tr '\n\r' '  ' <"$SITE/$1"; }
 
-is_local() {
-  case "$1" in
-    http:*|https:*|//*|mailto:*|tel:*|data:*|javascript:*|\#*|"") return 1 ;;
-  esac
-  return 0
-}
+# 3. The root page sends visitors to /home/.
+root_html="$(flat index.html)"
+echo "$root_html" | grep -Eqi '<meta http-equiv="refresh" content="[0-9]+; *url=/home/"' ||
+  err "index.html: no meta refresh to /home/"
+echo "$root_html" | grep -qi '<link rel="canonical" href="https://www.kour.me/home"' ||
+  err "index.html: no canonical link to https://www.kour.me/home"
 
-for f in $ALL_HTML; do
-  flat="$(tr '\n\r' '  ' < "$f")"
-
-  # 2. Title.
-  if ! printf '%s' "$flat" | grep -Eq '<title>[^<]+</title>'; then
-    err "$f has no <title>"
-  fi
-
-  # 3. Stylesheet link.
-  if ! printf '%s' "$flat" | grep -Eq '<link[^>]*rel="stylesheet"[^>]*href="/assets/css/style\.css"'; then
-    err "$f does not link to /assets/css/style.css"
-  fi
-
-  # 4. Every local href/src points to an existing file.
-  refs="$(printf '%s' "$flat" | grep -Eo '(href|src)="[^"]*"' | sed -E 's/^(href|src)="//; s/"$//')"
-  while IFS= read -r ref; do
-    [ -z "$ref" ] && continue
-    is_local "$ref" || continue
-    target="$(resolve "$ref" "$f")"
-    [ -z "$target" ] && continue
-    [ -f "$target" ] || err "$f links to '$ref', but $target does not exist"
-  done <<EOF
-$refs
-EOF
+# 4. Every page has a non-empty <title>.
+for f in $PAGES index.html 404.html; do
+  flat "$f" | grep -Eqi '<title>[[:space:]]*[^<[:space:]][^<]*</title>' || err "$f: missing or empty <title>"
 done
 
-# 4b. Local url(...) references in the stylesheet.
-css_refs="$(grep -Eo 'url\([^)]*\)' assets/css/style.css | sed -E "s/^url\(//; s/\)$//; s/^[\"']//; s/[\"']$//")"
-while IFS= read -r ref; do
-  [ -z "$ref" ] && continue
-  is_local "$ref" || continue
-  target="$(resolve "$ref" assets/css/style.css)"
-  [ -f "$target" ] || err "assets/css/style.css refers to '$ref', but $target does not exist"
-done <<EOF
-$css_refs
-EOF
-
-# 5. Nav on every page lists the 4 pages in order.
-for f in $NAV_PAGES; do
-  nav="$(tr '\n\r' '  ' < "$f" | grep -Eo '<nav[^>]*>.*</nav>' | head -n 1)"
-  if [ -z "$nav" ]; then
-    err "$f has no <nav>"
-    continue
-  fi
-  got="$(printf '%s' "$nav" | grep -Eo '<a [^>]*href="[^"]*"[^>]*>[^<]*</a>' \
-    | sed -E 's/.*href="([^"]*)"[^>]*>([^<]*)<\/a>/\1|\2/' | tr '\n' ';')"
-  if [ "$got" != "$EXPECTED_NAV" ]; then
-    err "$f nav is wrong. Expected: $EXPECTED_NAV  Got: $got"
-  fi
-  # The site title links to /home/.
-  if ! tr '\n\r' '  ' < "$f" | grep -Eq '<a class="site-title" href="/home/">George Kour, Ph\.D\.</a>'; then
-    err "$f header has no site title 'George Kour, Ph.D.' linking to /home/"
-  fi
+# 5. The nav lists the 4 pages, in order, with the right labels and addresses.
+EXPECTED_NAV="/home/|Home;/publications/|Publications;/teaching/|Teaching;/links-resources/|Links & Resources;"
+for f in $PAGES 404.html; do
+  nav="$(flat "$f" | sed -n 's:.*<nav id="navbar"\(.*\)</nav>.*:\1:p')"
+  [ -n "$nav" ] || { err "$f: no <nav id=\"navbar\">"; continue; }
+  got="$(echo "$nav" | grep -o '<a class="nav-link"[^>]*href="[^"]*">[^<]*' |
+    sed -e 's:.*href="\([^"]*\)">[[:space:]]*\(.*\):\1|\2:' -e 's/[[:space:]]*$//' -e 's/&amp;/\&/g' |
+    tr '\n' ';')"
+  [ "$got" = "$EXPECTED_NAV" ] || err "$f: nav is '$got', expected '$EXPECTED_NAV'"
 done
 
-# 6. Root index.html sends visitors to /home/.
-root_flat="$(tr '\n\r' '  ' < index.html)"
-printf '%s' "$root_flat" | grep -Eqi '<meta http-equiv="refresh" content="0; *url=/home/"' \
-  || err "index.html has no meta refresh to /home/"
-printf '%s' "$root_flat" | grep -Eq '<a href="/home/"' \
-  || err "index.html has no plain link to /home/"
-printf '%s' "$root_flat" | grep -Eq '<link rel="canonical" href="https://www\.kour\.me/home">' \
-  || err "index.html has no canonical link to https://www.kour.me/home"
+# 6. Old Google Sites heading anchors are kept.
+check_ids() {
+  local f="$1"; shift
+  for id in "$@"; do
+    grep -q "id=\"$id\"" "$SITE/$f" || err "$f: missing heading anchor id=\"$id\""
+  done
+}
+check_ids home/index.html h.q4wcjinfbaz1 h.p_lujnsfikmTVd h.p_zqA8I2zFqZvP
+check_ids publications/index.html h.fclsdrvmgzrm h.p_xY_nY1xX4Ypv
+check_ids teaching/index.html h.ao2ziu9eq497 h.p_oQxnhJbmk8UM h.k58d4jgpt5mj h.hrj399f848kb
+check_ids links-resources/index.html h.p_kd8WZCiBFKhc h.p_9RovSi7yLXnI
 
-# 7. GitHub Pages files.
-if [ -f CNAME ]; then
-  cname="$(tr -d ' \t\r\n' < CNAME)"
-  [ "$cname" = "www.kour.me" ] || err "CNAME should contain www.kour.me, but contains '$cname'"
+# 7. CNAME is copied into _site with the domain.
+if [ -f "$SITE/CNAME" ]; then
+  [ "$(tr -d '[:space:]' <"$SITE/CNAME")" = "www.kour.me" ] || err "_site/CNAME is not www.kour.me"
 else
-  err "missing CNAME file"
+  err "missing _site/CNAME"
 fi
-[ -f .nojekyll ] || err "missing .nojekyll file"
 
-# 8. 404.html links back to the Home page (root-relative, so it works at any address).
-tr '\n\r' '  ' < 404.html | grep -Eq '<main[^>]*>.*<a href="/home/"' \
-  || err "404.html has no link to /home/ in its main content"
+# 8. Every local href/src points to a file in _site.
+for f in $PAGES index.html 404.html; do
+  for addr in $(flat "$f" | grep -Eo '(href|src)=["'"'"'][^"'"'"']*["'"'"']' |
+    sed -E 's/^(href|src)=.//; s/.$//'); do
+    case "$addr" in
+      //* | *://* | mailto:* | tel:* | javascript:* | data:* | '#'* | '') continue ;;
+    esac
+    path="${addr%%#*}"
+    path="${path%%\?*}"
+    case "$path" in
+      /*) target="$SITE$path" ;;
+      *) target="$(dirname "$SITE/$f")/$path" ;;
+    esac
+    case "$target" in */) target="${target}index.html" ;; esac
+    [ -d "$target" ] && target="$target/index.html"
+    [ -f "$target" ] || err "$f: local link '$addr' has no file in _site"
+  done
+done
 
 if [ "$fail" -ne 0 ]; then
   echo "check-site: FAILED" >&2
   exit 1
 fi
-echo "check-site: all checks passed"
+echo "check-site: OK"

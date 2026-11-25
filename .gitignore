@@ -12,3 +12,14 @@ dist/
 build/
 __pycache__/
 .venv/
+
+# Jekyll / Ruby build output and installed gems
+vendor/
+_site/
+.jekyll-cache/
+.jekyll-metadata
+.sass-cache/
+.bundle/
+.tweet-cache/
+assets/libs/
+.scratch/

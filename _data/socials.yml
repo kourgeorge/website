@@ -1,0 +1,11 @@
+# The owner's social links, shown as icons at the bottom of the Home page.
+# They are in the same order as the "Online Presence" list in content/home.md.
+# For more information, see the jekyll-socials plugin: https://github.com/george-gca/jekyll-socials
+email: kourgeorge@gmail.com
+cv_pdf: https://drive.google.com/file/d/1jKShjChFSWVyrwjqUwpUAGDPcxdn__so/view?usp=sharing
+work_url: http://researcher.watson.ibm.com/researcher/view.php?person=ibm-GKOUR # IBM Research page
+linkedin_username: georgekour
+github_username: kourgeorge
+scholar_userid: Yx8ov1wAAAAJ
+research_gate_profile: George_Kour
+dblp_url: https://dblp.uni-trier.de/pers/hd/k/Kour:George
