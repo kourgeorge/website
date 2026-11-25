@@ -17,6 +17,7 @@ __pycache__/
 vendor/
 _site/
 _site_preview/
+_site_prod/
 .jekyll-cache/
 .jekyll-metadata
 .sass-cache/

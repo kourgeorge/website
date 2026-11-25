@@ -6,7 +6,8 @@
 # that the publication list (from _bibliography/papers.bib) is shown, and
 # that the built CSS keeps the small Home social icons (font-size 1.75rem),
 # and that the 4 pages have the page banner with its picture, and that
-# llms.txt and robots.txt are built and allow indexing.
+# llms.txt and robots.txt are built and allow indexing, and that a
+# production build (JEKYLL_ENV=production, into _site_prod) keeps their lines.
 # It also builds the github.io preview (_config.preview.yml) into _site_preview
 # and checks that its local links all start with /website/ and work.
 # Needs Homebrew Ruby (see the PATH below) and the gems from the Gemfile.
@@ -300,6 +301,35 @@ else
   # 14b. llms.txt in the preview build links to the preview address.
   grep -qF '(https://kourgeorge.github.io/website/home/)' "$PREVIEW/llms.txt" 2>/dev/null ||
     err "_site_preview/llms.txt: no link to https://kourgeorge.github.io/website/home/"
+fi
+
+# 15. Production build (JEKYLL_ENV=production, like the Deploy action, which
+# turns on jekyll-minifier) into _site_prod: the .txt files keep their line
+# breaks (they are in jekyll-minifier's exclude list in _config.yml).
+PROD="$ROOT/_site_prod"
+rm -rf "$PROD"
+if ! JEKYLL_ENV=production bundle exec jekyll build --quiet --destination "$PROD" \
+  >/tmp/check-site-prod-build.log 2>&1; then
+  cat /tmp/check-site-prod-build.log >&2
+  err "production build (JEKYLL_ENV=production) failed"
+else
+  PLLMS="$PROD/llms.txt"
+  if [ ! -s "$PLLMS" ]; then
+    err "missing or empty _site_prod/llms.txt"
+  else
+    n_lines="$(wc -l <"$PLLMS" | tr -d ' ')"
+    [ "$n_lines" -gt 10 ] || err "_site_prod/llms.txt: only $n_lines lines (squashed by the minifier?)"
+    [ "$(head -n 1 "$PLLMS")" = "# George Kour" ] || err "_site_prod/llms.txt: first line is not exactly '# George Kour'"
+    grep -q '^## ' "$PLLMS" || err "_site_prod/llms.txt: no line starting with '## '"
+    grep -q '^- \[' "$PLLMS" || err "_site_prod/llms.txt: no line starting with '- ['"
+  fi
+  PROBOTS="$PROD/robots.txt"
+  if [ ! -s "$PROBOTS" ]; then
+    err "missing or empty _site_prod/robots.txt"
+  else
+    grep -qx 'User-agent: \*' "$PROBOTS" || err "_site_prod/robots.txt: no 'User-agent: *' line of its own"
+    grep -Eq '^Disallow:[[:space:]]*$' "$PROBOTS" || err "_site_prod/robots.txt: no 'Disallow:' line of its own"
+  fi
 fi
 
 if [ "$fail" -ne 0 ]; then
