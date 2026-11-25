@@ -11,7 +11,7 @@ profile:
   image: prof_pic.png
   image_circular: false # crops the image to make it circular
 
-selected_papers: false # a list of papers marked as "selected={true}" in _bibliography/papers.bib
+selected_papers: true # a list of papers marked as "selected={true}" in _bibliography/papers.bib
 social: true # includes social icons at the bottom of the page
 
 announcements:

@@ -2,7 +2,8 @@
 # Builds the al-folio (Jekyll) site into _site and checks the result:
 # the 4 page addresses, the root redirect to /home/, page titles, the nav
 # (Home, Publications, Teaching, Links & Resources, in that order), the CNAME,
-# the 404 page and that every local href/src points to a file in _site.
+# the 404 page, that every local href/src points to a file in _site, and
+# that the publication list (from _bibliography/papers.bib) is shown.
 # Needs Homebrew Ruby (see the PATH below) and the gems from the Gemfile.
 # Usage: bash tests/check-site.sh   (from anywhere)
 
@@ -105,6 +106,17 @@ for f in $PAGES index.html 404.html; do
     [ -f "$target" ] || err "$f: local link '$addr' has no file in _site"
   done
 done
+
+# 9. The publication list is built from _bibliography/papers.bib: the
+# Publications page shows at least 10 entries (one <div class="row"> each),
+# and the Home page shows the "selected publications" list.
+n_pubs="$(flat publications/index.html | grep -o '<ol class="bibliography">.*</ol>' |
+  grep -o '<div class="row">' | wc -l | tr -d ' ')"
+[ "$n_pubs" -ge 10 ] || err "publications/index.html: $n_pubs bibliography entries, expected at least 10"
+home_html="$(flat home/index.html)"
+echo "$home_html" | grep -qi 'selected publications' || err "home/index.html: no \"selected publications\" heading"
+n_sel="$(echo "$home_html" | grep -o '<div class="row">' | wc -l | tr -d ' ')"
+[ "$n_sel" -ge 1 ] || err "home/index.html: no selected publications listed"
 
 if [ "$fail" -ne 0 ]; then
   echo "check-site: FAILED" >&2

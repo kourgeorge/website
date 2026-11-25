@@ -1,5 +1,534 @@
 ---
 ---
 
-% The owner's papers will be added here in a later task.
-% For now the Publications page (_pages/publications.md) lists them by hand.
+% George Kour's papers, for the Publications page and the "selected publications"
+% list on the Home page.
+%
+% Source: the dblp record https://dblp.org/pid/156/2971.bib (downloaded
+% 2026-11-25), cleaned up for al-folio:
+% - short keys (firstauthorYEARword);
+% - when dblp lists both an arXiv (CoRR) copy and a published version of the
+%   same paper, only the published version is kept, with an arxiv= field;
+% - pdf=/html= links come from the old hand-written list (content/publications.md);
+% - selected={true} marks the papers shown on the Home page.
+% The last three entries are on the old hand-written list but not on dblp.
+%
+% To refresh from dblp: scripts/update-publications.sh (read its notes first).
+
+% ----------------------------------------------------------------- 2026
+
+@inproceedings{nakash2026efficient,
+  abbr         = {ACL},
+  bibtex_show  = {true},
+  author       = {Itay Nakash and
+                  George Kour and
+                  Ateret Anaby{-}Tavor},
+  title        = {Efficient Agent Evaluation via Diversity-Guided User Simulation},
+  booktitle    = {Proceedings of the 64th Annual Meeting of the Association for Computational
+                  Linguistics (Volume 6: Industry Track), {ACL} 2026, San Diego, California,
+                  USA, July 2-7, 2026},
+  pages        = {1627--1648},
+  publisher    = {Association for Computational Linguistics},
+  year         = {2026},
+  url          = {https://doi.org/10.18653/v1/2026.acl-industry.112},
+  doi          = {10.18653/v1/2026.acl-industry.112},
+  arxiv        = {2604.21480},
+}
+
+% ----------------------------------------------------------------- 2025
+
+@inproceedings{kour2025thinkagain,
+  abbr         = {ACL},
+  bibtex_show  = {true},
+  selected     = {true},
+  author       = {George Kour and
+                  Itay Nakash and
+                  Michal Shmueli{-}Scheuer and
+                  Ateret Anaby{-}Tavor},
+  title        = {Think Again! The Effect of Test-Time Compute on Preferences, Opinions,
+                  and Beliefs of Large Language Models},
+  booktitle    = {Proceedings of the 63rd Annual Meeting of the Association for Computational
+                  Linguistics (Volume 6: Industry Track), {ACL} 2025, Vienna, Austria,
+                  July 27 - August 1, 2025},
+  pages        = {639--660},
+  publisher    = {Association for Computational Linguistics},
+  year         = {2025},
+  url          = {https://doi.org/10.18653/v1/2025.acl-industry.45},
+  doi          = {10.18653/v1/2025.acl-industry.45},
+  arxiv        = {2505.19621},
+}
+
+@inproceedings{nakash2025redteaming,
+  abbr         = {EMNLP},
+  bibtex_show  = {true},
+  selected     = {true},
+  author       = {Itay Nakash and
+                  George Kour and
+                  Koren Lazar and
+                  Matan Vetzler and
+                  Guy Uziel and
+                  Ateret Anaby{-}Tavor},
+  title        = {Effective Red-Teaming of Policy-Adherent Agents},
+  booktitle    = {Proceedings of the 2025 Conference on Empirical Methods in Natural
+                  Language Processing, {EMNLP} 2025, Suzhou, China, November 4-9, 2025},
+  pages        = {2250--2268},
+  publisher    = {Association for Computational Linguistics},
+  year         = {2025},
+  url          = {https://doi.org/10.18653/v1/2025.emnlp-main.114},
+  doi          = {10.18653/v1/2025.emnlp-main.114},
+  arxiv        = {2506.09600},
+}
+
+% dblp also lists the arXiv copy under the shorter title
+% "Exploring Straightforward Conversational Red-Teaming" (same authors).
+@inproceedings{kour2025straightforward,
+  abbr         = {NAACL},
+  bibtex_show  = {true},
+  selected     = {true},
+  author       = {George Kour and
+                  Naama Zwerdling and
+                  Marcel Zalmanovici and
+                  Ateret Anaby{-}Tavor and
+                  Ora Nova Fandina and
+                  Eitan Farchi},
+  title        = {Exploring Straightforward Methods for Automatic Conversational Red-Teaming},
+  booktitle    = {Proceedings of the 2025 Conference of the Nations of the Americas
+                  Chapter of the Association for Computational Linguistics: Human Language
+                  Technologies, {NAACL} 2025 - Volume 3: Industry Track, Albuquerque,
+                  New Mexico, USA, April 30, 2025},
+  pages        = {112--128},
+  publisher    = {Association for Computational Linguistics},
+  year         = {2025},
+  url          = {https://doi.org/10.18653/v1/2025.naacl-industry.10},
+  doi          = {10.18653/v1/2025.naacl-industry.10},
+  arxiv        = {2409.04822},
+}
+
+@inproceedings{nakash2025breakingreact,
+  abbr         = {NAACL},
+  bibtex_show  = {true},
+  selected     = {true},
+  author       = {Itay Nakash and
+                  George Kour and
+                  Guy Uziel and
+                  Ateret Anaby{-}Tavor},
+  title        = {Breaking ReAct Agents: Foot-in-the-Door Attack Will Get You In},
+  booktitle    = {Findings of the Association for Computational Linguistics: {NAACL}
+                  2025, Albuquerque, New Mexico, USA, April 29 - May 4, 2025},
+  series       = {Findings of {ACL}},
+  volume       = {{NAACL} 2025},
+  pages        = {6484--6509},
+  publisher    = {Association for Computational Linguistics},
+  year         = {2025},
+  url          = {https://doi.org/10.18653/v1/2025.findings-naacl.363},
+  doi          = {10.18653/v1/2025.findings-naacl.363},
+  arxiv        = {2410.16950},
+}
+
+% ----------------------------------------------------------------- 2024
+
+@inproceedings{reiss2024zerotohero,
+  abbr         = {ACL},
+  bibtex_show  = {true},
+  author       = {Tal Reiss and
+                  George Kour and
+                  Naama Zwerdling and
+                  Ateret Anaby{-}Tavor and
+                  Yedid Hoshen},
+  title        = {From Zero to Hero: Cold-Start Anomaly Detection},
+  booktitle    = {Findings of the Association for Computational Linguistics, {ACL} 2024,
+                  Bangkok, Thailand and virtual meeting, August 11-16, 2024},
+  series       = {Findings of {ACL}},
+  volume       = {{ACL} 2024},
+  pages        = {7607--7617},
+  publisher    = {Association for Computational Linguistics},
+  year         = {2024},
+  url          = {https://doi.org/10.18653/v1/2024.findings-acl.453},
+  doi          = {10.18653/v1/2024.findings-acl.453},
+  arxiv        = {2405.20341},
+}
+
+@article{achintalwar2024detectors,
+  abbr         = {arXiv},
+  bibtex_show  = {true},
+  author       = {Swapnaja Achintalwar and
+                  Adriana Alvarado Garcia and
+                  Ateret Anaby{-}Tavor and
+                  Ioana Baldini and
+                  Sara E. Berger and
+                  Bishwaranjan Bhattacharjee and
+                  Djallel Bouneffouf and
+                  Subhajit Chaudhury and
+                  Pin{-}Yu Chen and
+                  Lamogha Chiazor and
+                  Elizabeth M. Daly and
+                  Rog{\'{e}}rio Abreu de Paula and
+                  Pierre L. Dognin and
+                  Eitan Farchi and
+                  Soumya Ghosh and
+                  Michael Hind and
+                  Raya Horesh and
+                  George Kour and
+                  Ja Young Lee and
+                  Erik Miehling and
+                  Keerthiram Murugesan and
+                  Manish Nagireddy and
+                  Inkit Padhi and
+                  David Piorkowski and
+                  Ambrish Rawat and
+                  Orna Raz and
+                  Prasanna Sattigeri and
+                  Hendrik Strobelt and
+                  Sarathkrishna Swaminathan and
+                  Christoph Tillmann and
+                  Aashka Trivedi and
+                  Kush R. Varshney and
+                  Dennis Wei and
+                  Shalisha Witherspoon and
+                  Marcel Zalmanovici},
+  title        = {Detectors for Safe and Reliable LLMs: Implementations, Uses, and Limitations},
+  journal      = {CoRR},
+  volume       = {abs/2403.06009},
+  year         = {2024},
+  url          = {https://doi.org/10.48550/arXiv.2403.06009},
+  doi          = {10.48550/arXiv.2403.06009},
+  arxiv        = {2403.06009},
+}
+
+@article{fandina2024trustmetric,
+  abbr         = {arXiv},
+  bibtex_show  = {true},
+  author       = {Ora Nova Fandina and
+                  Leshem Choshen and
+                  Eitan Farchi and
+                  George Kour and
+                  Yotam Perlitz and
+                  Orna Raz},
+  title        = {Can You Trust Your Metric? Automatic Concatenation-Based Tests for
+                  Metric Validity},
+  journal      = {CoRR},
+  volume       = {abs/2408.12259},
+  year         = {2024},
+  url          = {https://doi.org/10.48550/arXiv.2408.12259},
+  doi          = {10.48550/arXiv.2408.12259},
+  arxiv        = {2408.12259},
+}
+
+% ----------------------------------------------------------------- 2023
+
+@article{ackerman2023distributional,
+  abbr         = {arXiv},
+  bibtex_show  = {true},
+  author       = {Samuel Ackerman and
+                  George Kour and
+                  Eitan Farchi},
+  title        = {Characterizing how 'distributional' {NLP} corpora distance metrics
+                  are},
+  journal      = {CoRR},
+  volume       = {abs/2310.14829},
+  year         = {2023},
+  url          = {https://doi.org/10.48550/arXiv.2310.14829},
+  doi          = {10.48550/arXiv.2310.14829},
+  arxiv        = {2310.14829},
+}
+
+@article{kour2023unveiling,
+  abbr         = {arXiv},
+  bibtex_show  = {true},
+  selected     = {true},
+  author       = {George Kour and
+                  Marcel Zalmanovici and
+                  Naama Zwerdling and
+                  Esther Goldbraich and
+                  Ora Nova Fandina and
+                  Ateret Anaby{-}Tavor and
+                  Orna Raz and
+                  Eitan Farchi},
+  title        = {Unveiling Safety Vulnerabilities of Large Language Models},
+  journal      = {CoRR},
+  volume       = {abs/2311.04124},
+  year         = {2023},
+  url          = {https://doi.org/10.48550/arXiv.2311.04124},
+  doi          = {10.48550/arXiv.2311.04124},
+  arxiv        = {2311.04124},
+}
+
+% ----------------------------------------------------------------- 2022
+
+@article{ackerman2022highquality,
+  abbr         = {arXiv},
+  bibtex_show  = {true},
+  author       = {Samuel Ackerman and
+                  Ateret Anaby{-}Tavor and
+                  Eitan Farchi and
+                  Esther Goldbraich and
+                  George Kour and
+                  Ella Rabinovich and
+                  Orna Raz and
+                  Saritha Route and
+                  Marcel Zalmanovici and
+                  Naama Zwerdling},
+  title        = {High-quality Conversational Systems},
+  journal      = {CoRR},
+  volume       = {abs/2204.13043},
+  year         = {2022},
+  url          = {https://doi.org/10.48550/arXiv.2204.13043},
+  doi          = {10.48550/arXiv.2204.13043},
+  arxiv        = {2204.13043},
+  pdf          = {https://arxiv.org/pdf/2204.13043},
+}
+
+@article{zwerdling2022generatedcorpora,
+  abbr         = {arXiv},
+  bibtex_show  = {true},
+  author       = {Naama Zwerdling and
+                  Segev Shlomov and
+                  Esther Goldbraich and
+                  George Kour and
+                  Boaz Carmeli and
+                  Naama Tepper and
+                  Inbal Ronen and
+                  Vitaly Zabershinsky and
+                  Ateret Anaby{-}Tavor},
+  title        = {Understanding the Properties of Generated Corpora},
+  journal      = {CoRR},
+  volume       = {abs/2206.11219},
+  year         = {2022},
+  url          = {https://doi.org/10.48550/arXiv.2206.11219},
+  doi          = {10.48550/arXiv.2206.11219},
+  arxiv        = {2206.11219},
+}
+
+% dblp has only the arXiv copy; the venue note comes from the old hand-written list.
+@article{kour2022measuring,
+  abbr         = {arXiv},
+  bibtex_show  = {true},
+  author       = {George Kour and
+                  Samuel Ackerman and
+                  Orna Raz and
+                  Eitan Farchi and
+                  Boaz Carmeli and
+                  Ateret Anaby{-}Tavor},
+  title        = {Measuring the Measuring Tools: An Automatic Evaluation of Semantic
+                  Metrics for Text Corpora},
+  journal      = {CoRR},
+  volume       = {abs/2211.16259},
+  year         = {2022},
+  url          = {https://doi.org/10.48550/arXiv.2211.16259},
+  doi          = {10.48550/arXiv.2211.16259},
+  arxiv        = {2211.16259},
+  note         = {Also at the GEM workshop, EMNLP 2022},
+}
+
+% ----------------------------------------------------------------- 2021
+
+% dblp has only the arXiv copy; the venue note comes from the old hand-written list.
+@article{kour2021classifierquality,
+  abbr         = {arXiv},
+  bibtex_show  = {true},
+  author       = {George Kour and
+                  Marcel Zalmanovici and
+                  Orna Raz and
+                  Samuel Ackerman and
+                  Ateret Anaby{-}Tavor},
+  title        = {Classifier Data Quality: {A} Geometric Complexity Based Method for
+                  Automated Baseline And Insights Generation},
+  journal      = {CoRR},
+  volume       = {abs/2112.11832},
+  year         = {2021},
+  url          = {https://doi.org/10.48550/arXiv.2112.11832},
+  doi          = {10.48550/arXiv.2112.11832},
+  arxiv        = {2112.11832},
+  pdf          = {https://arxiv.org/pdf/2112.11832},
+  note         = {Also at the AAAI EDSMLS workshop, 2022},
+}
+
+% ----------------------------------------------------------------- 2020
+
+@inproceedings{anabytavor2020notenoughdata,
+  abbr         = {AAAI},
+  bibtex_show  = {true},
+  selected     = {true},
+  author       = {Ateret Anaby{-}Tavor and
+                  Boaz Carmeli and
+                  Esther Goldbraich and
+                  Amir Kantor and
+                  George Kour and
+                  Segev Shlomov and
+                  Naama Tepper and
+                  Naama Zwerdling},
+  title        = {Do Not Have Enough Data? Deep Learning to the Rescue!},
+  booktitle    = {The Thirty-Fourth {AAAI} Conference on Artificial Intelligence, {AAAI}
+                  2020, The Thirty-Second Innovative Applications of Artificial Intelligence
+                  Conference, {IAAI} 2020, The Tenth {AAAI} Symposium on Educational
+                  Advances in Artificial Intelligence, {EAAI} 2020, New York, NY, USA,
+                  February 7-12, 2020},
+  pages        = {7383--7390},
+  publisher    = {{AAAI} Press},
+  year         = {2020},
+  url          = {https://doi.org/10.1609/aaai.v34i05.6233},
+  doi          = {10.1609/aaai.v34i05.6233},
+  arxiv        = {1911.03118},
+  pdf          = {https://arxiv.org/pdf/1911.03118},
+}
+
+@inproceedings{tepper2020balancing,
+  abbr         = {EMNLP},
+  bibtex_show  = {true},
+  author       = {Naama Tepper and
+                  Esther Goldbraich and
+                  Naama Zwerdling and
+                  George Kour and
+                  Ateret Anaby{-}Tavor and
+                  Boaz Carmeli},
+  title        = {Balancing via Generation for Multi-Class Text Classification Improvement},
+  booktitle    = {Findings of the Association for Computational Linguistics: {EMNLP}
+                  2020, Online Event, 16-20 November 2020},
+  series       = {Findings of {ACL}},
+  volume       = {{EMNLP} 2020},
+  pages        = {1440--1452},
+  publisher    = {Association for Computational Linguistics},
+  year         = {2020},
+  url          = {https://doi.org/10.18653/v1/2020.findings-emnlp.130},
+  doi          = {10.18653/v1/2020.findings-emnlp.130},
+  pdf          = {https://www.aclweb.org/anthology/2020.findings-emnlp.130.pdf},
+}
+
+% ----------------------------------------------------------------- 2019
+
+@inproceedings{jacovi2019blackbox,
+  abbr         = {ICLR},
+  bibtex_show  = {true},
+  author       = {Alon Jacovi and
+                  Guy Hadash and
+                  Einat Kermany and
+                  Boaz Carmeli and
+                  Ofer Lavi and
+                  George Kour and
+                  Jonathan Berant},
+  title        = {Neural network gradient-based learning of black-box function interfaces},
+  booktitle    = {7th International Conference on Learning Representations, {ICLR} 2019,
+                  New Orleans, LA, USA, May 6-9, 2019},
+  publisher    = {OpenReview.net},
+  year         = {2019},
+  url          = {https://openreview.net/forum?id=r1e13s05YX},
+  html         = {https://openreview.net/forum?id=r1e13s05YX},
+  pdf          = {https://openreview.net/pdf?id=r1e13s05YX},
+  arxiv        = {1901.03995},
+}
+
+% Not on dblp; from the old hand-written list.
+@article{kour2019attentional,
+  abbr         = {bioRxiv},
+  bibtex_show  = {true},
+  author       = {George Kour and
+                  Genela Morris},
+  title        = {Estimating Attentional Set-Shifting Dynamics in Varying Contextual Bandits},
+  journal      = {bioRxiv},
+  pages        = {621300},
+  year         = {2019},
+  pdf          = {https://www.biorxiv.org/content/biorxiv/early/2019/04/29/621300.full.pdf},
+}
+
+% ----------------------------------------------------------------- 2018
+
+@article{hadash2018estimate,
+  abbr         = {arXiv},
+  bibtex_show  = {true},
+  author       = {Guy Hadash and
+                  Einat Kermany and
+                  Boaz Carmeli and
+                  Ofer Lavi and
+                  George Kour and
+                  Alon Jacovi},
+  title        = {Estimate and Replace: {A} Novel Approach to Integrating Deep Neural
+                  Networks with Existing Applications},
+  journal      = {CoRR},
+  volume       = {abs/1804.09028},
+  year         = {2018},
+  url          = {https://doi.org/10.48550/arXiv.1804.09028},
+  doi          = {10.48550/arXiv.1804.09028},
+  arxiv        = {1804.09028},
+  pdf          = {https://drive.google.com/open?id=1fBiMSRKw9sGxcSxHgQxro30OpA2QZguX},
+}
+
+% ----------------------------------------------------------------- 2017
+
+% Not on dblp; from the old hand-written list.
+% Note: on the old site this paper and the ADMA 2016 paper link to the same Drive file.
+@inproceedings{kour2017handlingtime,
+  abbr         = {SEC},
+  bibtex_show  = {true},
+  author       = {George Kour and
+                  Shaul Strachan and
+                  Raz Regev},
+  title        = {Estimating Handling Time of Software Defects},
+  booktitle    = {Third International Conference on Software Engineering, SEC-2017},
+  year         = {2017},
+  pdf          = {https://drive.google.com/open?id=1yrb60cFMBT7gWYZEmjH46kqNBTSziTs3},
+}
+
+% ----------------------------------------------------------------- 2016
+
+@inproceedings{keshet2016marketshare,
+  abbr         = {ADMA},
+  bibtex_show  = {true},
+  author       = {Renato Keshet and
+                  Alina Maor and
+                  George Kour},
+  title        = {Prediction-Based, Prioritized Market-Share Insight Extraction},
+  booktitle    = {Advanced Data Mining and Applications - 12th International Conference,
+                  {ADMA} 2016, Gold Coast, QLD, Australia, December 12-15, 2016, Proceedings},
+  series       = {Lecture Notes in Computer Science},
+  volume       = {10086},
+  pages        = {81--94},
+  year         = {2016},
+  url          = {https://doi.org/10.1007/978-3-319-49586-6_6},
+  doi          = {10.1007/978-3-319-49586-6_6},
+  pdf          = {https://drive.google.com/open?id=1yrb60cFMBT7gWYZEmjH46kqNBTSziTs3},
+}
+
+% ----------------------------------------------------------------- 2014
+
+@inproceedings{kour2014segmentation,
+  abbr         = {ICFHR},
+  bibtex_show  = {true},
+  author       = {George Kour and
+                  Raid Saabni},
+  title        = {Real-Time Segmentation of On-Line Handwritten Arabic Script},
+  booktitle    = {14th International Conference on Frontiers in Handwriting Recognition,
+                  {ICFHR} 2014, Crete, Greece, September 1-4, 2014},
+  pages        = {417--422},
+  publisher    = {{IEEE} Computer Society},
+  year         = {2014},
+  url          = {https://doi.org/10.1109/ICFHR.2014.76},
+  doi          = {10.1109/ICFHR.2014.76},
+  pdf          = {https://drive.google.com/open?id=16v5dYnYCem_Nk3OmUkzkQp0xBQKNk3fI},
+}
+
+@inproceedings{kour2014classification,
+  abbr         = {SoCPaR},
+  bibtex_show  = {true},
+  author       = {George Kour and
+                  Raid Saabni},
+  title        = {Fast classification of handwritten on-line Arabic characters},
+  booktitle    = {6th International Conference of Soft Computing and Pattern Recognition,
+                  SoCPaR 2014, Tunis, Tunisia, August 11-14, 2014},
+  pages        = {312--318},
+  publisher    = {{IEEE}},
+  year         = {2014},
+  url          = {https://doi.org/10.1109/SOCPAR.2014.7008025},
+  doi          = {10.1109/SOCPAR.2014.7008025},
+  pdf          = {https://drive.google.com/open?id=1qc18nVd5NrreEEVmz68wT_F3AUWsVBCB},
+}
+
+% Not on dblp; from the old hand-written list.
+@mastersthesis{kour2014thesis,
+  abbr         = {M.Sc.},
+  bibtex_show  = {true},
+  author       = {George Kour},
+  title        = {Real Time Segmentation and Recognition of Online Handwritten Arabic Script},
+  school       = {Tel-Aviv University},
+  year         = {2014},
+  pdf          = {https://drive.google.com/open?id=19Irpq1_Yh9Fv3YhhoynR7etq5cjTcBoM},
+}
