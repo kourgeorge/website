@@ -179,28 +179,44 @@ done
 [ -s "$SITE/$BANNER_IMG" ] || err "missing _site/$BANNER_IMG"
 grep -q '\.page-banner' "$CSS" 2>/dev/null || err "main.css: no .page-banner rules"
 
-# 13. Supervised student projects on Teaching (from _data/student_projects.yml
-# via _includes/student_projects.liquid): the heading id="student-projects"
-# comes after the last course heading, the section lists 4 projects under a
-# year, and it shows no email addresses or phone-number-like strings.
+# 13. The Autonomous Agents workshop course on Teaching, with its student
+# projects (from _data/student_projects.yml via
+# _includes/student_projects.liquid): the heading id="agentic-workshop"
+# exists; the "Student projects" sub-heading id="student-projects" and the
+# project list sit inside the workshop section (after its heading, before the
+# next <h3> or the end); the list has 4 projects under a 2026 heading and
+# does not show the redundant "workshop" line; the old separate "Supervised
+# Student Projects" heading is gone; and the workshop section shows no email
+# addresses or phone/ID-number-like strings.
 # (The 4 old course anchor ids are checked in step 6.)
 teach_html="$(flat teaching/index.html)"
-echo "$teach_html" | grep -q '<h3 id="student-projects">Supervised Student Projects</h3>' ||
-  err "teaching/index.html: no 'Supervised Student Projects' heading with id=\"student-projects\""
-echo "$teach_html" | grep -q 'id="h.hrj399f848kb".*id="student-projects"' ||
-  err "teaching/index.html: student projects are not after 'Deep learning for Sequential Data'"
-sp_html="$(echo "$teach_html" | grep -o '<section class="student-projects".*' | sed 's:</section>.*::')"
-if [ -z "$sp_html" ]; then
-  err "teaching/index.html: no <section class=\"student-projects\">"
+echo "$teach_html" | grep -q '<h3 id="agentic-workshop">Workshop in Learning Systems and Autonomous Agents</h3>' ||
+  err "teaching/index.html: no workshop heading with id=\"agentic-workshop\""
+echo "$teach_html" | grep -q 'Supervised Student Projects' &&
+  err "teaching/index.html: the old 'Supervised Student Projects' section is still there"
+# The workshop section: from its heading up to the next <h3> (or the end).
+ws_html="$(echo "$teach_html" | sed -n 's:.*\(<h3 id="agentic-workshop">.*\):\1:p' |
+  sed 's:^<h3 id="agentic-workshop">[^<]*</h3>::' | sed 's:<h3[ >].*::')"
+if [ -z "$ws_html" ]; then
+  err "teaching/index.html: workshop section is empty"
 else
-  n_sp="$(echo "$sp_html" | grep -o '<li class="sp-item">' | wc -l | tr -d ' ')"
-  [ "$n_sp" -eq 4 ] || err "teaching/index.html: $n_sp student projects, expected 4"
-  echo "$sp_html" | grep -q '<h4 class="sp-year">2026</h4>' || err "teaching/index.html: no 2026 year heading"
-  sp_text="$(echo "$sp_html" | sed 's/<[^>]*>/ /g')"
-  echo "$sp_html" | grep -Eq '[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}|mailto:' &&
-    err "teaching/index.html: student projects section has an email address"
-  echo "$sp_text" | grep -Eq '(\+972|\b0[2-9])[- ]?[0-9]{1,2}[- ]?[0-9]{3}[- ]?[0-9]{4}|[0-9]{9,}' &&
-    err "teaching/index.html: student projects section has a phone/ID-number-like string"
+  echo "$ws_html" | grep -q '<h4 id="student-projects">Student projects</h4>' ||
+    err "teaching/index.html: no 'Student projects' sub-heading (id=\"student-projects\") inside the workshop section"
+  sp_html="$(echo "$ws_html" | grep -o '<section class="student-projects".*' | sed 's:</section>.*::')"
+  if [ -z "$sp_html" ]; then
+    err "teaching/index.html: no <section class=\"student-projects\"> inside the workshop section"
+  else
+    n_sp="$(echo "$sp_html" | grep -o '<li class="sp-item">' | wc -l | tr -d ' ')"
+    [ "$n_sp" -eq 4 ] || err "teaching/index.html: $n_sp student projects, expected 4"
+    echo "$sp_html" | grep -q '<h5 class="sp-year">2026</h5>' || err "teaching/index.html: no 2026 year heading"
+    echo "$sp_html" | grep -q 'course 150070' &&
+      err "teaching/index.html: the project list still shows the redundant 'workshop' line"
+  fi
+  ws_text="$(echo "$ws_html" | sed 's/<[^>]*>/ /g')"
+  echo "$ws_html" | grep -Eq '[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}|mailto:' &&
+    err "teaching/index.html: workshop section has an email address"
+  echo "$ws_text" | grep -Eq '(\+972|\b0[2-9])[- ]?[0-9]{1,2}[- ]?[0-9]{3}[- ]?[0-9]{4}|[0-9]{9,}' &&
+    err "teaching/index.html: workshop section has a phone/ID-number-like string"
 fi
 
 # 11. Preview build for https://kourgeorge.github.io/website/ (what the Deploy

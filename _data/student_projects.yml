@@ -4,7 +4,7 @@
 # GitHub pages. Never add students' phone numbers, emails or ID numbers.
 # To add a new year, just add more entries with that year.
 #
-# Fields: year, workshop, title, students (list), summary, tags (list),
+# Fields: year, workshop (kept, but not shown on the page), title, students (list), summary, tags (list),
 # links (page = MTA project page, github = code, demo = demo or registry,
 # pypi = Python package page). Leave out any link that does not exist.
 
