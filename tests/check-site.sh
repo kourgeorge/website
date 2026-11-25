@@ -25,6 +25,20 @@ err() {
   fail=1
 }
 
+# 0. The Deploy workflow runs on every push to main: its push trigger has no
+# "paths:" allow-list, and any paths-ignore does not skip _sass, llms.txt or
+# robots.txt (a paths: filter once skipped a push that only changed llms.txt).
+DEPLOY=".github/workflows/deploy.yml"
+PUSH_BLOCK="$(awk '/^  push:/{on=1; next} on && /^  [^ #]/{on=0} on' "$DEPLOY")"
+if [ -z "$PUSH_BLOCK" ]; then
+  err "$DEPLOY: no push trigger found"
+else
+  echo "$PUSH_BLOCK" | grep -Eq '^ +paths:' &&
+    err "$DEPLOY: push trigger has a paths: list (some changes would not deploy)"
+  echo "$PUSH_BLOCK" | grep -Eq '^ +- +"?(_sass|llms\.txt|robots\.txt|(\*\*/?\*?)?\.(txt|scss)"?$|\*\*?"?$)' &&
+    err "$DEPLOY: push paths-ignore excludes _sass, llms.txt or robots.txt changes"
+fi
+
 # 1. Build the site (quietly). Install the gems first if they are missing.
 if ! bundle check >/dev/null 2>&1; then
   bundle install --quiet >/tmp/check-site-bundle.log 2>&1 || {
