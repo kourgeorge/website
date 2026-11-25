@@ -116,6 +116,31 @@ new site looks right on `<user>.github.io`, so the old site stays up until then.
    Under "Custom domain", `www.kour.me` should show (it is read from the `CNAME`
    file). If not, type it in and click Save.
 
+   **Preview mode (look at the site on github.io before switching kour.me).**
+   With the `CNAME` file in place, GitHub sends github.io visitors on to
+   www.kour.me, which still shows the old Google site. To check the new site
+   first:
+   - Go to **Settings > Secrets and variables > Actions > Variables** and add a
+     repository variable `SITE_PREVIEW` with the value `true`.
+   - Open the **Actions** tab and re-run the **Deploy site** action. It now builds
+     with `_config.yml,_config.preview.yml` (address
+     `https://kourgeorge.github.io/website/`) and leaves out the `CNAME` file.
+   - If **Settings > Pages** still shows `www.kour.me` under "Custom domain",
+     click Remove there.
+   - View https://kourgeorge.github.io/website/ and check all four pages.
+
+   **Going live (switch to www.kour.me).**
+   - Delete the `SITE_PREVIEW` variable, or set it to `false`.
+   - Re-run the **Deploy site** action. It builds for https://www.kour.me again,
+     with the `CNAME` file.
+   - In **Settings > Pages**, set the custom domain to `www.kour.me` and click
+     Save.
+   - Then do steps 5 to 8 below (switch the DNS).
+
+   To try the preview build on your computer:
+   `bundle exec jekyll serve --config _config.yml,_config.preview.yml`, then open
+   http://localhost:4000/website/.
+
 5. **Switch off the old Google Sites custom domain.** In Google Sites, open the
    site, go to **Settings > Custom domains**, and remove `www.kour.me`. Google
    holds the domain until you do this. Do it right before step 6, because the old

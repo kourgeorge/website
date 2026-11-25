@@ -16,6 +16,7 @@ __pycache__/
 # Jekyll / Ruby build output and installed gems
 vendor/
 _site/
+_site_preview/
 .jekyll-cache/
 .jekyll-metadata
 .sass-cache/

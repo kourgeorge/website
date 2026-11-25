@@ -80,9 +80,20 @@ jobs:
       - name: Install JS deps 📦
         run: npm ci
       - name: Install and Build 🔧
+        # Preview mode: set the repository variable SITE_PREVIEW to 'true' to build
+        # for https://kourgeorge.github.io/website/ (no CNAME). Otherwise the site is
+        # built for https://www.kour.me as usual.
+        env:
+          SITE_PREVIEW: ${{ vars.SITE_PREVIEW }}
         run: |
           export JEKYLL_ENV=production
-          bundle exec jekyll build
+          if [ "$SITE_PREVIEW" = "true" ]; then
+            echo "Preview build for https://kourgeorge.github.io/website/"
+            bundle exec jekyll build --config _config.yml,_config.preview.yml
+            rm -f _site/CNAME
+          else
+            bundle exec jekyll build
+          fi
       - name: Purge unused CSS 🧹
         run: |
           npm install -g purgecss

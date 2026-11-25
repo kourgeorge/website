@@ -5,6 +5,8 @@
 # the 404 page, that every local href/src points to a file in _site, and
 # that the publication list (from _bibliography/papers.bib) is shown, and
 # that the built CSS keeps the small Home social icons (font-size 1.75rem).
+# It also builds the github.io preview (_config.preview.yml) into _site_preview
+# and checks that its local links all start with /website/ and work.
 # Needs Homebrew Ruby (see the PATH below) and the gems from the Gemfile.
 # Usage: bash tests/check-site.sh   (from anywhere)
 
@@ -132,6 +134,39 @@ else
   elif ! echo "$icon_rules" | grep -Eq '(^|[{;])[[:space:]]*font-size:[[:space:]]*1\.75rem[[:space:]]*(;|})'; then
     err "main.css: '.social .contact-icons' rule has no font-size:1.75rem (got: $icon_rules)"
   fi
+fi
+
+# 11. Preview build for https://kourgeorge.github.io/website/ (what the Deploy
+# action builds when the repo variable SITE_PREVIEW is 'true'). Built into
+# _site_preview. The 4 pages exist, and every local href/src that starts
+# with / starts with /website/ and points to a file in that build.
+PREVIEW="$ROOT/_site_preview"
+rm -rf "$PREVIEW"
+if ! bundle exec jekyll build --quiet --config _config.yml,_config.preview.yml \
+  --destination "$PREVIEW" >/tmp/check-site-preview-build.log 2>&1; then
+  cat /tmp/check-site-preview-build.log >&2
+  err "preview build (--config _config.yml,_config.preview.yml) failed"
+else
+  for f in $PAGES index.html 404.html; do
+    [ -f "$PREVIEW/$f" ] || { err "missing page in _site_preview: $f"; continue; }
+    for addr in $(tr '\n\r' '  ' <"$PREVIEW/$f" | grep -Eo '(href|src)=["'"'"'][^"'"'"']*["'"'"']' |
+      sed -E 's/^(href|src)=.//; s/.$//'); do
+      case "$addr" in
+        //*) continue ;;
+        /website/*) ;;
+        /*) err "_site_preview/$f: local link '$addr' does not start with /website/"; continue ;;
+        *) continue ;;
+      esac
+      path="${addr%%#*}"
+      path="${path%%\?*}"
+      target="$PREVIEW/${path#/website/}"
+      case "$target" in */) target="${target}index.html" ;; esac
+      [ -d "$target" ] && target="$target/index.html"
+      [ -f "$target" ] || err "_site_preview/$f: local link '$addr' has no file in _site_preview"
+    done
+  done
+  grep -Eqi 'url=/website/home/"' "$PREVIEW/index.html" ||
+    err "_site_preview/index.html: no meta refresh to /website/home/"
 fi
 
 if [ "$fail" -ne 0 ]; then
