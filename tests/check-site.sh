@@ -5,7 +5,8 @@
 # the 404 page, that every local href/src points to a file in _site, and
 # that the publication list (from _bibliography/papers.bib) is shown, and
 # that the built CSS keeps the small Home social icons (font-size 1.75rem),
-# and that the 4 pages have the page banner with its picture.
+# and that the 4 pages have the page banner with its picture, and that
+# llms.txt and robots.txt are built and allow indexing.
 # It also builds the github.io preview (_config.preview.yml) into _site_preview
 # and checks that its local links all start with /website/ and work.
 # Needs Homebrew Ruby (see the PATH below) and the gems from the Gemfile.
@@ -219,6 +220,31 @@ else
     err "teaching/index.html: workshop section has a phone/ID-number-like string"
 fi
 
+# 14. llms.txt (from llms.txt at the repo root, https://llmstxt.org) for AI
+# search tools: it starts with "# George Kour", links to the 4 pages with
+# https://www.kour.me, and has no '@' (so no email addresses). robots.txt
+# allows everything ("Disallow:" with nothing after it) and points to the
+# sitemap.
+LLMS="$SITE/llms.txt"
+if [ ! -s "$LLMS" ]; then
+  err "missing or empty _site/llms.txt"
+else
+  [ "$(head -n 1 "$LLMS")" = "# George Kour" ] || err "_site/llms.txt: first line is not '# George Kour'"
+  for p in home publications teaching links-resources; do
+    grep -qF "(https://www.kour.me/$p/)" "$LLMS" || err "_site/llms.txt: no link to https://www.kour.me/$p/"
+  done
+  grep -q '@' "$LLMS" && err "_site/llms.txt: has an '@' character"
+  grep -q '{{\|{%' "$LLMS" && err "_site/llms.txt: has unrendered Liquid"
+fi
+ROBOTS="$SITE/robots.txt"
+if [ ! -s "$ROBOTS" ]; then
+  err "missing or empty _site/robots.txt"
+else
+  grep -Eq '^Disallow:[[:space:]]*$' "$ROBOTS" || err "_site/robots.txt: no empty 'Disallow:' line"
+  grep -Eq '^Disallow:[[:space:]]*[^[:space:]]' "$ROBOTS" && err "_site/robots.txt: disallows something"
+  grep -qx 'Sitemap: https://www.kour.me/sitemap.xml' "$ROBOTS" || err "_site/robots.txt: no 'Sitemap: https://www.kour.me/sitemap.xml' line"
+fi
+
 # 11. Preview build for https://kourgeorge.github.io/website/ (what the Deploy
 # action builds when the repo variable SITE_PREVIEW is 'true'). Built into
 # _site_preview. The 4 pages exist, and every local href/src that starts
@@ -257,6 +283,9 @@ else
     grep -q "url('/website/$BANNER_IMG')" "$PREVIEW/$f" 2>/dev/null ||
       err "_site_preview/$f: banner background is not /website/$BANNER_IMG"
   done
+  # 14b. llms.txt in the preview build links to the preview address.
+  grep -qF '(https://kourgeorge.github.io/website/home/)' "$PREVIEW/llms.txt" 2>/dev/null ||
+    err "_site_preview/llms.txt: no link to https://kourgeorge.github.io/website/home/"
 fi
 
 if [ "$fail" -ne 0 ]; then
