@@ -27,6 +27,23 @@
           {% if site.title == 'blank' %}{{ site.first_name }} {{ site.last_name }}{% else %}{{ site.title }}{% endif %}
         </h1>
         {% if page.subtitle %}<p class="page-banner-subtitle">{{ page.subtitle }}</p>{% endif %}
+        {%- if page.social %}
+          {%- comment -%}
+            The social icons from _data/socials.yml (jekyll-socials plugin),
+            small and white, then a "CV" button. The plugin's own CV icon is
+            taken out of the row so the CV link is not shown twice.
+          {%- endcomment -%}
+          {%- capture banner_icons %}{% social_links %}{% endcapture -%}
+          {%- assign cv_url = site.data.socials.cv_pdf -%}
+          {%- if cv_url -%}
+            {%- capture cv_icon %}<a href='{{ cv_url }}' title='Cv pdf'><i class='ai ai-cv'></i></a>{% endcapture -%}
+            {%- assign banner_icons = banner_icons | remove: cv_icon -%}
+          {%- endif %}
+          <div class="page-banner-social">
+            <div class="contact-icons">{{ banner_icons }}</div>
+            {% if cv_url %}<a class="page-banner-cv" href="{{ cv_url }}" title="CV (PDF)"><i class="fa-solid fa-file-lines" aria-hidden="true"></i> CV</a>{% endif %}
+          </div>
+        {%- endif %}
       </div>
     </div>
   </div>

@@ -1,5 +1,6 @@
-# The owner's social links, shown as icons at the bottom of the Home page.
-# They are in the same order as the "Online Presence" list in content/home.md.
+# The owner's social links, shown as small white icons in the Home banner
+# (_includes/page_banner.liquid); cv_pdf is shown there as a "CV" button.
+# They are in the same order as the old "Online Presence" list in content/home.md.
 # For more information, see the jekyll-socials plugin: https://github.com/george-gca/jekyll-socials
 email: kourgeorge@gmail.com
 cv_pdf: https://drive.google.com/file/d/1jKShjChFSWVyrwjqUwpUAGDPcxdn__so/view?usp=sharing

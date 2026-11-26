@@ -12,7 +12,7 @@ profile:
   image_circular: true # shown as a round photo in the Home banner
 
 selected_papers: true # a list of papers marked as "selected={true}" in _bibliography/papers.bib
-social: true # includes social icons at the bottom of the page
+social: true # social icons and a CV button in the Home banner (_includes/page_banner.liquid)
 
 announcements:
   enabled: false # no news items yet
@@ -21,39 +21,53 @@ latest_posts:
   enabled: false # the blog is turned off
 ---
 
-<!-- Text copied word for word from content/home.md. The heading ids are the old Google Sites anchors (see content/NOTES.md). -->
+<!-- Text from content/home.md, shortened for Home (T-26); the full details are in the CV. The heading ids are the old Google Sites anchors (see content/NOTES.md). The layout (_layouts/about.liquid) puts the selected publications where the marker below is. -->
 
 I am a senior researcher in the Language and Conversation Group at IBM Research, focusing on the evaluation, safety, and security of large language models and AI agents. My work examines how AI systems make decisions, express preferences, and behave in complex or adversarial settings, with an emphasis on developing methods for assessing reliability, alignment, and risk.
 
-I also teach in the Computer Science faculty at the Academic College of Tel Aviv-Yaffo, where I lead both introductory and advanced machine learning courses.
+I also teach machine learning and lead a [workshop on autonomous AI agents]({{ '/teaching/#agentic-workshop' | relative_url }}) in the Computer Science faculty at the Academic College of Tel Aviv-Yaffo.
 
-I earned my bachelor's degree in computer engineering from the Technion, followed by a master's at Tel Aviv University, where I worked with Prof. Dana Ron and Dr. Raid Saabni on a thesis about online handwriting recognition in Arabic. For my Ph.D. in computational neuroscience at Haifa University’s Sagol Department of Neurobiology, I studied cognitive models of attention and motivation, focusing on how the brain represents different states, under the guidance of Dr. Genela Morris.
+B.Sc. Computer Engineering, Technion · M.Sc., Tel Aviv University · Ph.D. Computational Neuroscience, University of Haifa
+{: .hm-edu}
 
-<h3 id="h.q4wcjinfbaz1">Research Interests:</h3>
+<p id="h.p_lujnsfikmTVd" class="hm-contact"><strong>Email:</strong> gkour(at)ibm.com / kourgeorge(at)gmail.com</p>
 
-My research interests are mainly focused on the foundation of learning mechanisms, encompassing both artificial and natural systems, including:
+<!-- selected-publications -->
 
-Natural Language Processing - Large Language Models - Generative Models - AI Safety - Computational Neuroscience - Cognitive Modeling - Reinforcement Learning.
+<h3 id="h.q4wcjinfbaz1" class="lr-section">Research Interests</h3>
 
-<h3 id="h.p_lujnsfikmTVd">Online Presence:</h3>
+<p class="lr-intro">My research interests are mainly focused on the foundation of learning mechanisms, encompassing both artificial and natural systems, including:</p>
 
-- Email: gkour(at)ibm.com / kourgeorge(at)gmail.com
-- My [**CV**](https://drive.google.com/file/d/1jKShjChFSWVyrwjqUwpUAGDPcxdn__so/view?usp=sharing) _(updated May. 2026)_.
-- [Researcher page](http://researcher.watson.ibm.com/researcher/view.php?person=ibm-GKOUR) at **IBM Research**.
-- My [**linked-in**](https://www.linkedin.com/in/georgekour/) profile
-- A link to my [**github**](https://github.com/kourgeorge) account
-- My [**page**](https://scholar.google.com/citations?hl=en&user=Yx8ov1wAAAAJ) on Google Scholar
-- My [**Researchgate**](https://www.researchgate.net/profile/George_Kour) page
-- My [**dblp**](https://dblp.uni-trier.de/pers/hd/k/Kour:George) page.
+<ul class="hm-tags">
+  <li class="hm-tag">Natural Language Processing</li>
+  <li class="hm-tag">Large Language Models</li>
+  <li class="hm-tag">Generative Models</li>
+  <li class="hm-tag">AI Safety</li>
+  <li class="hm-tag">Computational Neuroscience</li>
+  <li class="hm-tag">Cognitive Modeling</li>
+  <li class="hm-tag">Reinforcement Learning</li>
+</ul>
 
----
+<h3 id="h.p_zqA8I2zFqZvP" class="lr-section">Supported Organizations</h3>
 
-<h3 id="h.p_zqA8I2zFqZvP">Supported Organizations:</h3>
+<p class="lr-intro">Being part of a nation displaced from its homeland, and simply as a human being, I'm deeply passionate about human rights, particularly those of refugees. I support these organizations:</p>
 
-Being part of a nation displaced from its homeland, and simply as a human being, I'm deeply passionate about human rights, particularly those of refugees.
-
-I support the following organizations:
-
-- [**Sadaka-Reut**](http://www.reutsadaka.org/): an Arab-Jewish Partnership Organization. _Active Role: Board of Directors Member._
-- [**SAMS**](https://www.sams-usa.net/): The Syrian American Medical Society. _Active Role: Volunteer & Honorary member 2017-2018._
-- [**_tsofen_**](http://www.tsofen.org/): An organization promoting Arab citizens' representation in hi-tech firms. _Active Role: Volunteer in the One-On-One program._
+<section class="gh-projects hm-orgs">
+  <ul class="gp-grid">
+    <li class="gp-card hm-org">
+      <a class="gp-title" href="http://www.reutsadaka.org/"><strong>Sadaka-Reut</strong></a>
+      <span class="hm-role">Board of Directors member</span>
+      <span class="gp-blurb">An Arab-Jewish partnership organization.</span>
+    </li>
+    <li class="gp-card hm-org">
+      <a class="gp-title" href="https://www.sams-usa.net/"><strong>SAMS</strong></a>
+      <span class="hm-role">Volunteer and honorary member, 2017-2018</span>
+      <span class="gp-blurb">The Syrian American Medical Society.</span>
+    </li>
+    <li class="gp-card hm-org">
+      <a class="gp-title" href="http://www.tsofen.org/"><strong>Tsofen</strong></a>
+      <span class="hm-role">Volunteer, One-on-One program</span>
+      <span class="gp-blurb">Promotes Arab citizens' representation in hi-tech firms.</span>
+    </li>
+  </ul>
+</section>

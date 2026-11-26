@@ -8,8 +8,15 @@ layout: default
     _layouts/default.liquid), so the theme's header and floated photo are
     left out here.
   {%- endcomment -%}
+  {%- comment -%}
+    T-26: the page text is split at the "<!-- selected-publications -->"
+    marker in _pages/about.md, so the order is: short bio, selected
+    publications, Research Interests, Supported Organizations. The social
+    icons are in the banner, so there is no icon row at the bottom.
+  {%- endcomment -%}
+  {%- assign about_parts = content | split: '<!-- selected-publications -->' -%}
   <article>
-    <div class="clearfix">{{ content }}</div>
+    {{ about_parts[0] }}
 
     <!-- News -->
     {% if page.announcements and page.announcements.enabled %}
@@ -29,20 +36,15 @@ layout: default
 
     <!-- Selected papers -->
     {% if page.selected_papers %}
-      <h2>
-        <a href="{{ '/publications/' | relative_url }}" style="color: inherit">selected publications</a>
-      </h2>
+      <h3 id="selected-publications" class="lr-section">
+        <a href="{{ '/publications/' | relative_url }}" style="color: inherit">Selected publications</a>
+      </h3>
       {% include selected_papers.liquid %}
     {% endif %}
 
-    <!-- Social -->
-    {% if page.social %}
-      <div class="social">
-        <div class="contact-icons">{% social_links %}</div>
-
-        <div class="contact-note">{{ site.contact_note }}</div>
-      </div>
-    {% endif %}
+    {%- for part in about_parts offset: 1 %}
+      {{ part }}
+    {%- endfor %}
 
     {% if site.newsletter and site.newsletter.enabled and site.footer_fixed %}
       {% if site.plugins contains 'al_newsletter' %}

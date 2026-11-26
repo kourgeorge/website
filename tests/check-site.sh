@@ -4,14 +4,16 @@
 # (Home, Publications, Teaching, Links & Resources, in that order), the CNAME,
 # the 404 page, that every local href/src points to a file in _site, and
 # that the publication list (from _bibliography/papers.bib) is shown, and
-# that the built CSS keeps the small Home social icons (font-size 1.75rem),
+# that the built CSS keeps the small Home banner social icons (font-size 1.25rem),
 # and that the 4 pages have the page banner with its picture, and that
 # llms.txt and robots.txt are built and allow indexing, and that a
 # production build (JEKYLL_ENV=production, into _site_prod) keeps their lines
 # and has the Google Analytics tag on every page, while the dev build has none,
 # and that the footer is only "© <year> George Kour. All Rights Reserved.",
 # and that Links & Resources and Teaching show their projects as cards, with
-# their section and course headings and no empty paragraphs.
+# their section and course headings and no empty paragraphs, and that Home
+# has its sections in order, 7 interest tags, 3 organization cards and the
+# social icons with a CV button in the banner (no bottom icon row).
 # It also builds the github.io preview (_config.preview.yml) into _site_preview
 # and checks that its local links all start with /website/ and work.
 # Needs Homebrew Ruby (see the PATH below) and the gems from the Gemfile.
@@ -142,18 +144,18 @@ echo "$home_html" | grep -qi 'selected publications' || err "home/index.html: no
 n_sel="$(echo "$home_html" | grep -o '<div class="row">' | wc -l | tr -d ' ')"
 [ "$n_sel" -ge 1 ] || err "home/index.html: no selected publications listed"
 
-# 10. The small social icons on Home (from _sass/_custom.scss, loaded by
-# assets/css/main.scss): the built CSS has a ".social .contact-icons" rule
-# with font-size 1.75rem.
+# 10. The small social icons in the Home banner (from _sass/_custom.scss,
+# loaded by assets/css/main.scss): the built CSS has a
+# ".page-banner-social .contact-icons" rule with font-size 1.25rem.
 CSS="$SITE/assets/css/main.css"
 if [ ! -s "$CSS" ]; then
   err "missing or empty _site/assets/css/main.css"
 else
-  icon_rules="$(tr '\n\r' '  ' <"$CSS" | grep -o '\.social \.contact-icons *{[^}]*}')"
+  icon_rules="$(tr '\n\r' '  ' <"$CSS" | grep -o '\.page-banner-social \.contact-icons *{[^}]*}')"
   if [ -z "$icon_rules" ]; then
-    err "main.css: no '.social .contact-icons' rule (is '@use \"custom\";' still in assets/css/main.scss?)"
-  elif ! echo "$icon_rules" | grep -Eq '(^|[{;])[[:space:]]*font-size:[[:space:]]*1\.75rem[[:space:]]*(;|})'; then
-    err "main.css: '.social .contact-icons' rule has no font-size:1.75rem (got: $icon_rules)"
+    err "main.css: no '.page-banner-social .contact-icons' rule (is '@use \"custom\";' still in assets/css/main.scss?)"
+  elif ! echo "$icon_rules" | grep -Eq '(^|[{;])[[:space:]]*font-size:[[:space:]]*1\.25rem[[:space:]]*(;|})'; then
+    err "main.css: '.page-banner-social .contact-icons' rule has no font-size:1.25rem (got: $icon_rules)"
   fi
   # 10b. Compact selected publications on Home: the built CSS has a
   # ".publications.selected-papers ol.bibliography li" rule with font-size
@@ -175,6 +177,58 @@ n_sel_c="$(echo "$home_html" | grep -o '<div class="publications selected-papers
 [ "$n_sel_c" -ge 1 ] || err "home/index.html: no papers inside <div class=\"publications selected-papers\">"
 grep -q 'selected-papers' "$SITE/publications/index.html" &&
   err "publications/index.html: uses the Home-only 'selected-papers' class"
+
+# 19. Home layout (T-26). The banner has the social icons (from
+# _data/socials.yml) and a "CV" button linking to the CV on Drive, with the
+# plugin's own CV icon taken out so it is not shown twice; there is no
+# bottom <div class="social"> icon row. The main content runs: short bio,
+# Selected publications, Research Interests, Supported Organizations; the 7
+# interests are tags and the 3 organizations are cards; the emails are shown
+# in the "(at)" form; the 1-column / 3-column org grid is in the CSS.
+banner_html="$(echo "$home_html" | grep -o '<div class="page-banner page-banner-home".*' | sed 's:<div class="container mt-5".*::')"
+banner_social="$(echo "$banner_html" | grep -o '<div class="page-banner-social">.*')"
+if [ -z "$banner_social" ]; then
+  err "home/index.html: no <div class=\"page-banner-social\"> in the banner"
+else
+  for u in 'https://github.com/kourgeorge' 'https://www.linkedin.com/in/georgekour' 'https://scholar.google.com/citations?user=Yx8ov1wAAAAJ' 'https://dblp.uni-trier.de/pers/hd/k/Kour:George'; do
+    echo "$banner_social" | grep -qF "href=\"$u" || err "home/index.html: banner has no icon link to $u"
+  done
+  echo "$banner_social" | grep -Eq '<a class="page-banner-cv" href="https://drive\.google\.com/file/d/1jKShjChFSWVyrwjqUwpUAGDPcxdn__so/[^"]*"[^>]*>.*CV</a>' ||
+    err "home/index.html: banner has no CV button linking to the CV on Drive"
+  n_cv="$(echo "$banner_social" | grep -o 'href="https://drive.google.com/file/d/1jKShjChFSWVyrwjqUwpUAGDPcxdn__so' | wc -l | tr -d ' ')"
+  [ "$n_cv" -eq 1 ] || err "home/index.html: the banner links to the CV $n_cv times, expected 1"
+fi
+echo "$home_html" | grep -q '<div class="social">' && err "home/index.html: the old bottom social icon row is still there"
+home_main="$(echo "$home_html" | grep -o '<article>.*</article>')"
+pos() { echo "$home_main" | grep -bo "$1" | head -n 1 | cut -d: -f1; }
+p_bio="$(pos 'I am a senior researcher in the Language and Conversation Group')"
+p_pub="$(pos '<h3 id="selected-publications" class="lr-section">')"
+p_ri="$(pos '<h3 id="h.q4wcjinfbaz1" class="lr-section">Research Interests</h3>')"
+p_so="$(pos '<h3 id="h.p_zqA8I2zFqZvP" class="lr-section">Supported Organizations</h3>')"
+if [ -z "$p_bio" ] || [ -z "$p_pub" ] || [ -z "$p_ri" ] || [ -z "$p_so" ]; then
+  err "home/index.html: missing a section (bio '$p_bio', selected publications '$p_pub', Research Interests '$p_ri', Supported Organizations '$p_so')"
+elif ! [ "$p_bio" -lt "$p_pub" ] || ! [ "$p_pub" -lt "$p_ri" ] || ! [ "$p_ri" -lt "$p_so" ]; then
+  err "home/index.html: sections are not in the order bio, selected publications, Research Interests, Supported Organizations"
+fi
+echo "$home_main" | grep -q 'href="/teaching/#agentic-workshop">workshop on autonomous AI agents</a>' ||
+  err "home/index.html: bio has no link to the agents workshop on Teaching"
+for name in "Dana Ron" "Raid Saabni" "Genela Morris"; do
+  echo "$home_main" | grep -q "$name" && err "home/index.html: still names the supervisor $name"
+done
+n_tags="$(echo "$home_main" | grep -o '<li class="hm-tag">[^<]*</li>' | wc -l | tr -d ' ')"
+[ "$n_tags" -eq 7 ] || err "home/index.html: $n_tags research interest tags, expected 7"
+orgs_html="$(echo "$home_main" | grep -o '<section class="gh-projects hm-orgs">.*' | sed 's:</section>.*::')"
+n_orgs="$(echo "$orgs_html" | grep -o '<li class="gp-card hm-org">' | wc -l | tr -d ' ')"
+[ "$n_orgs" -eq 3 ] || err "home/index.html: $n_orgs organization cards, expected 3"
+for u in 'http://www.reutsadaka.org/' 'https://www.sams-usa.net/' 'http://www.tsofen.org/'; do
+  echo "$orgs_html" | grep -qF "href=\"$u\"" || err "home/index.html: no organization card linking to $u"
+done
+echo "$home_main" | grep -qF 'gkour(at)ibm.com / kourgeorge(at)gmail.com' ||
+  err "home/index.html: the emails are not shown as gkour(at)ibm.com / kourgeorge(at)gmail.com"
+echo "$home_main" | grep -Eq '<[a-z0-9]+ id="h\.p_lujnsfikmTVd"[^>]*>.*\(at\)ibm\.com' ||
+  err "home/index.html: the Online Presence anchor is not on the email line"
+tr '\n\r' '  ' <"$CSS" | grep -Eq '@media ?\(min-width: ?768px\) *\{[^}]*\.hm-orgs \.gp-grid *\{[^}]*grid-template-columns: ?repeat\(3' ||
+  err "main.css: no 3-column .hm-orgs .gp-grid rule for screens 768px and wider"
 
 # 12. Page banners (from _includes/page_banner.liquid): each of the 4 pages
 # has a <div class="page-banner ..."> with the chalk-brain picture as its
