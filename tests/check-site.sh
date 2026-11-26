@@ -19,6 +19,9 @@
 # Before building, it checks that every paper in _bibliography/papers.bib has
 # a chapter and a tldr of at most 30 words, and that _data/research_journey.yml
 # has the chapters.
+# The interactive talk (talks/what-it-pays-attention-to/) is copied into
+# _site, _site_prod and _site_preview byte for byte, is the first item of the
+# Talks list, and has no "Ask George" text or network scripts/styles.
 # It also builds the github.io preview (_config.preview.yml) into _site_preview
 # and checks that its local links all start with /website/ and work.
 # Needs Homebrew Ruby (see the PATH below) and the gems from the Gemfile.
@@ -438,14 +441,22 @@ echo "$lr_html" | grep -q '<h3 id="h.p_9RovSi7yLXnI" class="lr-section">Talks an
   err "links-resources/index.html: no 'Talks and Presentations:' section heading (class lr-section)"
 lr_main="$(echo "$lr_html" | grep -o '<article>.*</article>')"
 n_talks="$(echo "$lr_main" | grep -o '<div class="lr-talks">.*' | sed 's:</div>.*::' | grep -o '<li>' | wc -l | tr -d ' ')"
-[ "$n_talks" -ge 9 ] || err "links-resources/index.html: $n_talks talks inside <div class=\"lr-talks\">, expected at least 9"
-# T-37: the first talk is the Reichman University 2026 talk, linking to its
+[ "$n_talks" -ge 10 ] || err "links-resources/index.html: $n_talks talks inside <div class=\"lr-talks\">, expected at least 10"
+talk_items="$(echo "$lr_main" | grep -o '<div class="lr-talks">.*' | sed 's:</div>.*::' | sed 's:<li>:\
+<li>:g' | grep '^<li>' | sed 's:</li>.*::')"
+# T-39: the first talk is the interactive talk, linking to its page on the site.
+first_talk="$(echo "$talk_items" | sed -n 1p)"
+echo "$first_talk" | grep -q 'What It Pays Attention To: an interactive talk on my research journey, from models to brains and back to AI safety.' ||
+  err "links-resources/index.html: the first talk is not 'What It Pays Attention To'"
+echo "$first_talk" | grep -q 'href="/talks/what-it-pays-attention-to/"[^>]*>open the talk</a>' ||
+  err "links-resources/index.html: the first talk does not link to /talks/what-it-pays-attention-to/"
+# T-37: the second talk is the Reichman University 2026 talk, linking to its
 # slides (without the personal ouid= parameter).
-first_talk="$(echo "$lr_main" | grep -o '<div class="lr-talks">.*' | sed 's:</div>.*::' | grep -o '<li>.*' | sed 's:</li>.*::' | head -n 1)"
-echo "$first_talk" | grep -q 'Reichman University, May 2026' ||
-  err "links-resources/index.html: the first talk is not the Reichman University May 2026 talk"
-echo "$first_talk" | grep -q 'href="https://docs.google.com/presentation/d/1c64eM0zZNFOd2uVuEXeiDCLWcfzDCsHr/edit?usp=sharing"[^>]*>slides</a>' ||
-  err "links-resources/index.html: the first talk does not link to the Reichman slides"
+second_talk="$(echo "$talk_items" | sed -n 2p)"
+echo "$second_talk" | grep -q 'Reichman University, May 2026' ||
+  err "links-resources/index.html: the second talk is not the Reichman University May 2026 talk"
+echo "$second_talk" | grep -q 'href="https://docs.google.com/presentation/d/1c64eM0zZNFOd2uVuEXeiDCLWcfzDCsHr/edit?usp=sharing"[^>]*>slides</a>' ||
+  err "links-resources/index.html: the second talk does not link to the Reichman slides"
 echo "$lr_main" | grep -q 'ouid=' && err "links-resources/index.html: a link has the personal ouid= parameter"
 echo "$lr_main" | grep -Eq '<p[^>]*>[[:space:]]*(<br */?>[[:space:]]*)*</p>' &&
   err "links-resources/index.html: empty <p></p> in the main content"
@@ -604,6 +615,25 @@ fi
 # not counted.
 GA_DEV="$(grep -rl "$GA_ID" "$SITE" --include='*.html' 2>/dev/null | head -n 3)"
 [ -z "$GA_DEV" ] || err "dev build _site has the analytics ID $GA_ID in: $GA_DEV"
+
+# 17. T-39: the interactive talk is served exactly as built, in the dev,
+# production and preview builds (no front matter, skipped by jekyll-minifier).
+TALK="talks/what-it-pays-attention-to/index.html"
+if [ ! -s "$ROOT/$TALK" ]; then
+  err "missing or empty $TALK"
+else
+  head -n 1 "$ROOT/$TALK" | grep -q '^---' && err "$TALK has front matter (Jekyll would change it)"
+  for d in "$SITE" "$PROD" "$PREVIEW"; do
+    if [ ! -f "$d/$TALK" ]; then
+      err "missing $(basename "$d")/$TALK"
+    else
+      cmp -s "$ROOT/$TALK" "$d/$TALK" || err "$(basename "$d")/$TALK is not byte-identical to $TALK"
+    fi
+  done
+  grep -q 'Ask George' "$ROOT/$TALK" && err "$TALK has 'Ask George' text"
+  grep -Eiq '<script[^>]*src=["'"'"']?(https?:)?//' "$ROOT/$TALK" && err "$TALK loads a <script src> from the network"
+  grep -Eiq '<link[^>]*href=["'"'"']?(https?:)?//' "$ROOT/$TALK" && err "$TALK loads a <link href> from the network"
+fi
 
 if [ "$fail" -ne 0 ]; then
   echo "check-site: FAILED" >&2

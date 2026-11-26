@@ -304,7 +304,8 @@ jekyll-minifier:
   compress_css: false
   # JS minification is delegated to jekyll-terser (compress_javascript above is false).
   # Plain-text files (llms.txt, robots.txt, ...) need their line breaks, so never minify them.
-  exclude: ["*.txt", "llms.txt", "robots.txt"]
+  # The interactive talk (talks/) is a ready-built, self-contained page: serve it exactly as built.
+  exclude: ["*.txt", "llms.txt", "robots.txt", "talks/**/*", "talks/what-it-pays-attention-to/index.html"]
 
 # -----------------------------------------------------------------------------
 # Terser

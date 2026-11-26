@@ -70,6 +70,12 @@ The site rebuilds when you save a file. (Changes to `_config.yml` need a restart
   theme's file (from the `al_folio_core` gem, version 1.0.15) with one line added
   at the end: `@use "custom";`. After you upgrade the theme gem, copy the new
   theme `main.scss` over it again and keep that `@use "custom";` line at the end.
+- **Interactive talk** (`talks/what-it-pays-attention-to/index.html`, served at
+  `/talks/what-it-pays-attention-to/`): its source lives outside this repo, in
+  `~/Desktop/research-journey-talk`. To update it, run `npm run build:public` there,
+  then copy `dist/public/what-it-pays-attention-to.html` over
+  `talks/what-it-pays-attention-to/index.html`. Don't edit the copy here and don't
+  add front matter: the site serves it exactly as built.
 
 Preview it, then run the check:
 
