@@ -268,20 +268,141 @@
   }
 }
 
-// Projects and data-sets on Links & Resources (_includes/github_projects.liquid):
-// same look as the student projects above, with a link in the title and a
-// star badge in the theme colour.
+// Links & Resources page (_pages/links-resources.md and
+// _includes/github_projects.liquid). Its own classes (.lr-*, .gh-projects,
+// .gp-*), so Teaching's student projects list is not affected. Colours use
+// the theme's variables, so light and dark mode both work.
+
+// Section headings ("Projects and Data-sets:", "Talks and Presentations:"):
+// larger, with a thin rule under them; the second one gets extra space above.
+.lr-section {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 0 0 0.6rem;
+  padding-bottom: 0.35rem;
+  border-bottom: 2px solid var(--global-divider-color);
+}
+
+.lr-section ~ .lr-section {
+  margin-top: 2.5rem;
+}
+
+.lr-intro {
+  margin-bottom: 0.25rem;
+  color: var(--global-text-color-light);
+  font-size: 0.95rem;
+}
+
+// Projects: group label (small caps in the theme colour, thin rule under it)
+// and a grid of small cards, 2 columns from 768px, 1 on phones.
 .gh-projects {
-  .sp-title a {
-    color: var(--global-text-color);
+  .gp-group {
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--global-theme-color);
+    margin: 1.25rem 0 0.6rem;
+    padding-bottom: 0.25rem;
+    border-bottom: 1px solid var(--global-divider-color);
   }
 
-  .sp-title a:hover {
+  .gp-grid {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.6rem;
+
+    @media (min-width: 768px) {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  .gp-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    min-width: 0;
+    padding: 0.6rem 0.75rem;
+    border: 1px solid var(--global-divider-color);
+    border-radius: 0.5rem;
+    background-color: var(--global-card-bg-color);
+    font-size: 0.875rem;
+    line-height: 1.35;
+    transition: border-color 0.15s ease-in-out;
+  }
+
+  .gp-card:hover {
+    border-color: var(--global-theme-color);
+  }
+
+  .gp-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.25rem 0.5rem;
+  }
+
+  .gp-title {
+    font-size: 0.95rem;
+    color: var(--global-text-color);
+    overflow-wrap: anywhere;
+  }
+
+  .gp-title:hover {
     color: var(--global-theme-color);
+  }
+
+  .gp-badges {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+  }
+
+  .gp-tag {
+    font-size: 0.7rem;
+    padding: 0.05rem 0.4rem;
+    border: 1px solid var(--global-divider-color);
+    border-radius: 0.25rem;
+    color: var(--global-text-color-light);
+    white-space: nowrap;
   }
 
   .gp-stars {
     color: var(--global-theme-color);
     border-color: var(--global-theme-color);
+  }
+
+  .gp-blurb {
+    color: var(--global-text-color);
+  }
+
+  .gp-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.2rem 0.6rem;
+    margin-top: auto;
+    font-size: 0.8rem;
+  }
+}
+
+// Talks: a compact list, each talk on its own line with a thin rule between.
+.lr-talks {
+  ul {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+  }
+
+  li {
+    font-size: 0.9rem;
+    line-height: 1.4;
+    padding: 0.45rem 0 0.45rem 0.75rem;
+    border-left: 3px solid var(--global-theme-color);
+    margin-bottom: 0.4rem;
+    background-color: var(--global-card-bg-color);
   }
 }

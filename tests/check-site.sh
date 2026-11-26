@@ -10,7 +10,8 @@
 # production build (JEKYLL_ENV=production, into _site_prod) keeps their lines
 # and has the Google Analytics tag on every page, while the dev build has none,
 # and that the footer is only "© <year> George Kour. All Rights Reserved.",
-# and that Links & Resources shows the grouped projects list.
+# and that Links & Resources shows the grouped projects as cards, with its
+# two section headings and no empty paragraphs.
 # It also builds the github.io preview (_config.preview.yml) into _site_preview
 # and checks that its local links all start with /website/ and work.
 # Needs Homebrew Ruby (see the PATH below) and the gems from the Gemfile.
@@ -246,19 +247,38 @@ fi
 # links to https://agents.kour.me/, not the old github.io address that
 # redirects there. The old anchor ids are
 # checked in step 6.
+# Layout (T-24): the projects are cards (<li class="gp-card">) in its own
+# <section class="gh-projects"> (not the Teaching student-projects classes),
+# both section headings have class "lr-section", the talks sit in
+# <div class="lr-talks">, the main content has no empty <p></p> and no <hr>
+# left over from Google Sites, and the built CSS has the 2-column card grid.
 lr_html="$(flat links-resources/index.html)"
-gp_html="$(echo "$lr_html" | grep -o '<section class="student-projects gh-projects".*' | sed 's:</section>.*::')"
+gp_html="$(echo "$lr_html" | grep -o '<section class="gh-projects".*' | sed 's:</section>.*::')"
 if [ -z "$gp_html" ]; then
-  err "links-resources/index.html: no <section class=\"student-projects gh-projects\">"
+  err "links-resources/index.html: no <section class=\"gh-projects\">"
 else
-  got_groups="$(echo "$gp_html" | grep -o '<h5 class="sp-year gp-group">[^<]*</h5>' |
+  got_groups="$(echo "$gp_html" | grep -o '<h5 class="gp-group">[^<]*</h5>' |
     sed 's:<[^>]*>::g; s/&amp;/\&/g' | tr '\n' ';')"
   want_groups="AI safety & LLM evaluation;AI agents & agent tools;Simulators & artificial life;Research code & data;LaTeX templates;"
   [ "$got_groups" = "$want_groups" ] ||
     err "links-resources/index.html: project groups are '$got_groups', expected '$want_groups'"
-  n_gp="$(echo "$gp_html" | grep -o '<li class="sp-item gp-item">' | wc -l | tr -d ' ')"
-  [ "$n_gp" -ge 14 ] || err "links-resources/index.html: $n_gp project entries, expected at least 14"
+  n_gp="$(echo "$gp_html" | grep -o '<li class="gp-card">' | wc -l | tr -d ' ')"
+  [ "$n_gp" -ge 14 ] || err "links-resources/index.html: $n_gp project cards, expected at least 14"
+  echo "$gp_html" | grep -q 'class="[^"]*\bsp-' &&
+    err "links-resources/index.html: projects still use Teaching's sp-* classes"
 fi
+echo "$lr_html" | grep -q '<h3 id="h.p_kd8WZCiBFKhc" class="lr-section">Projects and Data-sets:</h3>' ||
+  err "links-resources/index.html: no 'Projects and Data-sets:' section heading (class lr-section)"
+echo "$lr_html" | grep -q '<h3 id="h.p_9RovSi7yLXnI" class="lr-section">Talks and Presentations:</h3>' ||
+  err "links-resources/index.html: no 'Talks and Presentations:' section heading (class lr-section)"
+lr_main="$(echo "$lr_html" | grep -o '<article>.*</article>')"
+n_talks="$(echo "$lr_main" | grep -o '<div class="lr-talks">.*' | sed 's:</div>.*::' | grep -o '<li>' | wc -l | tr -d ' ')"
+[ "$n_talks" -ge 8 ] || err "links-resources/index.html: $n_talks talks inside <div class=\"lr-talks\">, expected at least 8"
+echo "$lr_main" | grep -Eq '<p[^>]*>[[:space:]]*(<br */?>[[:space:]]*)*</p>' &&
+  err "links-resources/index.html: empty <p></p> in the main content"
+echo "$lr_main" | grep -q '<hr' && err "links-resources/index.html: stray <hr> in the main content"
+tr '\n\r' '  ' <"$CSS" | grep -Eq '@media ?\(min-width: ?768px\) *\{[^}]*\.gh-projects \.gp-grid *\{[^}]*grid-template-columns: ?repeat\(2' ||
+  err "main.css: no 2-column .gh-projects .gp-grid rule for screens 768px and wider"
 echo "$lr_html" | grep -q 'href="https://github.com/kourgeorge/arxiv-style"' ||
   err "links-resources/index.html: no link to github.com/kourgeorge/arxiv-style"
 echo "$lr_html" | grep -q 'href="https://huggingface.co/datasets/ibm-research/' ||
