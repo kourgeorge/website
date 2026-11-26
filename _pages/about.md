@@ -15,7 +15,8 @@ selected_papers: true # a list of papers marked as "selected={true}" in _bibliog
 social: true # social icons and a CV button in the Home banner (_includes/page_banner.liquid)
 
 announcements:
-  enabled: false # no news items yet
+  enabled: true # the News list on Home, from the _news/ folder (one small file per item)
+  limit: 6 # show at most 6 items, newest first
 
 latest_posts:
   enabled: false # the blog is turned off

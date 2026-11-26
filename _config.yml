@@ -188,7 +188,7 @@ collections:
   news:
     defaults:
       layout: post
-    output: true
+    output: false # T-35: news items are one-liners on Home, with no page of their own
 
 # -----------------------------------------------------------------------------
 # Jekyll settings

@@ -1,0 +1,25 @@
+{%- comment -%}
+  T-35: the News list on Home, a compact version of the theme's news.liquid.
+  One line per item from the _news/ collection (inline items, no pages of
+  their own), newest first, at most page.announcements.limit items. The date
+  is shown as "Sep 2026"; an item with date_label (only the year is known)
+  shows that instead. The <time datetime> has the same precision as the
+  label (YYYY-MM or YYYY). Styles: .hm-news in _sass/_custom.scss.
+{%- endcomment -%}
+{%- assign news_items = site.news | sort: 'date' | reverse -%}
+{%- assign news_limit = page.announcements.limit | default: 6 -%}
+<ul class="hm-news">
+  {%- for item in news_items limit: news_limit %}
+    {%- if item.date_label -%}
+      {%- assign news_label = item.date_label -%}
+      {%- assign news_dt = item.date_label -%}
+    {%- else -%}
+      {%- assign news_label = item.date | date: '%b %Y' -%}
+      {%- assign news_dt = item.date | date: '%Y-%m' -%}
+    {%- endif %}
+    <li class="hm-news-item">
+      <time class="hm-news-date" datetime="{{ news_dt }}">{{ news_label }}</time>
+      <span class="hm-news-text">{{ item.content | remove: '<p>' | remove: '</p>' | strip }}</span>
+    </li>
+  {%- endfor %}
+</ul>

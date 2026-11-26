@@ -18,12 +18,10 @@ layout: default
   <article>
     {{ about_parts[0] }}
 
-    <!-- News -->
+    <!-- News (T-35): one-line items from _news/, newest first, no "all news" page -->
     {% if page.announcements and page.announcements.enabled %}
-      <h2>
-        <a href="{{ '/news/' | relative_url }}" style="color: inherit">news</a>
-      </h2>
-      {% include news.liquid limit=true %}
+      <h3 id="news" class="lr-section">News</h3>
+      {% include home_news.liquid %}
     {% endif %}
 
     <!-- Latest posts -->

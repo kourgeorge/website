@@ -12,7 +12,8 @@
 # and that the footer is only "© <year> George Kour. All Rights Reserved.",
 # and that Links & Resources and Teaching show their projects as cards, with
 # their section and course headings and no empty paragraphs, and that Home
-# has its sections in order, 7 interest tags, 3 organization cards and the
+# has its sections in order (with a News list of 5-6 dated items, newest
+# first), 7 interest tags, 3 organization cards and the
 # social icons with a CV button in the banner (no bottom icon row).
 # It also builds the github.io preview (_config.preview.yml) into _site_preview
 # and checks that its local links all start with /website/ and work.
@@ -210,6 +211,55 @@ if [ -z "$p_bio" ] || [ -z "$p_pub" ] || [ -z "$p_ri" ] || [ -z "$p_so" ]; then
 elif ! [ "$p_bio" -lt "$p_pub" ] || ! [ "$p_pub" -lt "$p_ri" ] || ! [ "$p_ri" -lt "$p_so" ]; then
   err "home/index.html: sections are not in the order bio, selected publications, Research Interests, Supported Organizations"
 fi
+# 19c. News on Home (T-35, from _news/ via _includes/home_news.liquid): a
+# "News" heading between the bio and Selected publications, with 5-6 items,
+# each with a <time datetime="YYYY-MM" or "YYYY"> date shown as "Sep 2026"
+# or "2025", newest first (years never go up; months never go up within a
+# year when both items have one). Every link in the list is local (and has a
+# file in _site; step 8 checks the whole page too) or starts with https://.
+# The items have no pages of their own (no _site/news/).
+p_news="$(pos '<h3 id="news" class="lr-section">News</h3>')"
+if [ -z "$p_news" ]; then
+  err "home/index.html: no News heading (<h3 id=\"news\" class=\"lr-section\">News</h3>)"
+elif [ -n "$p_bio" ] && [ -n "$p_pub" ] && { ! [ "$p_bio" -lt "$p_news" ] || ! [ "$p_news" -lt "$p_pub" ]; }; then
+  err "home/index.html: News is not between the bio and Selected publications"
+fi
+news_html="$(echo "$home_main" | grep -o '<ul class="hm-news">.*' | sed 's:</ul>.*::')"
+n_news="$(echo "$news_html" | grep -o '<li class="hm-news-item">' | wc -l | tr -d ' ')"
+{ [ "$n_news" -ge 5 ] && [ "$n_news" -le 6 ]; } || err "home/index.html: $n_news News items, expected 5-6"
+n_dated="$(echo "$news_html" | grep -Eo '<li class="hm-news-item"> *<time class="hm-news-date" datetime="[0-9]{4}(-[0-9]{2})?">([A-Z][a-z]{2} )?[0-9]{4}</time>' | wc -l | tr -d ' ')"
+[ "$n_dated" -eq "$n_news" ] || err "home/index.html: only $n_dated of $n_news News items start with a date"
+prev_y=9999
+prev_m=""
+for dt in $(echo "$news_html" | grep -Eo 'datetime="[0-9-]+"' | sed -E 's/datetime="//; s/"$//'); do
+  y="${dt%%-*}"
+  m=""
+  case "$dt" in *-*) m="${dt#*-}" ;; esac
+  if [ "$y" -gt "$prev_y" ]; then
+    err "home/index.html: News is not newest first ($dt after $prev_y)"
+  elif [ "$y" -eq "$prev_y" ] && [ -n "$m" ] && [ -n "$prev_m" ] && [ "$m" \> "$prev_m" ]; then
+    err "home/index.html: News is not newest first ($dt after $prev_y-$prev_m)"
+  fi
+  if [ "$y" -ne "$prev_y" ] || [ -n "$m" ]; then prev_m="$m"; fi
+  prev_y="$y"
+done
+for addr in $(echo "$news_html" | grep -Eo 'href="[^"]*"' | sed -E 's/^href="//; s/"$//'); do
+  case "$addr" in
+    https://*) ;;
+    /*)
+      path="${addr%%#*}"
+      target="$SITE$path"
+      case "$target" in */) target="${target}index.html" ;; esac
+      [ -f "$target" ] || err "home/index.html: News link '$addr' has no file in _site"
+      frag="${addr#*#}"
+      if [ "$frag" != "$addr" ] && [ -n "$frag" ]; then
+        grep -q "id=\"$frag\"" "$target" 2>/dev/null || err "home/index.html: News link '$addr' has no id=\"$frag\" on its page"
+      fi
+      ;;
+    *) err "home/index.html: News link '$addr' is neither local (/...) nor https://" ;;
+  esac
+done
+[ -e "$SITE/news" ] && err "_site/news exists: News items should not have pages of their own"
 echo "$home_main" | grep -q 'href="/teaching/#agentic-workshop">workshop on autonomous AI agents</a>' ||
   err "home/index.html: bio has no link to the agents workshop on Teaching"
 for name in "Dana Ron" "Raid Saabni" "Genela Morris"; do
