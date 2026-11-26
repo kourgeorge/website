@@ -5,6 +5,7 @@
 # the 404 page, that every local href/src points to a file in _site, and
 # that the publication list (from _bibliography/papers.bib) is shown, and
 # that the built CSS keeps the small Home banner social icons (font-size 1.25rem),
+# that the accent colour is deep teal (no old pink b509ac, dev or production),
 # and that the 4 pages have the page banner with its picture, and that
 # llms.txt and robots.txt are built and allow indexing, and that a
 # production build (JEKYLL_ENV=production, into _site_prod) keeps their lines
@@ -170,6 +171,11 @@ else
   fi
   echo "$sel_css" | grep -Eq '\.publications\.selected-papers ol\.bibliography li \.links[^{]*\{[^}]*display:[[:space:]]*none' ||
     err "main.css: the button row (.links) is not hidden in the Home selected publications"
+  # 10c. Accent colour is deep teal (_sass/_variables.scss, _sass/_custom.scss):
+  # the theme's old pink/purple (#b509ac) is gone and the teal values are set.
+  ! grep -qi 'b509ac' "$CSS" || err "main.css: still has the old pink accent b509ac"
+  grep -qi '#0f766e' "$CSS" || err "main.css: no light-mode teal accent #0f766e"
+  grep -qi '#2dd4bf' "$CSS" || err "main.css: no dark-mode teal accent #2dd4bf"
 fi
 # The Home list uses the compact wrapper and still lists at least 1 paper;
 # the Publications page does not use it.
@@ -548,6 +554,12 @@ else
   # 16. Google Analytics (GA4, from analytics.google in _config.yml via
   # _includes/google_analytics.liquid): the 4 pages and 404.html of the
   # production build load gtag.js and call gtag('config', ...) with the ID.
+  # 15b. The production CSS has no old pink accent either.
+  if [ -s "$PROD/assets/css/main.css" ]; then
+    ! grep -qi 'b509ac' "$PROD/assets/css/main.css" || err "_site_prod main.css: still has the old pink accent b509ac"
+  else
+    err "missing or empty _site_prod/assets/css/main.css"
+  fi
   for f in $PAGES 404.html; do
     [ -f "$PROD/$f" ] || { err "missing page in _site_prod: $f"; continue; }
     grep -q "googletagmanager.com/gtag/js?id=$GA_ID" "$PROD/$f" ||

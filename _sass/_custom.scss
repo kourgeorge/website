@@ -1,4 +1,6 @@
 // Local style overrides for this site (loaded last from assets/css/main.scss).
+// The accent colour (deep teal) is set in _sass/_themes.scss; rules here use
+// var(--global-theme-color) / var(--global-hover-color), not a fixed colour.
 
 // Social icons in the Home banner (markup in _includes/page_banner.liquid,
 // icons from _data/socials.yml): small and white on the dark banner (theme
