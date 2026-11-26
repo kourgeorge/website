@@ -10,8 +10,8 @@
 # production build (JEKYLL_ENV=production, into _site_prod) keeps their lines
 # and has the Google Analytics tag on every page, while the dev build has none,
 # and that the footer is only "© <year> George Kour. All Rights Reserved.",
-# and that Links & Resources shows the grouped projects as cards, with its
-# two section headings and no empty paragraphs.
+# and that Links & Resources and Teaching show their projects as cards, with
+# their section and course headings and no empty paragraphs.
 # It also builds the github.io preview (_config.preview.yml) into _site_preview
 # and checks that its local links all start with /website/ and work.
 # Needs Homebrew Ruby (see the PATH below) and the gems from the Gemfile.
@@ -209,26 +209,32 @@ grep -q '\.page-banner' "$CSS" 2>/dev/null || err "main.css: no .page-banner rul
 # Student Projects" heading is gone; and the workshop section shows no email
 # addresses or phone/ID-number-like strings.
 # (The 4 old course anchor ids are checked in step 6.)
+# Layout (T-25, like Links & Resources): the workshop heading has class
+# "lr-section", then the 4 old courses follow in order, each an
+# <h3 class="tc-course"> with its paragraph right below; the 4 projects are
+# cards (<li class="gp-card sp-card">) in a <ul class="gp-grid"> under a
+# "gp-group" year label; and the main content has no <hr> or empty <p></p>.
 teach_html="$(flat teaching/index.html)"
-echo "$teach_html" | grep -q '<h3 id="agentic-workshop">Workshop in Learning Systems and Autonomous Agents</h3>' ||
+echo "$teach_html" | grep -q '<h3 id="agentic-workshop" class="lr-section[^"]*">Workshop in Learning Systems and Autonomous Agents</h3>' ||
   err "teaching/index.html: no workshop heading with id=\"agentic-workshop\""
 echo "$teach_html" | grep -q 'Supervised Student Projects' &&
   err "teaching/index.html: the old 'Supervised Student Projects' section is still there"
 # The workshop section: from its heading up to the next <h3> (or the end).
-ws_html="$(echo "$teach_html" | sed -n 's:.*\(<h3 id="agentic-workshop">.*\):\1:p' |
-  sed 's:^<h3 id="agentic-workshop">[^<]*</h3>::' | sed 's:<h3[ >].*::')"
+ws_html="$(echo "$teach_html" | sed -n 's:.*\(<h3 id="agentic-workshop"[^>]*>.*\):\1:p' |
+  sed 's:^<h3 id="agentic-workshop"[^>]*>[^<]*</h3>::' | sed 's:<h3[ >].*::')"
 if [ -z "$ws_html" ]; then
   err "teaching/index.html: workshop section is empty"
 else
-  echo "$ws_html" | grep -q '<h4 id="student-projects">Student projects</h4>' ||
+  echo "$ws_html" | grep -q '<h4 id="student-projects"[^>]*>Student projects</h4>' ||
     err "teaching/index.html: no 'Student projects' sub-heading (id=\"student-projects\") inside the workshop section"
-  sp_html="$(echo "$ws_html" | grep -o '<section class="student-projects".*' | sed 's:</section>.*::')"
+  sp_html="$(echo "$ws_html" | grep -o '<section class="student-projects[^"]*".*' | sed 's:</section>.*::')"
   if [ -z "$sp_html" ]; then
     err "teaching/index.html: no <section class=\"student-projects\"> inside the workshop section"
   else
-    n_sp="$(echo "$sp_html" | grep -o '<li class="sp-item">' | wc -l | tr -d ' ')"
-    [ "$n_sp" -eq 4 ] || err "teaching/index.html: $n_sp student projects, expected 4"
-    echo "$sp_html" | grep -q '<h5 class="sp-year">2026</h5>' || err "teaching/index.html: no 2026 year heading"
+    n_sp="$(echo "$sp_html" | grep -o '<li class="gp-card sp-card">' | wc -l | tr -d ' ')"
+    [ "$n_sp" -eq 4 ] || err "teaching/index.html: $n_sp student project cards (gp-card), expected 4"
+    echo "$sp_html" | grep -q '<ul class="gp-grid">' || err "teaching/index.html: student projects are not in a gp-grid"
+    echo "$sp_html" | grep -q '<h5 class="gp-group sp-year">2026</h5>' || err "teaching/index.html: no 2026 year label (gp-group)"
     echo "$sp_html" | grep -q 'course 150070' &&
       err "teaching/index.html: the project list still shows the redundant 'workshop' line"
   fi
@@ -238,6 +244,18 @@ else
   echo "$ws_text" | grep -Eq '(\+972|\b0[2-9])[- ]?[0-9]{1,2}[- ]?[0-9]{3}[- ]?[0-9]{4}|[0-9]{9,}' &&
     err "teaching/index.html: workshop section has a phone/ID-number-like string"
 fi
+got_courses="$(echo "$teach_html" | grep -o '<h3 id="[^"]*" class="[^"]*">[^<]*</h3>' |
+  sed 's:<h3 id="\([^"]*\)" class="\([^"]*\)">\([^<]*\)</h3>:\1|\2|\3:' | tr '\n' ';')"
+want_courses="agentic-workshop|lr-section tc-current|Workshop in Learning Systems and Autonomous Agents;h.ao2ziu9eq497|tc-course|Introduction to Machine Learning in Python;h.p_oQxnhJbmk8UM|tc-course|Introduction to Scientific Programming in MATLAB;h.k58d4jgpt5mj|tc-course|Git for gits;h.hrj399f848kb|tc-course|Deep learning for Sequential Data;"
+[ "$got_courses" = "$want_courses" ] ||
+  err "teaching/index.html: course headings are '$got_courses', expected '$want_courses'"
+n_tc_text="$(echo "$teach_html" | grep -Eo '</h3>[[:space:]]*<p class="tc-text">' | wc -l | tr -d ' ')"
+[ "$n_tc_text" -eq 5 ] || err "teaching/index.html: $n_tc_text course headings with their paragraph right below, expected 5"
+teach_main="$(echo "$teach_html" | grep -o '<article>.*</article>')"
+[ -n "$teach_main" ] || err "teaching/index.html: no <article> main content"
+echo "$teach_main" | grep -Eq '<p[^>]*>[[:space:]]*(<br */?>[[:space:]]*)*</p>' &&
+  err "teaching/index.html: empty <p></p> in the main content"
+echo "$teach_main" | grep -q '<hr' && err "teaching/index.html: stray <hr> in the main content"
 
 # 18. Projects and Data-sets on Links & Resources (from
 # _data/github_projects.yml via _includes/github_projects.liquid): the 5 group
