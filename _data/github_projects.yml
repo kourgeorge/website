@@ -56,7 +56,7 @@
   stars: 1
   language: "Python"
   links:
-    site: "https://kourgeorge.github.io/agents-patterns-atlas/"
+    site: "https://agents.kour.me/"
   order: 22
 - group: "AI agents & agent tools"
   title: "jarvis"

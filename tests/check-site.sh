@@ -242,7 +242,9 @@ fi
 # _data/github_projects.yml via _includes/github_projects.liquid): the 5 group
 # headings in order, at least 14 entries, links to arxiv-style and to the
 # ibm-research Hugging Face datasets, and no link to the old Arabic letters
-# Drive file (id 0B1ZvWH6..., now behind a sign-in). The old anchor ids are
+# Drive file (id 0B1ZvWH6..., now behind a sign-in). agents-patterns-atlas
+# links to https://agents.kour.me/, not the old github.io address that
+# redirects there. The old anchor ids are
 # checked in step 6.
 lr_html="$(flat links-resources/index.html)"
 gp_html="$(echo "$lr_html" | grep -o '<section class="student-projects gh-projects".*' | sed 's:</section>.*::')"
@@ -265,6 +267,10 @@ echo "$lr_html" | grep -q 'huggingface.co/datasets/ibm/' &&
   err "links-resources/index.html: still links to the old huggingface.co/datasets/ibm/ address"
 echo "$lr_html" | grep -q '0B1ZvWH6' &&
   err "links-resources/index.html: still links to the old Arabic letters Drive file"
+echo "$lr_html" | grep -q 'href="https://agents.kour.me/"' ||
+  err "links-resources/index.html: no link to https://agents.kour.me/"
+echo "$lr_html" | grep -q 'kourgeorge.github.io/agents-patterns-atlas' &&
+  err "links-resources/index.html: still links to kourgeorge.github.io/agents-patterns-atlas"
 echo "$lr_html" | grep -q 'href="https://github.com/kourgeorge"' ||
   err "links-resources/index.html: no link to the GitHub profile"
 echo "$lr_html" | grep -q 'Talks and Presentations' ||
