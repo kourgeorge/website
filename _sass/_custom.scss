@@ -531,3 +531,344 @@
     color: var(--global-text-color-light);
   }
 }
+
+// Publications page: "a journey of ideas" (_includes/publications_journey.liquid,
+// cards from _layouts/journey_entry.liquid). A thin teal thread down the left
+// with a dot per chapter and a hollow dot at the end; paper cards reuse the
+// .gh-projects .gp-card look from Links & Resources. Colours use the theme's
+// variables, so light and dark mode both work. Without JavaScript the switch
+// and chips are hidden and everything is shown (the journey, then the classic
+// list); assets/js/publications-journey.js adds .jr-js and data-view/filter.
+.jr-root {
+  --jr-pad: 2.25rem; // room left of the chapters for the thread
+  --jr-line: 0.55rem; // where the thread runs
+  --jr-dot: 14px;
+  margin-top: 0.75rem;
+}
+
+.jr-controls {
+  display: none;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.jr-js .jr-controls {
+  display: flex;
+}
+
+.jr-switch {
+  display: inline-flex;
+  border: 1px solid var(--global-theme-color);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.jr-switch-btn,
+.jr-chip {
+  font-size: 0.8rem;
+  line-height: 1.2;
+  cursor: pointer;
+  color: var(--global-theme-color);
+  background: transparent;
+  border: 0;
+}
+
+.jr-switch-btn {
+  padding: 0.3rem 0.85rem;
+}
+
+.jr-switch-btn + .jr-switch-btn {
+  border-left: 1px solid var(--global-theme-color);
+}
+
+.jr-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.jr-chip {
+  padding: 0.2rem 0.7rem;
+  border: 1px solid var(--global-theme-color);
+  border-radius: 999px;
+}
+
+.jr-switch-btn[aria-pressed="true"],
+.jr-chip[aria-pressed="true"] {
+  color: var(--global-bg-color);
+  background-color: var(--global-theme-color);
+}
+
+.jr-switch-btn:focus-visible,
+.jr-chip:focus-visible {
+  outline: 2px solid var(--global-theme-color);
+  outline-offset: 2px;
+}
+
+.jr-root[data-view="classic"] .jr-chips,
+.jr-js[data-view="classic"] .jr-journey,
+.jr-js[data-view="journey"] .jr-classic,
+.jr-js .jr-classic-title {
+  display: none;
+}
+
+.publications.jr-journey {
+  margin-top: 0;
+}
+
+.jr-thread {
+  padding-left: var(--jr-pad);
+}
+
+.jr-chapter {
+  position: relative;
+  padding-bottom: 1.75rem;
+}
+
+// The dot for each chapter, on the thread, next to its label.
+.jr-chapter::before {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  top: 0.2rem;
+  left: calc(var(--jr-line) - var(--jr-pad) + 1px - var(--jr-dot) / 2);
+  width: var(--jr-dot);
+  height: var(--jr-dot);
+  border-radius: 50%;
+  background-color: var(--global-theme-color);
+  box-shadow: 0 0 0 3px var(--global-bg-color);
+}
+
+// The thread: from each dot down to the next one.
+.jr-chapter:not(.jr-next)::after {
+  content: "";
+  position: absolute;
+  top: 0.5rem;
+  bottom: -0.5rem;
+  left: calc(var(--jr-line) - var(--jr-pad));
+  width: 2px;
+  background-color: var(--global-theme-color);
+  opacity: 0.55;
+}
+
+.jr-root:not([data-filter="all"]) .jr-chapter::after {
+  bottom: 0;
+}
+
+// "What comes next": a hollow dot and its question, where the thread ends.
+.jr-next {
+  padding-bottom: 0.5rem;
+}
+
+.jr-next::before {
+  background-color: var(--global-bg-color);
+  border: 2px solid var(--global-theme-color);
+  box-shadow: none;
+}
+
+.jr-label {
+  margin: 0 0 0.15rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--global-theme-color);
+}
+
+.jr-title {
+  margin: 0 0 0.35rem;
+  font-size: 1.35rem;
+  font-weight: 600;
+}
+
+.jr-question {
+  margin: 0 0 0.6rem;
+  font-size: 1.15rem;
+  font-style: italic;
+  line-height: 1.4;
+  color: var(--global-text-color-light);
+}
+
+.jr-intro {
+  margin: 0 0 0.75rem;
+  font-size: 0.95rem;
+}
+
+.jr-bridge {
+  margin: 0.25rem 0 0;
+  font-size: 0.85rem;
+  font-style: italic;
+  color: var(--global-text-color-light);
+
+  .jr-arrow {
+    font-style: normal;
+    font-weight: 700;
+    margin-right: 0.2rem;
+    color: var(--global-theme-color);
+  }
+}
+
+// The papers of a chapter: one card per row, oldest first. jekyll-scholar
+// groups them by year (to sort them); the year headings are not shown.
+.publications .jr-papers {
+  h2.bibliography {
+    display: none;
+  }
+
+  ol.bibliography {
+    margin: 0;
+
+    li {
+      margin-bottom: 0.6rem;
+    }
+  }
+}
+
+.publications .jr-papers ol.bibliography li .jr-card {
+  gap: 0;
+  scroll-margin-top: 4.5rem;
+
+  > * + * {
+    margin-top: 0.25rem;
+  }
+
+  // The folded Abs / Bib blocks take no room until they are opened.
+  > .hidden {
+    margin-top: 0;
+  }
+
+  > div.abstract.hidden:not(.open) {
+    border-color: transparent;
+  }
+
+  .jr-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .jr-venue {
+    font-size: 0.7rem;
+    padding: 0.15rem 0.45rem;
+    color: var(--global-card-bg-color);
+    background-color: var(--global-theme-color);
+  }
+
+  .jr-year {
+    font-size: 0.75rem;
+    color: var(--global-text-color-light);
+  }
+
+  .jr-paper-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    line-height: 1.3;
+
+    a {
+      color: var(--global-text-color);
+    }
+
+    a:hover {
+      color: var(--global-theme-color);
+    }
+  }
+
+  .author {
+    font-size: 0.8rem;
+    color: var(--global-text-color-light);
+
+    > em {
+      font-weight: 700;
+      color: var(--global-text-color);
+    }
+  }
+
+  .jr-tldr {
+    margin-bottom: 0;
+  }
+
+  .jr-tldr-label {
+    font-weight: 700;
+    margin-right: 0.25rem;
+    color: var(--global-theme-color);
+  }
+
+  .jr-builds {
+    font-size: 0.75rem;
+    color: var(--global-text-color-light);
+
+    ul.bibliography,
+    ul.bibliography li {
+      display: inline;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+  }
+
+  .links {
+    margin-top: 0.15rem;
+
+    a.btn {
+      font-size: 0.7rem;
+      padding: 0.1rem 0.5rem;
+      margin: 0.1rem 0.15rem 0.1rem 0;
+    }
+  }
+}
+
+// Side quests: folded, after the thread.
+.jr-side {
+  margin: 1.5rem 0 0.5rem;
+  padding: 0.6rem 0.85rem;
+  border: 1px solid var(--global-divider-color);
+  border-radius: 0.5rem;
+
+  > summary {
+    cursor: pointer;
+  }
+
+  .jr-label {
+    display: inline;
+    margin-right: 0.35rem;
+  }
+
+  .jr-side-q {
+    font-style: italic;
+    color: var(--global-text-color-light);
+  }
+
+  .jr-intro {
+    margin-top: 0.6rem;
+  }
+}
+
+.jr-classic-title {
+  margin-top: 2rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.publications.jr-classic {
+  margin-top: 0;
+}
+
+// Phones: the thread moves to a thin line near the left edge.
+@media (max-width: 576px) {
+  .jr-root {
+    --jr-pad: 1.1rem;
+    --jr-line: 0.2rem;
+    --jr-dot: 10px;
+  }
+
+  .jr-title {
+    font-size: 1.2rem;
+  }
+
+  .jr-question {
+    font-size: 1.05rem;
+  }
+}

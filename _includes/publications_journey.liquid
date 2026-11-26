@@ -1,0 +1,91 @@
+{%- comment -%}
+  The Publications page as "a journey of ideas" (used by _pages/publications.md).
+  Chapters come from _data/research_journey.yml, in order; each chapter's
+  papers are the entries of _bibliography/papers.bib with chapter={<id>},
+  oldest first (grouped by year, ascending; the year headings are hidden),
+  shown as cards by _layouts/journey_entry.liquid.
+  - prelude, quality, safety, agents: on the teal thread, one dot each;
+  - next: the hollow dot at the end of the thread (its question only);
+  - side: the folded "Side quests" section after the thread.
+  The "Classic list" is al-folio's normal list (grouped by year, newest first).
+  Without JavaScript everything is shown (journey, then the classic list);
+  assets/js/publications-journey.js adds the Journey / Classic switch and the
+  chapter filter chips. Styles: .jr-* in _sass/_custom.scss.
+{%- endcomment -%}
+{%- assign jr_chapters = site.data.research_journey -%}
+<div class="jr-root" id="jr-root" data-view="journey" data-filter="all">
+<script>
+  (function () {
+    var r = document.getElementById("jr-root");
+    var v = "journey";
+    try {
+      v = window.localStorage.getItem("publications-view") || v;
+    } catch (e) {}
+    r.setAttribute("data-view", v === "classic" ? "classic" : "journey");
+    r.className += " jr-js";
+  })();
+</script>
+<div class="jr-controls">
+  <div class="jr-switch" role="group" aria-label="How to show the papers">
+    <button type="button" class="jr-switch-btn" data-jr-view="journey" aria-pressed="true">Journey</button>
+    <button type="button" class="jr-switch-btn" data-jr-view="classic" aria-pressed="false">Classic list</button>
+  </div>
+  <div class="jr-chips" role="group" aria-label="Show one chapter">
+    <button type="button" class="jr-chip" data-jr-filter="all" aria-pressed="true">All</button>
+    {%- for ch in jr_chapters %}
+      {%- if ch.id != 'side' and ch.id != 'next' %}
+    <button type="button" class="jr-chip" data-jr-filter="{{ ch.id }}" aria-pressed="false">{% case ch.id %}{% when 'prelude' %}Prelude{% when 'quality' %}Quality{% when 'safety' %}Safety{% when 'agents' %}Agents{% else %}{{ ch.id | capitalize }}{% endcase %}</button>
+      {%- endif %}
+    {%- endfor %}
+  </div>
+</div>
+
+<div class="jr-journey publications gh-projects">
+<div class="jr-thread">
+{%- for ch in jr_chapters %}
+  {%- if ch.id == 'side' %}{% continue %}{% endif %}
+  {%- if ch.id == 'next' %}
+<section class="jr-chapter jr-next" id="chapter-next" data-chapter="next">
+  <p class="jr-label">What comes next</p>
+  <p class="jr-question">{{ ch.question }}</p>
+</section>
+    {%- continue %}
+  {%- endif %}
+  {%- if ch.talk_chapter %}{% assign jr_label = ch.talk_chapter %}{% elsif ch.id == 'prelude' %}{% assign jr_label = 'Prelude' %}{% else %}{% assign jr_label = ch.title %}{% endif %}
+<section class="jr-chapter" id="chapter-{{ ch.id }}" data-chapter="{{ ch.id }}">
+  <p class="jr-label">{{ jr_label }}{% if ch.years %} &middot; {{ ch.years }}{% endif %}</p>
+  <h4 class="jr-title">{{ ch.title }}</h4>
+  <p class="jr-question">{{ ch.question }}</p>
+  {%- if ch.intro %}
+  <p class="jr-intro">{{ ch.intro }}</p>
+  {%- endif %}
+  <div class="jr-papers">
+{% bibliography --template journey_entry --group_by year --group_order ascending --query @*[chapter={{ ch.id }}] %}
+  </div>
+  {%- if ch.led_to %}
+  <p class="jr-bridge"><span class="jr-arrow" aria-hidden="true">&darr;</span> {{ ch.led_to }}</p>
+  {%- endif %}
+</section>
+{%- endfor %}
+</div>
+{%- for ch in jr_chapters %}
+  {%- if ch.id == 'side' %}
+<details class="jr-side" id="chapter-side" data-chapter="side">
+  <summary><span class="jr-label">Side quests{% if ch.years %} &middot; {{ ch.years }}{% endif %}</span> <span class="jr-side-q">{{ ch.question }}</span></summary>
+  {%- if ch.intro %}
+  <p class="jr-intro">{{ ch.intro }}</p>
+  {%- endif %}
+  <div class="jr-papers">
+{% bibliography --template journey_entry --group_by year --group_order ascending --query @*[chapter={{ ch.id }}] %}
+  </div>
+</details>
+  {%- endif %}
+{%- endfor %}
+</div>
+
+<div class="jr-classic publications" id="classic-list">
+<h4 class="jr-classic-title">All papers by year</h4>
+{% bibliography %}
+</div>
+</div>
+<script src="{{ '/assets/js/publications-journey.js' | relative_url }}"></script>

@@ -6,23 +6,24 @@ nav: true
 nav_order: 2
 _styles: >
   .post article ul { list-style-type: square; }
+# The SEC-2017 paper's pdf link opens the ADMA 2016 paper, so its journey card has no PDF button.
+journey_hide_pdf: [kour2017handlingtime]
 ---
 
 <!-- Text copied word for word from content/publications.md. The heading ids are the old Google Sites anchors (see content/NOTES.md). -->
 
-<h3 id="h.fclsdrvmgzrm">Papers:</h3>
+<h3 id="h.fclsdrvmgzrm" class="lr-section">Papers:</h3>
 
-<!-- The paper list is built from _bibliography/papers.bib (from dblp), grouped by year, newest first. -->
+<!-- The papers come from _bibliography/papers.bib (from dblp), shown as "a journey of ideas":
+     chapters from _data/research_journey.yml, each paper with its TL;DR
+     (_includes/publications_journey.liquid, _layouts/journey_entry.liquid).
+     The "Classic list" switch shows the usual list, grouped by year, newest first. -->
 
-<div class="publications">
-
-{% bibliography %}
-
+<div class="jr-wrap" markdown="0">
+{% include publications_journey.liquid %}
 </div>
 
----
-
-<h3 id="h.p_xY_nY1xX4Ypv">Patents:</h3>
+<h3 id="h.p_xY_nY1xX4Ypv" class="lr-section">Patents:</h3>
 
 - [Guy Hadash](https://patents.google.com/?inventor=Guy+Hadash), [Boaz Carmeli](https://patents.google.com/?inventor=Boaz+Carmeli), [George Kour](https://patents.google.com/?inventor=George+Kour); International Business Machines Corp, assignee. **Removing unnecessary history from reinforcement learning state.** U.S. Patent 11928556. Issued March 12, 2024. ([link](https://patents.google.com/patent/US20200210884A1/en))
 - Tepper, Naama, Esther Goldbraich, Boaz Carmeli, Naama Zwerdling, George Kour, and Ateret Anaby Tavor. International Business Machines Corp, assignee. **Dataset balancing via quality-controlled sample generation.** U.S. Patent 11797516. Issued October 24, 2023.

@@ -380,6 +380,8 @@ filtered_bibtex_keywords:
     award_name,
     bibtex_show,
     blog,
+    builds_on,
+    chapter,
     code,
     dimensions,
     eprint,
@@ -394,6 +396,8 @@ filtered_bibtex_keywords:
     selected,
     slides,
     supp,
+    talk_chapter,
+    tldr,
     video,
     website,
   ]

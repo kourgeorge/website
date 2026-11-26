@@ -18,7 +18,9 @@
 # social icons with a CV button in the banner (no bottom icon row).
 # Before building, it checks that every paper in _bibliography/papers.bib has
 # a chapter and a tldr of at most 30 words, and that _data/research_journey.yml
-# has the chapters.
+# has the chapters, and that Publications shows them as "a journey of ideas"
+# (chapters in order, a card with a TL;DR per paper, the DOI links, the
+# Classic list, clean BibTeX pop-ups).
 # The interactive talk (talks/what-it-pays-attention-to/) is copied into
 # _site, _site_prod and _site_preview byte for byte, is the first item of the
 # Talks list, and has no "Ask George" text or network scripts/styles.
@@ -218,6 +220,82 @@ n_sel_c="$(echo "$home_html" | grep -o '<div class="publications selected-papers
 [ "$n_sel_c" -ge 1 ] || err "home/index.html: no papers inside <div class=\"publications selected-papers\">"
 grep -q 'selected-papers' "$SITE/publications/index.html" &&
   err "publications/index.html: uses the Home-only 'selected-papers' class"
+
+# 9b. T-43: Publications as "a journey of ideas" (_includes/publications_journey.liquid,
+# _layouts/journey_entry.liquid). The chapters from _data/research_journey.yml
+# are shown in order (prelude, quality, safety, agents, then the "next" end
+# dot) with their titles, followed by the folded Side quests; there is one
+# paper card per entry of papers.bib (at least 20), each with a TL;DR line and
+# a linked title (the SEC-2017 card may have no link: it has no DOI/URL and
+# its pdf is the wrong paper, so it has no PDF button); every DOI in papers.bib
+# is linked; builds-on links point to a card on the page; the Classic list
+# (al-folio's list by year) is in the page; the switch script is loaded and
+# guards localStorage; and the BibTeX pop-ups (here and on Home) do not show
+# the journey fields.
+pub_html="$(flat publications/index.html)"
+got_ch="$(echo "$pub_html" | grep -o '<section class="jr-chapter[^"]*" id="chapter-[a-z]*"' |
+  sed 's:.*id="chapter-::; s:"$::' | tr '\n' ';')"
+[ "$got_ch" = "prelude;quality;safety;agents;next;" ] ||
+  err "publications/index.html: journey chapters are '$got_ch', expected 'prelude;quality;safety;agents;next;'"
+echo "$pub_html" | grep -q '<details class="jr-side" id="chapter-side"' ||
+  err "publications/index.html: no folded Side quests section (<details class=\"jr-side\">)"
+p_next="$(echo "$pub_html" | grep -bo 'id="chapter-next"' | head -n 1 | cut -d: -f1)"
+p_side="$(echo "$pub_html" | grep -bo 'id="chapter-side"' | head -n 1 | cut -d: -f1)"
+p_pat="$(echo "$pub_html" | grep -bo '<h3 id="h.p_xY_nY1xX4Ypv"[^>]*>Patents:</h3>' | head -n 1 | cut -d: -f1)"
+if [ -z "$p_next" ] || [ -z "$p_side" ] || [ -z "$p_pat" ]; then
+  err "publications/index.html: missing the next dot ('$p_next'), Side quests ('$p_side') or the Patents: heading ('$p_pat')"
+elif ! [ "$p_next" -lt "$p_side" ] || ! [ "$p_side" -lt "$p_pat" ]; then
+  err "publications/index.html: not in the order journey, Side quests, Patents"
+fi
+awk '/^- id: /{id=$3} /^  title: /{t=$0; sub(/^  title: "?/, "", t); sub(/"$/, "", t)
+  if (id != "next" && id != "side") print t}' _data/research_journey.yml |
+  while IFS= read -r t; do
+    echo "$pub_html" | grep -qF "<h4 class=\"jr-title\">$t</h4>" || echo "$t"
+  done >/tmp/check-site-missing-chapters.txt
+[ -s /tmp/check-site-missing-chapters.txt ] &&
+  err "publications/index.html: no chapter heading for: $(tr '\n' ';' </tmp/check-site-missing-chapters.txt)"
+cards="$(echo "$pub_html" | sed 's:<div class="gp-card jr-card":\
+&:g' | grep '^<div class="gp-card jr-card"')"
+n_cards="$(echo "$cards" | grep -c 'jr-card')"
+[ "$n_cards" -ge 20 ] || err "publications/index.html: $n_cards paper cards, expected at least 20"
+[ "$n_cards" -eq "$n_bib" ] || err "publications/index.html: $n_cards paper cards for $n_bib papers in papers.bib"
+n_tl="$(echo "$cards" | grep -c '<p class="jr-tldr"><strong class="jr-tldr-label">TL;DR</strong> [^<]')"
+[ "$n_tl" -eq "$n_cards" ] || err "publications/index.html: only $n_tl of $n_cards cards have a TL;DR line"
+n_tlink="$(echo "$cards" | grep -c '<div class="title jr-paper-title"><a href="https\?://')"
+[ "$n_tlink" -ge 20 ] && [ "$n_tlink" -ge $((n_cards - 1)) ] ||
+  err "publications/index.html: only $n_tlink of $n_cards cards have a linked title"
+sec_card="$(echo "$cards" | grep 'id="paper-kour2017handlingtime"')"
+[ -n "$sec_card" ] || err "publications/index.html: no card for kour2017handlingtime"
+echo "$sec_card" | grep -q 'role="button">PDF</a>' &&
+  err "publications/index.html: the SEC-2017 card has a PDF button (its pdf is the ADMA 2016 paper)"
+for doi in $(sed -n 's/^  doi *= *{\([^}]*\)}.*/\1/p' _bibliography/papers.bib); do
+  n_d="$(echo "$cards" | grep -cF "href=\"https://doi.org/$doi\"")"
+  [ "$n_d" -ge 1 ] || err "publications/index.html: no journey card links to https://doi.org/$doi"
+done
+for t in $(echo "$pub_html" | grep -o 'class="jr-builds-link" href="#paper-[^"]*"' | sed 's:.*#::; s:"$::'); do
+  echo "$pub_html" | grep -q "id=\"$t\"" || err "publications/index.html: builds-on link to #$t has no card"
+done
+n_bo="$(grep -c '^  builds_on ' _bibliography/papers.bib)"
+n_bol="$(echo "$pub_html" | grep -o 'class="jr-builds-link"' | wc -l | tr -d ' ')"
+[ "$n_bol" -eq "$n_bo" ] || err "publications/index.html: $n_bol builds-on links, expected $n_bo"
+classic="$(echo "$pub_html" | grep -o '<div class="jr-classic publications" id="classic-list">.*' | sed 's:<h3 id="h.p_xY_nY1xX4Ypv".*::')"
+n_classic="$(echo "$classic" | grep -o '<div class="row">' | wc -l | tr -d ' ')"
+[ "$n_classic" -eq "$n_bib" ] || err "publications/index.html: Classic list has $n_classic papers, expected $n_bib"
+echo "$classic" | grep -q '<h2 class="bibliography">2026</h2>' || err "publications/index.html: Classic list has no 2026 year heading"
+for b in 'data-jr-view="journey"' 'data-jr-view="classic"' 'data-jr-filter="all"' 'data-jr-filter="prelude"' 'data-jr-filter="quality"' 'data-jr-filter="safety"' 'data-jr-filter="agents"'; do
+  echo "$pub_html" | grep -q "<button type=\"button\" class=\"jr-[a-z-]*\" $b" || err "publications/index.html: no button with $b"
+done
+echo "$pub_html" | grep -q '<script src="/assets/js/publications-journey.js">' ||
+  err "publications/index.html: does not load /assets/js/publications-journey.js"
+grep -q 'try' "$SITE/assets/js/publications-journey.js" 2>/dev/null ||
+  err "_site/assets/js/publications-journey.js: missing, or localStorage not inside try/catch"
+for f in publications/index.html home/index.html; do
+  grep -Eq '<span class="na">(tldr|chapter|builds_on|talk_chapter)</span>' "$SITE/$f" &&
+    err "$f: a BibTeX pop-up shows a journey field (tldr/chapter/builds_on)"
+  grep -q '<span class="err">' "$SITE/$f" && err "$f: a BibTeX pop-up has leftover lines of a hidden field"
+done
+grep -q '#2dd4bf\|jr-thread' "$CSS" && grep -q '\.jr-chapter' "$CSS" ||
+  err "main.css: no journey (.jr-*) styles"
 
 # 19. Home layout (T-26). The banner has the social icons (from
 # _data/socials.yml) and a "CV" button linking to the CV on Drive, with the
