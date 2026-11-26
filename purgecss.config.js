@@ -2,7 +2,10 @@ module.exports = {
   content: ["_site/**/*.html", "_site/**/*.js"],
   css: ["_site/assets/css/*.css"],
   output: "_site/assets/css/",
-  skippedContentGlobs: ["_site/assets/**/*.html"],
+  // The interactive talk (talks/) has its own inlined styles and never uses the
+  // site CSS; PurgeCSS only rewrites the CSS files above, never HTML, so it is
+  // served unchanged. Skip scanning it so it doesn't keep unused site CSS.
+  skippedContentGlobs: ["_site/assets/**/*.html", "_site/talks/**/*.html"],
   safelist: [
     "collapse",
     "collapsing",
