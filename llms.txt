@@ -6,7 +6,7 @@ George Kour is a senior researcher in the Language and Conversation Group at IBM
 
 ## Pages
 
-- [Home](https://www.kour.me/home/): About George Kour, research interests, online profiles and selected publications
+- [Home](https://www.kour.me/home/): About George Kour, recent news, selected publications, research interests and supported organizations
 - [Publications](https://www.kour.me/publications/): Full list of papers and patents
 - [Teaching](https://www.kour.me/teaching/): Courses taught, including the Workshop in Learning Systems and Autonomous Agents and its student projects
 - [Links & Resources](https://www.kour.me/links-resources/): Projects, data sets, talks and presentations
