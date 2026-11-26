@@ -33,6 +33,28 @@
   url          = {https://doi.org/10.18653/v1/2026.acl-industry.112},
   doi          = {10.18653/v1/2026.acl-industry.112},
   arxiv        = {2604.21480},
+  chapter      = {agents},
+  tldr         = {DIVERT tests customer-service AI agents by branching conversations at key moments
+                  instead of replaying them in full, finding more failures for the same cost.},
+  builds_on    = {nakash2025redteaming},
+  abstract     = {Large language models (LLMs) are increasingly deployed as customer-facing agents,
+                  yet evaluating their reliability remains challenging due to stochastic, multi-turn
+                  interactions. Current evaluation protocols rely on linear Monte Carlo rollouts of
+                  complete agent-user conversations to estimate success. However, this approach is
+                  computationally inefficient, repeatedly regenerating identical early prefixes, and
+                  often fails to uncover deep failure modes that arise from rare user behaviors. We
+                  introduce DIVERT (Diversity-Induced Evaluation via Branching of Trajectories), an
+                  efficient, snapshot-based, coverage-guided user simulation framework for
+                  systematic exploration of agent-user interactions. DIVERT captures the full
+                  agent-environment state at critical decision points and resumes execution from
+                  these snapshots, enabling reuse of shared conversation prefixes and reducing
+                  redundant computation. From each junction, the framework branches using targeted,
+                  diversity-inducing user responses, allowing directed exploration of alternative
+                  interaction paths. By focusing evaluation on semantically diverse and
+                  underexplored trajectories, DIVERT improves both efficiency and coverage.
+                  Empirical results show that it discovers more failures per token compared to
+                  standard linear rollout protocols, while expanding the set of tasks on which
+                  failures are identified.},
 }
 
 % ----------------------------------------------------------------- 2025
@@ -56,6 +78,25 @@
   url          = {https://doi.org/10.18653/v1/2025.acl-industry.45},
   doi          = {10.18653/v1/2025.acl-industry.45},
   arxiv        = {2505.19621},
+  chapter      = {safety},
+  tldr         = {A survey of AI models' opinions and preferences shows they often take sides; extra
+                  thinking time barely helps, and newer versions are more one-sided.},
+  abstract     = {As Large Language Models (LLMs) become deeply integrated into human life and
+                  increasingly influence decision-making, it's crucial to evaluate whether and to
+                  what extent they exhibit subjective preferences, opinions, and beliefs. These
+                  tendencies may stem from biases within the models, which may shape their behavior,
+                  influence the advice and recommendations they offer to users, and potentially
+                  reinforce certain viewpoints. This paper presents the Preference, Opinion, and
+                  Belief survey (POBs), a benchmark developed to assess LLMs' subjective
+                  inclinations across societal, cultural, ethical, and personal domains. We applied
+                  our benchmark to evaluate leading open- and closed-source LLMs, measuring desired
+                  properties such as reliability, neutrality, and consistency. In addition, we
+                  investigated the effect of increasing the test-time compute, through reasoning and
+                  self-reflection mechanisms, on those metrics. While effective in other tasks, our
+                  results show that these mechanisms offer only limited gains in our domain.
+                  Furthermore, we reveal that newer model versions are becoming less consistent and
+                  more biased toward specific viewpoints, highlighting a blind spot and a concerning
+                  trend. POBS: https://ibm.github.io/POBS},
 }
 
 @inproceedings{nakash2025redteaming,
@@ -77,6 +118,27 @@
   url          = {https://doi.org/10.18653/v1/2025.emnlp-main.114},
   doi          = {10.18653/v1/2025.emnlp-main.114},
   arxiv        = {2506.09600},
+  chapter      = {agents},
+  tldr         = {CRAFT plays a pushy customer who uses an agent's own rules to talk it into
+                  breaking them, beating common jailbreak tricks; simple defences fall short.},
+  abstract     = {Task-oriented LLM-based agents are increasingly used in domains with strict
+                  policies, such as refund eligibility or cancellation rules. The challenge lies in
+                  ensuring that the agent consistently adheres to these rules and policies,
+                  appropriately refusing any request that would violate them, while still
+                  maintaining a helpful and natural interaction. This calls for the development of
+                  tailored design and evaluation methodologies to ensure agent resilience against
+                  malicious user behavior. We propose a novel threat model that focuses on
+                  adversarial users aiming to exploit policy-adherent agents for personal benefit.
+                  To address this, we present CRAFT, a multi-agent red-teaming system that leverages
+                  policy-aware persuasive strategies to undermine a policy-adherent agent in a
+                  customer-service scenario, outperforming conventional jailbreak methods such as
+                  DAN prompts, emotional manipulation, and coercive. Building upon the existing
+                  tau-bench benchmark, we introduce tau-break, a complementary benchmark designed to
+                  rigorously assess the agent's robustness against manipulative user behavior.
+                  Finally, we evaluate several straightforward yet effective defense strategies.
+                  While these measures provide some protection, they fall short, highlighting the
+                  need for stronger, research-driven safeguards to protect policy-adherent agents
+                  from adversarial attacks},
 }
 
 % dblp also lists the arXiv copy under the shorter title
@@ -102,6 +164,21 @@
   url          = {https://doi.org/10.18653/v1/2025.naacl-industry.10},
   doi          = {10.18653/v1/2025.naacl-industry.10},
   arxiv        = {2409.04822},
+  chapter      = {safety},
+  tldr         = {Ordinary chat models can act as attackers that coax other models into harmful
+                  replies over a conversation; better-aligned models are harder to break.},
+  builds_on    = {kour2023unveiling},
+  abstract     = {Large language models (LLMs) are increasingly used in business dialogue systems
+                  but they pose security and ethical risks. Multi-turn conversations, where context
+                  influences the model's behavior, can be exploited to produce undesired responses.
+                  In this paper, we examine the effectiveness of utilizing off-the-shelf LLMs in
+                  straightforward red-teaming approaches, where an attacker LLM aims to elicit
+                  undesired output from a target LLM, comparing both single-turn and conversational
+                  red-teaming tactics. Our experiments offer insights into various usage strategies
+                  that significantly affect their performance as red teamers. They suggest that
+                  off-the-shelf models can act as effective red teamers and even adjust their attack
+                  strategy based on past attempts, although their effectiveness decreases with
+                  greater alignment.},
 }
 
 @inproceedings{nakash2025breakingreact,
@@ -123,6 +200,25 @@
   url          = {https://doi.org/10.18653/v1/2025.findings-naacl.363},
   doi          = {10.18653/v1/2025.findings-naacl.363},
   arxiv        = {2410.16950},
+  chapter      = {agents},
+  tldr         = {A harmless first request, like a small sum, makes AI agents more likely to obey a
+                  hidden harmful instruction next; asking them to reflect helps.},
+  abstract     = {Following the advancement of large language models (LLMs), the development of
+                  LLM-based autonomous agents has become increasingly prevalent. As a result, the
+                  need to understand the security vulnerabilities of these agents has become a
+                  critical task. We examine how ReAct agents can be exploited using a
+                  straightforward yet effective method we refer to as the foot-in-the-door attack.
+                  Our experiments show that indirect prompt injection attacks, prompted by harmless
+                  and unrelated requests (such as basic calculations) can significantly increase the
+                  likelihood of the agent performing subsequent malicious actions. Our results show
+                  that once a ReAct agents thought includes a specific tool or action, the
+                  likelihood of executing this tool in the subsequent steps increases significantly,
+                  as the agent seldom re-evaluates its actions. Consequently, even random, harmless
+                  requests can establish a foot-in-the-door, allowing an attacker to embed malicious
+                  instructions into the agents thought process, making it more susceptible to
+                  harmful directives. To mitigate this vulnerability, we propose implementing a
+                  simple reflection mechanism that prompts the agent to reassess the safety of its
+                  actions during execution, which can help reduce the success of such attacks.},
 }
 
 % ----------------------------------------------------------------- 2024
@@ -146,6 +242,21 @@
   url          = {https://doi.org/10.18653/v1/2024.findings-acl.453},
   doi          = {10.18653/v1/2024.findings-acl.453},
   arxiv        = {2405.20341},
+  chapter      = {side},
+  tldr         = {ColdFusion helps a newly launched system, such as a chatbot, spot off-topic
+                  requests, starting with no data and adapting as a few real ones arrive.},
+  abstract     = {When first deploying an anomaly detection system, e.g., to detect out-of-scope
+                  queries in chatbots, there are no observed data, making data-driven approaches
+                  ineffective. Zero-shot anomaly detection methods offer a solution to such
+                  "cold-start" cases, but unfortunately they are often not accurate enough. This
+                  paper studies the realistic but underexplored cold-start setting where an anomaly
+                  detection model is initialized using zero-shot guidance, but subsequently receives
+                  a small number of contaminated observations (namely, that may include anomalies).
+                  The goal is to make efficient use of both the zero-shot guidance and the
+                  observations. We propose ColdFusion, a method that effectively adapts the
+                  zero-shot anomaly detector to contaminated observations. To support future
+                  development of this new setting, we propose an evaluation suite consisting of
+                  evaluation protocols and metrics.},
 }
 
 @article{achintalwar2024detectors,
@@ -193,6 +304,21 @@
   url          = {https://doi.org/10.48550/arXiv.2403.06009},
   doi          = {10.48550/arXiv.2403.06009},
   arxiv        = {2403.06009},
+  chapter      = {safety},
+  tldr         = {A library of small, easy-to-build detectors that flag harms such as toxic or
+                  unfaithful AI output, with their uses and limits.},
+  abstract     = {Large language models (LLMs) are susceptible to a variety of risks, from
+                  non-faithful output to biased and toxic generations. Due to several limiting
+                  factors surrounding LLMs (training cost, API access, data availability, etc.), it
+                  may not always be feasible to impose direct safety constraints on a deployed
+                  model. Therefore, an efficient and reliable alternative is required. To this end,
+                  we present our ongoing efforts to create and deploy a library of detectors:
+                  compact and easy-to-build classification models that provide labels for various
+                  harms. In addition to the detectors themselves, we discuss a wide range of uses
+                  for these detector models - from acting as guardrails to enabling effective AI
+                  governance. We also deep dive into inherent challenges in their development and
+                  discuss future work aimed at making the detectors more reliable and broadening
+                  their scope.},
 }
 
 @article{fandina2024trustmetric,
@@ -212,6 +338,24 @@
   url          = {https://doi.org/10.48550/arXiv.2408.12259},
   doi          = {10.48550/arXiv.2408.12259},
   arxiv        = {2408.12259},
+  chapter      = {safety},
+  tldr         = {Safety checkers that flag each harmful answer on its own often call the same
+                  answers safe once joined together; simple automatic tests catch this.},
+  abstract     = {Consider a scenario where a harmfulness detection metric is employed by a system
+                  to filter unsafe responses generated by a Large Language Model. When analyzing
+                  individual harmful and unethical prompt-response pairs, the metric correctly
+                  classifies each pair as highly unsafe, assigning the highest score. However, when
+                  these same prompts and responses are concatenated, the metric's decision flips,
+                  assigning the lowest possible score, thereby misclassifying the content as safe
+                  and allowing it to bypass the filter. In this study, we discovered that several
+                  harmfulness LLM-based metrics, including GPT-based, exhibit this decision-flipping
+                  phenomenon. Additionally, we found that even an advanced metric like GPT-4o is
+                  highly sensitive to input order. Specifically, it tends to classify responses as
+                  safe if the safe content appears first, regardless of any harmful content that
+                  follows, and vice versa. This work introduces automatic concatenation-based tests
+                  to assess the fundamental properties a valid metric should satisfy. We applied
+                  these tests in a model safety scenario to assess the reliability of harmfulness
+                  detection metrics, uncovering a number of inconsistencies.},
 }
 
 % ----------------------------------------------------------------- 2023
@@ -230,6 +374,26 @@
   url          = {https://doi.org/10.48550/arXiv.2310.14829},
   doi          = {10.48550/arXiv.2310.14829},
   arxiv        = {2310.14829},
+  chapter      = {quality},
+  tldr         = {Some distance scores between two text collections only look at close pairs; this
+                  paper shows how to test whether a score sees the whole picture.},
+  builds_on    = {kour2022measuring},
+  abstract     = {A corpus of vector-embedded text documents has some empirical distribution. Given
+                  two corpora, we want to calculate a single metric of distance (e.g., Mauve,
+                  Frechet Inception) between them. We describe an abstract quality, called
+                  `distributionality', of such metrics. A non-distributional metric tends to use
+                  very local measurements, or uses global measurements in a way that does not fully
+                  reflect the distributions' true distance. For example, if individual pairwise
+                  nearest-neighbor distances are low, it may judge the two corpora to have low
+                  distance, even if their two distributions are in fact far from each other. A more
+                  distributional metric will, in contrast, better capture the distributions' overall
+                  distance. We quantify this quality by constructing a Known-Similarity Corpora set
+                  from two paraphrase corpora and calculating the distance between paired corpora
+                  from it. The distances' trend shape as set element separation increases should
+                  quantify the distributionality of the metric. We propose that Average Hausdorff
+                  Distance and energy distance between corpora are representative examples of
+                  non-distributional and distributional distance metrics, to which other metrics can
+                  be compared, to evaluate how distributional they are.},
 }
 
 @article{kour2023unveiling,
@@ -251,6 +415,22 @@
   url          = {https://doi.org/10.48550/arXiv.2311.04124},
   doi          = {10.48550/arXiv.2311.04124},
   arxiv        = {2311.04124},
+  chapter      = {safety},
+  tldr         = {AttaQ is a set of tricky questions that push AI models toward harmful answers,
+                  plus a way to find and name each model's weakest topics.},
+  abstract     = {As large language models become more prevalent, their possible harmful or
+                  inappropriate responses are a cause for concern. This paper introduces a unique
+                  dataset containing adversarial examples in the form of questions, which we call
+                  AttaQ, designed to provoke such harmful or inappropriate responses. We assess the
+                  efficacy of our dataset by analyzing the vulnerabilities of various models when
+                  subjected to it. Additionally, we introduce a novel automatic approach for
+                  identifying and naming vulnerable semantic regions - input semantic areas for
+                  which the model is likely to produce harmful outputs. This is achieved through the
+                  application of specialized clustering techniques that consider both the semantic
+                  similarity of the input attacks and the harmfulness of the model's responses.
+                  Automatically identifying vulnerable semantic regions enhances the evaluation of
+                  model weaknesses, facilitating targeted improvements to its safety mechanisms and
+                  overall reliability.},
 }
 
 % ----------------------------------------------------------------- 2022
@@ -276,6 +456,33 @@
   doi          = {10.48550/arXiv.2204.13043},
   arxiv        = {2204.13043},
   pdf          = {https://arxiv.org/pdf/2204.13043},
+  chapter      = {quality},
+  tldr         = {A method and tools, with people in the loop, for building chatbots good enough to
+                  launch and keeping them good as user requests change.},
+  abstract     = {Conversational systems or chatbots are an example of AI-Infused Applications
+                  (AIIA). Chatbots are especially important as they are often the first interaction
+                  of clients with a business and are the entry point of a business into the AI
+                  (Artificial Intelligence) world. The quality of the chatbot is, therefore, key.
+                  However, as is the case in general with AIIAs, it is especially challenging to
+                  assess and control the quality of chatbot systems. Beyond the inherent statistical
+                  nature of these systems, where occasional failure is acceptable, we identify two
+                  major challenges. The first is to release an initial system that is of sufficient
+                  quality such that humans will interact with it. The second is to maintain the
+                  quality, enhance its capabilities, improve it and make necessary adjustments based
+                  on changing user requests or drift. These challenges exist because it is
+                  impossible to predict the real distribution of user requests and the natural
+                  language they will use to express these requests. Moreover, any empirical
+                  distribution of requests is likely to change over time. This may be due to
+                  periodicity, changing usage, and drift of topics. We provide a methodology and set
+                  of technologies to address these challenges and to provide automated assistance
+                  through a human-in-the-loop approach. We notice that it is crucial to connect
+                  between the different phases in the lifecycle of the chatbot development and to
+                  make sure it provides its expected business value. For example, that it frees
+                  human agents to deal with tasks other than answering human users. Our methodology
+                  and technologies apply during chatbot training in the pre-production phase,
+                  through to chatbot usage in the field in the post-production phase. They implement
+                  the `test first' paradigm by assisting in agile design, and support continuous
+                  integration through actionable insights.},
 }
 
 @article{zwerdling2022generatedcorpora,
@@ -297,6 +504,17 @@
   url          = {https://doi.org/10.48550/arXiv.2206.11219},
   doi          = {10.48550/arXiv.2206.11219},
   arxiv        = {2206.11219},
+  chapter      = {quality},
+  tldr         = {Tools that describe collections of AI-written text, which revealed striking
+                  differences between the texts produced by two leading text generators.},
+  abstract     = {Models for text generation have become focal for many research tasks and
+                  especially for the generation of sentence corpora. However, understanding the
+                  properties of an automatically generated text corpus remains challenging. We
+                  propose a set of tools that examine the properties of generated text corpora.
+                  Applying these tools on various generated corpora allowed us to gain new insights
+                  into the properties of the generative models. As part of our characterization
+                  process, we found remarkable differences in the corpora generated by two leading
+                  generative technologies.},
 }
 
 % dblp has only the arXiv copy; the venue note comes from the old hand-written list.
@@ -318,6 +536,19 @@
   doi          = {10.48550/arXiv.2211.16259},
   arxiv        = {2211.16259},
   note         = {Also at the GEM workshop, EMNLP 2022},
+  chapter      = {quality},
+  tldr         = {How do you know a text-similarity score is any good? Automatic tests show newer
+                  scores capture meaning better, while older ones react to surface wording.},
+  abstract     = {The ability to compare the semantic similarity between text corpora is important
+                  in a variety of natural language processing applications. However, standard
+                  methods for evaluating these metrics have yet to be established. We propose a set
+                  of automatic and interpretable measures for assessing the characteristics of
+                  corpus-level semantic similarity metrics, allowing sensible comparison of their
+                  behavior. We demonstrate the effectiveness of our evaluation measures in capturing
+                  fundamental characteristics by evaluating them on a collection of classical and
+                  state-of-the-art metrics. Our measures revealed that recently-developed metrics
+                  are becoming better in identifying semantic distributional mismatch while
+                  classical metrics are more sensitive to perturbations in the surface text levels.},
 }
 
 % ----------------------------------------------------------------- 2021
@@ -341,6 +572,26 @@
   arxiv        = {2112.11832},
   pdf          = {https://arxiv.org/pdf/2112.11832},
   note         = {Also at the AAAI EDSMLS workshop, 2022},
+  chapter      = {quality},
+  tldr         = {A cheap, explainable measure of how hard each example is to classify sets a fair
+                  minimum score for a model and points to likely mistakes.},
+  abstract     = {Testing Machine Learning (ML) models and AI-Infused Applications (AIIAs), or
+                  systems that contain ML models, is highly challenging. In addition to the
+                  challenges of testing classical software, it is acceptable and expected that
+                  statistical ML models sometimes output incorrect results. A major challenge is to
+                  determine when the level of incorrectness, e.g., model accuracy or F1 score for
+                  classifiers, is acceptable and when it is not. In addition to business
+                  requirements that should provide a threshold, it is a best practice to require any
+                  proposed ML solution to out-perform simple baseline models, such as a decision
+                  tree. We have developed complexity measures, which quantify how difficult given
+                  observations are to assign to their true class label; these measures can then be
+                  used to automatically determine a baseline performance threshold. These measures
+                  are superior to the best practice baseline in that, for a linear computation cost,
+                  they also quantify each observation' classification complexity in an explainable
+                  form, regardless of the classifier model used. Our experiments with both numeric
+                  synthetic data and real natural language chatbot data demonstrate that the
+                  complexity measures effectively highlight data regions and observations that are
+                  likely to be misclassified.},
 }
 
 % ----------------------------------------------------------------- 2020
@@ -370,6 +621,23 @@
   doi          = {10.1609/aaai.v34i05.6233},
   arxiv        = {1911.03118},
   pdf          = {https://arxiv.org/pdf/1911.03118},
+  chapter      = {quality},
+  tldr         = {LAMBADA has a fine-tuned language model write new labelled training sentences,
+                  then filters them, improving text classifiers when real labelled data is scarce.},
+  abstract     = {Based on recent advances in natural language modeling and those in text generation
+                  capabilities, we propose a novel data augmentation method for text classification
+                  tasks. We use a powerful pre-trained neural network model to artificially
+                  synthesize new labeled data for supervised learning. We mainly focus on cases with
+                  scarce labeled data. Our method, referred to as language-model-based data
+                  augmentation (LAMBADA), involves fine-tuning a state-of-the-art language generator
+                  to a specific task through an initial training phase on the existing (usually
+                  small) labeled data. Using the fine-tuned model and given a class label, new
+                  sentences for the class are generated. Our process then filters these new
+                  sentences by using a classifier trained on the original data. In a series of
+                  experiments, we show that LAMBADA improves classifiers' performance on a variety
+                  of datasets. Moreover, LAMBADA significantly improves upon the state-of-the-art
+                  techniques for data augmentation, specifically those applicable to text
+                  classification tasks with little data.},
 }
 
 @inproceedings{tepper2020balancing,
@@ -392,6 +660,24 @@
   url          = {https://doi.org/10.18653/v1/2020.findings-emnlp.130},
   doi          = {10.18653/v1/2020.findings-emnlp.130},
   pdf          = {https://www.aclweb.org/anthology/2020.findings-emnlp.130.pdf},
+  chapter      = {quality},
+  tldr         = {BalaGen evens out lopsided training data by generating new sentences for some
+                  classes and trimming others, which clearly improves text classifiers.},
+  builds_on    = {anabytavor2020notenoughdata},
+  abstract     = {Data balancing is a known technique for improving the performance of
+                  classification tasks. In this work we define a novel balancing-viageneration
+                  framework termed BalaGen. BalaGen consists of a flexible balancing policy coupled
+                  with a text generation mechanism. Combined, these two techniques can be used to
+                  augment a dataset for more balanced distribution. We evaluate BalaGen on three
+                  publicly available semantic utterance classification (SUC) datasets. One of these
+                  is a new COVID-19 Q&A dataset published here for the first time. Our work
+                  demonstrates that optimal balancing policies can significantly improve classifier
+                  performance, while augmenting just part of the classes and under-sampling others.
+                  Furthermore, capitalizing on the advantages of balancing, we show its usefulness
+                  in all relevant BalaGen framework components. We validate the superiority of
+                  BalaGen on ten semantic utterance datasets taken from real-life goaloriented
+                  dialogue systems. Based on our results we encourage using data balancing prior to
+                  training for text classification tasks.},
 }
 
 % ----------------------------------------------------------------- 2019
@@ -415,6 +701,29 @@
   html         = {https://openreview.net/forum?id=r1e13s05YX},
   pdf          = {https://openreview.net/pdf?id=r1e13s05YX},
   arxiv        = {1901.03995},
+  chapter      = {side},
+  tldr         = {A neural network learns to call existing exact functions by training with a
+                  learned stand-in that is swapped for the real function afterwards.},
+  builds_on    = {hadash2018estimate},
+  abstract     = {Deep neural networks work well at approximating complicated functions when
+                  provided with data and trained by gradient descent methods. At the same time,
+                  there is a vast amount of existing functions that programmatically solve different
+                  tasks in a precise manner eliminating the need for training. In many cases, it is
+                  possible to decompose a task to a series of functions, of which for some we may
+                  prefer to use a neural network to learn the functionality, while for others the
+                  preferred method would be to use existing black-box functions. We propose a method
+                  for end-to-end training of a base neural network that integrates calls to existing
+                  black-box functions. We do so by approximating the black-box functionality with a
+                  differentiable neural network in a way that drives the base network to comply with
+                  the black-box function interface during the end-to-end optimization process. At
+                  inference time, we replace the differentiable estimator with its external
+                  black-box non-differentiable counterpart such that the base network output matches
+                  the input arguments of the black-box function. Using this "Estimate and Replace"
+                  paradigm, we train a neural network, end to end, to compute the input to black-box
+                  functionality while eliminating the need for intermediate labels. We show that by
+                  leveraging the existing precise black-box function during inference, the
+                  integrated model generalizes better than a fully differentiable model, and learns
+                  more efficiently compared to RL-based methods.},
 }
 
 % Not on dblp; from the old hand-written list.
@@ -428,6 +737,22 @@
   pages        = {621300},
   year         = {2019},
   pdf          = {https://www.biorxiv.org/content/biorxiv/early/2019/04/29/621300.full.pdf},
+  chapter      = {prelude},
+  tldr         = {A statistical model that tracks, trial by trial, which strategy an animal is using
+                  in a changing reward task and how it switches between strategies.},
+  abstract     = {In this paper, we aim at estimating, on a trial-by-trial basis, the underlying
+                  decision-making process of an animal in a complex and changing environment. We
+                  propose a method for identifying the set of stochastic policies employed by the
+                  agent and estimating the transition dynamics between policies based on its
+                  behavior in a multidimensional discrimination task for measuring the properties of
+                  attentional set-shifting of the subject (both intra- and extra-dimensional). We
+                  propose using the Non-Homogeneous Hidden Markov Models (NHMMs) framework, to
+                  consider environmental state and rewards for modeling decision-making processes in
+                  a varying version of “Contextual Bandits”. We employ the Expectation-Maximization
+                  (EM) procedure for estimating the model’s parameters similar to the Baum-Welch
+                  algorithm used to train standard HMMs. To measure the model capacity to estimate
+                  underlying dynamics, Monte Carlo analysis is employed on synthetically generated
+                  data and compared to the performance of classical HMM.},
 }
 
 % ----------------------------------------------------------------- 2018
@@ -450,11 +775,26 @@
   doi          = {10.48550/arXiv.1804.09028},
   arxiv        = {1804.09028},
   pdf          = {https://drive.google.com/open?id=1fBiMSRKw9sGxcSxHgQxro30OpA2QZguX},
+  chapter      = {side},
+  tldr         = {Estimate and Replace: train a network with a learned copy of an existing
+                  application, then plug in the real one; it needs less data.},
+  abstract     = {Existing applications include a huge amount of knowledge that is out of reach for
+                  deep neural networks. This paper presents a novel approach for integrating calls
+                  to existing applications into deep learning architectures. Using this approach, we
+                  estimate each application's functionality with an estimator, which is implemented
+                  as a deep neural network (DNN). The estimator is then embedded into a base network
+                  that we direct into complying with the application's interface during an
+                  end-to-end optimization process. At inference time, we replace each estimator with
+                  its existing application counterpart and let the base network solve the task by
+                  interacting with the existing application. Using this 'Estimate and Replace'
+                  method, we were able to train a DNN end-to-end with less data and outperformed a
+                  matching DNN that did not interact with the external application.},
 }
 
 % ----------------------------------------------------------------- 2017
 
 % Not on dblp; from the old hand-written list.
+% Its pdf link opens the ADMA 2016 paper, so there is no abstract: the tldr is from the title only.
 % Note: on the old site this paper and the ADMA 2016 paper link to the same Drive file.
 @inproceedings{kour2017handlingtime,
   abbr         = {SEC},
@@ -466,6 +806,8 @@
   booktitle    = {Third International Conference on Software Engineering, SEC-2017},
   year         = {2017},
   pdf          = {https://drive.google.com/open?id=1yrb60cFMBT7gWYZEmjH46kqNBTSziTs3},
+  chapter      = {side},
+  tldr         = {Estimating how long it will take to handle a reported software defect.},
 }
 
 % ----------------------------------------------------------------- 2016
@@ -486,6 +828,18 @@
   url          = {https://doi.org/10.1007/978-3-319-49586-6_6},
   doi          = {10.1007/978-3-319-49586-6_6},
   pdf          = {https://drive.google.com/open?id=1yrb60cFMBT7gWYZEmjH46kqNBTSziTs3},
+  chapter      = {side},
+  tldr         = {A business-insight system that scans thousands of market combinations, surfaces
+                  the biggest market-share changes, and learns what the user finds significant.},
+  abstract     = {We present an approach for Business Intelligence (BI), where market share changes
+                  are tracked, evaluated, and prioritized dynamically and interactively. Out of all
+                  the hundreds or thousands of possible combinations of sub-markets and players, the
+                  system brings to the user those combinations where the most significant changes
+                  have happened, grouped into related insights. Time-series prediction and user
+                  interaction enable the system to learn what “significant” means to the user, and
+                  adapt the results accordingly. The proposed approach captures key insights that
+                  are missed by current top-down aggregative BI systems, and that are hard to be
+                  spotted by humans (e.g., Cisco’s US market disruption in 2010).},
 }
 
 % ----------------------------------------------------------------- 2014
@@ -504,6 +858,20 @@
   url          = {https://doi.org/10.1109/ICFHR.2014.76},
   doi          = {10.1109/ICFHR.2014.76},
   pdf          = {https://drive.google.com/open?id=16v5dYnYCem_Nk3OmUkzkQp0xBQKNk3fI},
+  chapter      = {prelude},
+  tldr         = {Splits handwritten Arabic into letters while the person is still writing, instead
+                  of waiting for the word to finish, tested on the ADAB database.},
+  abstract     = {Real-time performance is necessary in applications involving on-line handwriting
+                  recognition. However, conventional approaches usually wait until the entire curve
+                  is traced out before starting the analysis, inevitably causing delays in the
+                  recognition process. In regards to the Arabic script, the postponed analysis may
+                  be attributed to the cursive and unconstrained nature of the Arabic writing
+                  system, in both printed and handwritten forms. Nevertheless, this paper proposes a
+                  real-time recognition-based segmentation technique of on-line Arabic script. It
+                  demonstrate the feasibility of carrying out the most time consuming tasks,
+                  required for the segmentation process, during the course of writing. The system
+                  has been designed and tested using the ADAB Database, and promising results were
+                  obtained.},
 }
 
 @inproceedings{kour2014classification,
@@ -520,6 +888,24 @@
   url          = {https://doi.org/10.1109/SOCPAR.2014.7008025},
   doi          = {10.1109/SOCPAR.2014.7008025},
   pdf          = {https://drive.google.com/open?id=1qc18nVd5NrreEEVmz68wT_F3AUWsVBCB},
+  chapter      = {prelude},
+  tldr         = {A fast way to recognise handwritten Arabic letters as they are written, using a
+                  quick stand-in for a costly shape-distance measure and smart indexing.},
+  abstract     = {Delaying the analysis launch until the completion of the handwritten word
+                  scribing, restricts on-line recognition systems to meet the highly responsiveness
+                  demands expected from such applications, and prevents implementing advanced
+                  features of input typing such as automatic word completion and real-time automatic
+                  spelling. This paper proposes an efficient Arabic handwritten characters
+                  recognizer aimed at facilitating real-time handwritten script analysis tasks. The
+                  fast classification is enabled by employing an efficient embedding of the feature
+                  vectors into a normed wavelet coefficients domain in which the Earth Movers
+                  Distance metric is approximated using the Manhattan distance. A sub-linear time
+                  character classification is achieved by utilizing metric indexing techniques.
+                  Using the results of the top ranked shapes of each predicted character, a list of
+                  candidate shapes of Arabic word parts is generated in a filter and refine approach
+                  to enable fast yet accurate recognition results in a dictionary-free environment.
+                  The system was trained and tested on characters and word parts extracted from the
+                  ADAB database, and promising accuracy and performance results were achieved.},
 }
 
 % Not on dblp; from the old hand-written list.
@@ -531,4 +917,36 @@
   school       = {Tel-Aviv University},
   year         = {2014},
   pdf          = {https://drive.google.com/open?id=19Irpq1_Yh9Fv3YhhoynR7etq5cjTcBoM},
+  chapter      = {prelude},
+  tldr         = {M.Sc. thesis: splitting and recognising handwritten Arabic while it is written,
+                  which narrows the list of possible words and speeds up recognition.},
+  abstract     = {Despite the long-standing belief that digital computers will challenge the future
+                  of handwriting, pen and paper remain commonly used means for communication and
+                  recording of information in daily life. In addition to the growing use of
+                  keyboard-less devices such as smart-phones and tablets, which are too small to
+                  have a convenient keyboard, handwriting recognition is receiving increasing
+                  attention in the last decades. Correct and efficient recognition of handwritten
+                  Arabic text is a challenging problem due to the cursive and unconstrained nature
+                  of the Arabic script. While real-time performance is necessary in applications
+                  involving on-line handwriting recognition, conventional approaches usually wait
+                  until the entire curve is traced out before starting the analysis, inevitably
+                  causing delays in the recognition process. This deferment prevents on-line
+                  recognition techniques from achieving high responsiveness demands expected from
+                  such systems, and from implementing advanced features of input typing, such as
+                  automatic word completion. This work presents a real-time approach for segmenting
+                  and recognizing handwritten on-line Arabic script. We demonstrate the feasibility
+                  of segmenting Arabic handwritten text during the course of writing. The proposed
+                  segmentation approach is a recognition-based method that operates on the stroke
+                  level and nominates candidate segmentation points based on morphological features.
+                  Using a fast Arabic character classifier, the system attaches a score to the
+                  sub-strokes induced by the candidate points, which captures the likelihood of the
+                  sub-stroke to represent a letter. A candidate filtering followed by a segmentation
+                  selection process are activated when the entire stroke is available. A nearest
+                  neighbours based character classifier that employs a linear-time embedding of the
+                  Earth Mover’s Distance metric to a norm space is presented. The transformation of
+                  the feature space vectors into the wavelet coefficient space facilitates accurate
+                  similarity measurement and sub-linear search methods. We show that the resulting
+                  character segmentation and classification information can be used to significantly
+                  reduce the potential dictionary size and accelerate a holistic recognition
+                  process.},
 }

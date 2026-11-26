@@ -16,6 +16,9 @@
 # has its sections in order (with a News list of 7 dated items, newest
 # first, including the Reichman University talk), 7 interest tags, 3 organization cards and the
 # social icons with a CV button in the banner (no bottom icon row).
+# Before building, it checks that every paper in _bibliography/papers.bib has
+# a chapter and a tldr of at most 30 words, and that _data/research_journey.yml
+# has the chapters.
 # It also builds the github.io preview (_config.preview.yml) into _site_preview
 # and checks that its local links all start with /website/ and work.
 # Needs Homebrew Ruby (see the PATH below) and the gems from the Gemfile.
@@ -47,6 +50,34 @@ else
   echo "$PUSH_BLOCK" | grep -Eq '^ +- +"?(_sass|llms\.txt|robots\.txt|(\*\*/?\*?)?\.(txt|scss)"?$|\*\*?"?$)' &&
     err "$DEPLOY: push paths-ignore excludes _sass, llms.txt or robots.txt changes"
 fi
+
+# 0b. Every paper in _bibliography/papers.bib has a chapter (prelude, quality,
+# safety, agents or side, the ids in _data/research_journey.yml) and a tldr of
+# at most 30 words, for the "journey of ideas" on the Publications page.
+BIB_PROBLEMS="$(awk '
+  function done_tldr() { n = split(tl, w, /[ \t]+/); c = 0
+    for (i = 1; i <= n; i++) if (w[i] != "") c++
+    if (c > 30) print key ": tldr has " c " words (at most 30)"; intl = 0 }
+  /^@[a-zA-Z]+\{/ { key = $0; sub(/^@[a-zA-Z]+\{/, "", key); sub(/,.*/, "", key)
+    inentry = 1; has_t = 0; has_c = 0; next }
+  inentry && intl { tl = tl " " $0; if ($0 ~ /\},?[ \t]*$/) done_tldr(); next }
+  inentry && /^  tldr[ \t]*=/ { has_t = 1; tl = $0; sub(/^[^{]*\{/, "", tl); intl = 1
+    if ($0 ~ /\},?[ \t]*$/) done_tldr(); next }
+  inentry && /^  chapter[ \t]*=/ { has_c = 1
+    if ($0 !~ /\{(prelude|quality|safety|agents|side)\}/) print key ": bad chapter: " $0 }
+  inentry && /^\}/ { inentry = 0
+    if (!has_t) print key ": no tldr"; if (!has_c) print key ": no chapter" }
+' _bibliography/papers.bib)"
+[ -z "$BIB_PROBLEMS" ] || err "_bibliography/papers.bib: $BIB_PROBLEMS"
+n_bib="$(grep -c '^@' _bibliography/papers.bib)"
+n_tldr="$(grep -c '^  tldr ' _bibliography/papers.bib)"
+n_chap="$(grep -c '^  chapter ' _bibliography/papers.bib)"
+[ "$n_tldr" -eq "$n_bib" ] && [ "$n_chap" -eq "$n_bib" ] ||
+  err "_bibliography/papers.bib: $n_bib entries but $n_tldr tldr and $n_chap chapter fields"
+for id in prelude quality safety agents side next; do
+  grep -q "^- id: $id\$" _data/research_journey.yml ||
+    err "_data/research_journey.yml: no chapter with id $id"
+done
 
 # 1. Build the site (quietly). Install the gems first if they are missing.
 if ! bundle check >/dev/null 2>&1; then

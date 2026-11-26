@@ -1,0 +1,71 @@
+# The "journey of ideas" on the Publications page: the chapters, in order.
+# Each paper in _bibliography/papers.bib has chapter={<id>} (one of the ids
+# below) and a one-sentence tldr={...}; builds_on={<key>} links a paper to an
+# earlier one it grew from.
+# Chapters 1-3 follow George's Reichman University talk (May 2026),
+# "From Quality to Safety to Security: A Research Trajectory in AI Evaluation".
+# "side" is the folded section for papers outside the main arc; "next" (last)
+# is the open question the journey ends on.
+
+- id: prelude
+  title: "Before language models: handwriting and the brain"
+  years: "2014–2019"
+  question: "Can a computer keep up with a hand, or a mind, while it is still moving?"
+  intro: >-
+    It started with pen strokes: for the M.Sc. at Tel Aviv University, a system that splits
+    and recognises handwritten Arabic while the person is still writing, instead of waiting
+    for the word to end. The Ph.D. turned the same question to behaviour, modelling trial by
+    trial which strategy an animal is using as the rules of its task change.
+  led_to: "Reading people's hands and choices led to the next question: what about text written by machines?"
+
+- id: quality
+  title: "Do LLMs generate high-quality content?"
+  talk_chapter: "Chapter 1"
+  years: "2020–2023"
+  question: "If a model writes the data, can we trust it?"
+  intro: >-
+    Chatbots never have enough labelled examples, so we let language models write more
+    (LAMBADA), and then used generation to even out lopsided data (BalaGen). That raised a
+    harder question: how good is machine-written text, and how good are the scores we use to
+    judge it? So we built tests for the measuring tools themselves, and for the quality of the
+    chatbots built on them.
+  led_to: "Models became fluent writers and then fluent talkers… but is what they say safe?"
+
+- id: safety
+  title: "Are (conversational) LLMs safe?"
+  talk_chapter: "Chapter 2"
+  years: "2023–2025"
+  question: "What does it take to get a chat model to say something harmful?"
+  intro: >-
+    As chat models arrived, we asked them hard questions and found harmful answers even
+    without any moral trap. AttaQ collected such questions and mapped the topics where each
+    model is weakest; then we let models attack each other over whole conversations, checked
+    whether the safety checkers can be trusted, and asked which opinions the models
+    themselves hold.
+  led_to: "Then models stopped only talking and started acting, using tools on our behalf… so what happens when an agent can be talked into acting against us?"
+
+- id: agents
+  title: "From LLM safety to agent security"
+  talk_chapter: "Chapter 3"
+  years: "2025–2026"
+  question: "If an AI agent acts for you, can someone talk it into acting against you?"
+  intro: >-
+    Agents that call tools give attackers new ways in. We showed that a harmless first
+    request can open the door to a harmful one (foot-in-the-door), built CRAFT to talk
+    rule-bound customer-service agents into breaking their own policies, and then made this
+    kind of testing cheaper by branching conversations at key moments (DIVERT).
+  led_to: "Next: testing the whole agent, with its tools, memory and retries, not just the model inside it."
+
+- id: side
+  title: "Side quests"
+  years: "2016–2024"
+  question: "What else did we find along the way?"
+  intro: >-
+    Papers outside the main arc: industry work on business insights from market-share data
+    and on software defects, teaching neural networks to use existing exact functions
+    (Estimate and Replace), and helping a newly launched system spot off-topic requests from
+    day one.
+
+- id: next
+  title: "What comes next"
+  question: "We can test some of what a model believes. Can we decide whose values it should hold?"
