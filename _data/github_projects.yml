@@ -1,0 +1,138 @@
+# Projects and data-sets on Links & Resources (_includes/github_projects.liquid).
+# Facts, star counts and links come from the T-21 survey (2026-11-26).
+# Fields: group, title, url, blurb (one plain line), stars (optional; left out
+# for datasets, PDFs and repos with 0 stars), language (optional),
+# links (site, docs, pypi, dataset; optional), order.
+# Items are shown sorted by "order"; groups appear in the order of their first
+# item, so keep each group's numbers together (10s, 20s, ...).
+# Refresh the star numbers by hand: bash scripts/update-github-stars.sh
+
+# 1. AI safety & LLM evaluation
+- group: "AI safety & LLM evaluation"
+  title: "prompt-sentinel"
+  url: "https://github.com/kourgeorge/prompt-sentinel"
+  blurb: "A Python library that hides sensitive data before prompts are sent to outside LLMs."
+  stars: 5
+  language: "Python"
+  links:
+    docs: "https://kourgeorge.github.io/prompt-sentinel/"
+    pypi: "https://pypi.org/project/prompt-sentinel/"
+  order: 11
+- group: "AI safety & LLM evaluation"
+  title: "AttaQ dataset"
+  url: "https://huggingface.co/datasets/ibm-research/AttaQ"
+  blurb: "A red-teaming dataset of 1,402 adversarial questions for testing whether LLMs give harmful answers."
+  order: 12
+- group: "AI safety & LLM evaluation"
+  title: "ProvoQ dataset"
+  url: "https://huggingface.co/datasets/ibm-research/ProvoQ"
+  blurb: "2,705 human-curated provocative questions for testing how LLMs handle stigma-related topics."
+  order: 13
+- group: "AI safety & LLM evaluation"
+  title: "llmrace"
+  url: "https://github.com/kourgeorge/llmrace"
+  blurb: "\"Speedtest.net, but for LLMs\": measures model speed from the terminal."
+  language: "TypeScript"
+  order: 14
+- group: "AI safety & LLM evaluation"
+  title: "vending-bench-arena"
+  url: "https://github.com/kourgeorge/vending-bench-arena"
+  blurb: "A benchmark where an LLM agent runs a virtual vending-machine business."
+  language: "Python"
+  order: 15
+
+# 2. AI agents & agent tools
+- group: "AI agents & agent tools"
+  title: "symcc"
+  url: "https://github.com/kourgeorge/symcc"
+  blurb: "A Claude Code plugin that runs a team of coding agents from one chat."
+  stars: 1
+  language: "TypeScript"
+  order: 21
+- group: "AI agents & agent tools"
+  title: "agents-patterns-atlas"
+  url: "https://github.com/kourgeorge/agents-patterns-atlas"
+  blurb: "An online book of design patterns for AI agents."
+  stars: 1
+  language: "Python"
+  links:
+    site: "https://kourgeorge.github.io/agents-patterns-atlas/"
+  order: 22
+- group: "AI agents & agent tools"
+  title: "jarvis"
+  url: "https://github.com/kourgeorge/jarvis"
+  blurb: "A personal-assistant agent built with LangChain, with email, calendar and other tools."
+  stars: 3
+  language: "Python"
+  order: 23
+- group: "AI agents & agent tools"
+  title: "ssh-docs"
+  url: "https://github.com/kourgeorge/ssh-docs"
+  blurb: "Serves documentation over a read-only SSH server, so AI agents can browse it with shell commands."
+  language: "Python"
+  order: 24
+
+# 3. Simulators & artificial life
+- group: "Simulators & artificial life"
+  title: "project-origin"
+  url: "https://github.com/kourgeorge/project-origin"
+  blurb: "An artificial-life simulator for studying how intelligence emerges and evolves."
+  stars: 36
+  language: "Python"
+  links:
+    site: "https://kourgeorge.github.io/project-origin/"
+  order: 31
+- group: "Simulators & artificial life"
+  title: "sailsim"
+  url: "https://github.com/kourgeorge/sailsim"
+  blurb: "A sailing simulator that runs in the browser, with a sailing school."
+  links:
+    site: "https://sail.kour.me"
+  order: 32
+- group: "Simulators & artificial life"
+  title: "plus-maze-simulator"
+  url: "https://github.com/kourgeorge/plus-maze-simulator"
+  blurb: "Simulates the plus-maze task with agents whose motivations change."
+  language: "Python"
+  order: 33
+
+# 4. Research code & data
+- group: "Research code & data"
+  title: "arabic-icr"
+  url: "https://github.com/kourgeorge/arabic-icr"
+  blurb: "Code and materials from my M.Sc. research on online Arabic handwriting recognition."
+  stars: 10
+  language: "C++"
+  order: 41
+- group: "Research code & data"
+  title: "behave_analysis"
+  url: "https://github.com/kourgeorge/behave_analysis"
+  blurb: "Code for the paper \"Bayesian Modeling of Reward-Dependent Sequential Decision Dynamics\"."
+  language: "MATLAB"
+  order: 42
+- group: "Research code & data"
+  title: "Ph.D. research proposal"
+  url: "https://drive.google.com/open?id=1K6ddyOdeoazpGpmPH0cN4dbGGehWjnbT"
+  blurb: "\"Neural Correlates of State Representation in the Striatum\" (PDF)."
+  order: 43
+- group: "Research code & data"
+  title: "Ph.D. thesis"
+  url: "https://drive.google.com/file/d/10Ug4fsmUdmR8If5UMZLUW9aiPDfR5inH/view?usp=sharing"
+  blurb: "My Ph.D. thesis (PDF)."
+  order: 44
+
+# 5. LaTeX templates
+- group: "LaTeX templates"
+  title: "arxiv-style"
+  url: "https://github.com/kourgeorge/arxiv-style"
+  blurb: "A LaTeX style and template for arXiv and other preprints, based on the NeurIPS style."
+  stars: 1625
+  language: "TeX"
+  order: 51
+- group: "LaTeX templates"
+  title: "tau-thesis-latex"
+  url: "https://github.com/kourgeorge/tau-thesis-latex"
+  blurb: "A LaTeX template for M.Sc. and Ph.D. theses at Tel Aviv University."
+  stars: 10
+  language: "TeX"
+  order: 52

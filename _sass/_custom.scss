@@ -267,3 +267,21 @@
     white-space: nowrap;
   }
 }
+
+// Projects and data-sets on Links & Resources (_includes/github_projects.liquid):
+// same look as the student projects above, with a link in the title and a
+// star badge in the theme colour.
+.gh-projects {
+  .sp-title a {
+    color: var(--global-text-color);
+  }
+
+  .sp-title a:hover {
+    color: var(--global-theme-color);
+  }
+
+  .gp-stars {
+    color: var(--global-theme-color);
+    border-color: var(--global-theme-color);
+  }
+}

@@ -9,7 +9,8 @@
 # llms.txt and robots.txt are built and allow indexing, and that a
 # production build (JEKYLL_ENV=production, into _site_prod) keeps their lines
 # and has the Google Analytics tag on every page, while the dev build has none,
-# and that the footer is only "© <year> George Kour. All Rights Reserved.".
+# and that the footer is only "© <year> George Kour. All Rights Reserved.",
+# and that Links & Resources shows the grouped projects list.
 # It also builds the github.io preview (_config.preview.yml) into _site_preview
 # and checks that its local links all start with /website/ and work.
 # Needs Homebrew Ruby (see the PATH below) and the gems from the Gemfile.
@@ -236,6 +237,38 @@ else
   echo "$ws_text" | grep -Eq '(\+972|\b0[2-9])[- ]?[0-9]{1,2}[- ]?[0-9]{3}[- ]?[0-9]{4}|[0-9]{9,}' &&
     err "teaching/index.html: workshop section has a phone/ID-number-like string"
 fi
+
+# 18. Projects and Data-sets on Links & Resources (from
+# _data/github_projects.yml via _includes/github_projects.liquid): the 5 group
+# headings in order, at least 14 entries, links to arxiv-style and to the
+# ibm-research Hugging Face datasets, and no link to the old Arabic letters
+# Drive file (id 0B1ZvWH6..., now behind a sign-in). The old anchor ids are
+# checked in step 6.
+lr_html="$(flat links-resources/index.html)"
+gp_html="$(echo "$lr_html" | grep -o '<section class="student-projects gh-projects".*' | sed 's:</section>.*::')"
+if [ -z "$gp_html" ]; then
+  err "links-resources/index.html: no <section class=\"student-projects gh-projects\">"
+else
+  got_groups="$(echo "$gp_html" | grep -o '<h5 class="sp-year gp-group">[^<]*</h5>' |
+    sed 's:<[^>]*>::g; s/&amp;/\&/g' | tr '\n' ';')"
+  want_groups="AI safety & LLM evaluation;AI agents & agent tools;Simulators & artificial life;Research code & data;LaTeX templates;"
+  [ "$got_groups" = "$want_groups" ] ||
+    err "links-resources/index.html: project groups are '$got_groups', expected '$want_groups'"
+  n_gp="$(echo "$gp_html" | grep -o '<li class="sp-item gp-item">' | wc -l | tr -d ' ')"
+  [ "$n_gp" -ge 14 ] || err "links-resources/index.html: $n_gp project entries, expected at least 14"
+fi
+echo "$lr_html" | grep -q 'href="https://github.com/kourgeorge/arxiv-style"' ||
+  err "links-resources/index.html: no link to github.com/kourgeorge/arxiv-style"
+echo "$lr_html" | grep -q 'href="https://huggingface.co/datasets/ibm-research/' ||
+  err "links-resources/index.html: no link to huggingface.co/datasets/ibm-research"
+echo "$lr_html" | grep -q 'huggingface.co/datasets/ibm/' &&
+  err "links-resources/index.html: still links to the old huggingface.co/datasets/ibm/ address"
+echo "$lr_html" | grep -q '0B1ZvWH6' &&
+  err "links-resources/index.html: still links to the old Arabic letters Drive file"
+echo "$lr_html" | grep -q 'href="https://github.com/kourgeorge"' ||
+  err "links-resources/index.html: no link to the GitHub profile"
+echo "$lr_html" | grep -q 'Talks and Presentations' ||
+  err "links-resources/index.html: the Talks and Presentations section is gone"
 
 # 17. Footer (from _includes/footer.liquid, a copy of al-folio's): on the 4
 # pages it reads "© <year> George Kour. All Rights Reserved." and has no

@@ -1,0 +1,33 @@
+{%- comment -%}
+  Projects and data-sets on Links & Resources (data: _data/github_projects.yml),
+  grouped by "group". Items are sorted by "order", so groups appear in the
+  order of their first item. Reuses the student-projects look (.student-projects
+  and .sp-* classes in _sass/_custom.scss) plus .gh-projects for small extras.
+  All links are external, so the page works in the preview build too.
+  markdown="0" keeps kramdown from changing the HTML.
+{%- endcomment -%}
+{%- assign gp_items = site.data.github_projects | sort: "order" -%}
+{%- assign gp_groups = gp_items | group_by: "group" -%}
+<section class="student-projects gh-projects" markdown="0">
+{%- for group in gp_groups %}
+<h5 class="sp-year gp-group">{{ group.name }}</h5>
+<ul class="sp-list">
+{%- for p in group.items %}
+<li class="sp-item gp-item">
+<div class="sp-title"><a href="{{ p.url }}" target="_blank" rel="noopener noreferrer"><strong>{{ p.title }}</strong></a></div>
+<div class="sp-summary">{{ p.blurb }}</div>
+{%- if p.stars or p.language or p.links %}
+<div class="sp-meta">
+{%- if p.stars %}<span class="sp-tag gp-stars" title="GitHub stars">&#9733; {{ p.stars }}</span>{% endif -%}
+{%- if p.language %}<span class="sp-tag">{{ p.language }}</span>{% endif -%}
+{%- if p.links.site %}<a class="sp-link" href="{{ p.links.site }}" target="_blank" rel="noopener noreferrer">[site]</a>{% endif -%}
+{%- if p.links.docs %}<a class="sp-link" href="{{ p.links.docs }}" target="_blank" rel="noopener noreferrer">[docs]</a>{% endif -%}
+{%- if p.links.pypi %}<a class="sp-link" href="{{ p.links.pypi }}" target="_blank" rel="noopener noreferrer">[PyPI]</a>{% endif -%}
+{%- if p.links.dataset %}<a class="sp-link" href="{{ p.links.dataset }}" target="_blank" rel="noopener noreferrer">[dataset]</a>{% endif -%}
+</div>
+{%- endif %}
+</li>
+{%- endfor %}
+</ul>
+{%- endfor %}
+</section>
