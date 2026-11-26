@@ -22,7 +22,7 @@ latest_posts:
   enabled: false # the blog is turned off
 ---
 
-<!-- Text from content/home.md, shortened for Home (T-26); the full details are in the CV. The heading ids are the old Google Sites anchors (see content/NOTES.md). The layout (_layouts/about.liquid) puts the selected publications where the marker below is. -->
+<!-- Text from content/home.md, shortened for Home (T-26); the full details are in the CV. The heading ids are the old Google Sites anchors (see content/NOTES.md). The layout (_layouts/about.liquid) puts News at the "news" marker and the selected publications at the "selected-publications" marker below. -->
 
 I am a senior researcher in the Language and Conversation Group at IBM Research, focusing on the evaluation, safety, and security of large language models and AI agents. My work examines how AI systems make decisions, express preferences, and behave in complex or adversarial settings, with an emphasis on developing methods for assessing reliability, alignment, and risk.
 
@@ -33,7 +33,7 @@ B.Sc. Computer Engineering, Technion · M.Sc., Tel Aviv University · Ph.D. Comp
 
 <p id="h.p_lujnsfikmTVd" class="hm-contact"><strong>Email:</strong> gkour(at)ibm.com / kourgeorge(at)gmail.com</p>
 
-<!-- selected-publications -->
+<!-- news -->
 
 <h3 id="h.q4wcjinfbaz1" class="lr-section">Research Interests</h3>
 
@@ -48,6 +48,8 @@ B.Sc. Computer Engineering, Technion · M.Sc., Tel Aviv University · Ph.D. Comp
   <li class="hm-tag">Cognitive Modeling</li>
   <li class="hm-tag">Reinforcement Learning</li>
 </ul>
+
+<!-- selected-publications -->
 
 <h3 id="h.p_zqA8I2zFqZvP" class="lr-section">Supported Organizations</h3>
 

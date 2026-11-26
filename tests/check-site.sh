@@ -183,7 +183,8 @@ grep -q 'selected-papers' "$SITE/publications/index.html" &&
 # _data/socials.yml) and a "CV" button linking to the CV on Drive, with the
 # plugin's own CV icon taken out so it is not shown twice; there is no
 # bottom <div class="social"> icon row. The main content runs: short bio,
-# Selected publications, Research Interests, Supported Organizations; the 7
+# News, Research Interests, Selected publications, Supported Organizations
+# (T-36 moved Research Interests above Selected publications); the 7
 # interests are tags and the 3 organizations are cards; the emails are shown
 # in the "(at)" form; the 1-column / 3-column org grid is in the CSS.
 banner_html="$(echo "$home_html" | grep -o '<div class="page-banner page-banner-home".*' | sed 's:<div class="container mt-5".*::')"
@@ -208,11 +209,11 @@ p_ri="$(pos '<h3 id="h.q4wcjinfbaz1" class="lr-section">Research Interests</h3>'
 p_so="$(pos '<h3 id="h.p_zqA8I2zFqZvP" class="lr-section">Supported Organizations</h3>')"
 if [ -z "$p_bio" ] || [ -z "$p_pub" ] || [ -z "$p_ri" ] || [ -z "$p_so" ]; then
   err "home/index.html: missing a section (bio '$p_bio', selected publications '$p_pub', Research Interests '$p_ri', Supported Organizations '$p_so')"
-elif ! [ "$p_bio" -lt "$p_pub" ] || ! [ "$p_pub" -lt "$p_ri" ] || ! [ "$p_ri" -lt "$p_so" ]; then
-  err "home/index.html: sections are not in the order bio, selected publications, Research Interests, Supported Organizations"
+elif ! [ "$p_bio" -lt "$p_ri" ] || ! [ "$p_ri" -lt "$p_pub" ] || ! [ "$p_pub" -lt "$p_so" ]; then
+  err "home/index.html: sections are not in the order bio, Research Interests, selected publications, Supported Organizations"
 fi
 # 19c. News on Home (T-35, from _news/ via _includes/home_news.liquid): a
-# "News" heading between the bio and Selected publications, with 5-6 items,
+# "News" heading between the bio and Research Interests, with 5-6 items,
 # each with a <time datetime="YYYY-MM" or "YYYY"> date shown as "Sep 2026"
 # or "2025", newest first (years never go up; months never go up within a
 # year when both items have one). Every link in the list is local (and has a
@@ -221,8 +222,8 @@ fi
 p_news="$(pos '<h3 id="news" class="lr-section">News</h3>')"
 if [ -z "$p_news" ]; then
   err "home/index.html: no News heading (<h3 id=\"news\" class=\"lr-section\">News</h3>)"
-elif [ -n "$p_bio" ] && [ -n "$p_pub" ] && { ! [ "$p_bio" -lt "$p_news" ] || ! [ "$p_news" -lt "$p_pub" ]; }; then
-  err "home/index.html: News is not between the bio and Selected publications"
+elif [ -n "$p_bio" ] && [ -n "$p_ri" ] && { ! [ "$p_bio" -lt "$p_news" ] || ! [ "$p_news" -lt "$p_ri" ]; }; then
+  err "home/index.html: News is not between the bio and Research Interests"
 fi
 news_html="$(echo "$home_main" | grep -o '<ul class="hm-news">.*' | sed 's:</ul>.*::')"
 n_news="$(echo "$news_html" | grep -o '<li class="hm-news-item">' | wc -l | tr -d ' ')"

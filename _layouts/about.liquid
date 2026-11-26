@@ -10,19 +10,25 @@ layout: default
   {%- endcomment -%}
   {%- comment -%}
     T-26: the page text is split at the "<!-- selected-publications -->"
-    marker in _pages/about.md, so the order is: short bio, selected
-    publications, Research Interests, Supported Organizations. The social
-    icons are in the banner, so there is no icon row at the bottom.
+    marker in _pages/about.md, and the first part again at the
+    "<!-- news -->" marker (T-36), so the order is: short bio, News,
+    Research Interests, selected publications, Supported Organizations. The
+    social icons are in the banner, so there is no icon row at the bottom.
   {%- endcomment -%}
   {%- assign about_parts = content | split: '<!-- selected-publications -->' -%}
+  {%- assign about_head = about_parts[0] | split: '<!-- news -->' -%}
   <article>
-    {{ about_parts[0] }}
+    {{ about_head[0] }}
 
     <!-- News (T-35): one-line items from _news/, newest first, no "all news" page -->
     {% if page.announcements and page.announcements.enabled %}
       <h3 id="news" class="lr-section">News</h3>
       {% include home_news.liquid %}
     {% endif %}
+
+    {%- for part in about_head offset: 1 %}
+      {{ part }}
+    {%- endfor %}
 
     <!-- Latest posts -->
     {% if page.latest_posts and page.latest_posts.enabled %}
