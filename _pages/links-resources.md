@@ -19,6 +19,7 @@ My open-source projects, datasets and research material, grouped by topic. More 
 
 <div class="lr-talks" markdown="1">
 
+- From Quality to Safety to Security: A Research Trajectory in AI Evaluation. A talk at Reichman University, May 2026. ([slides](https://docs.google.com/presentation/d/1c64eM0zZNFOd2uVuEXeiDCLWcfzDCsHr/edit?usp=sharing))
 - Introducing Attention Mechanism and Transformer Architecture for Language Modeling. ([here](https://drive.google.com/file/d/18BXEsjmcVoW8IfNP8IcP94LKDgc15ttm/view?usp=sharing))
 - A talk Presenting LAMBADA (AAAI 2020) at IBM AI Research Lab. ([here](https://youtu.be/SF4h1Q1uLaY))
 - A link to the "git for gits" mini-course. ([here](https://drive.google.com/file/d/1SaR2PCiQYv7jhkd2yv62F0oJOl1QBRsw/view?usp=sharing))

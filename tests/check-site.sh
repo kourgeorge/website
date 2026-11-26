@@ -12,8 +12,8 @@
 # and that the footer is only "© <year> George Kour. All Rights Reserved.",
 # and that Links & Resources and Teaching show their projects as cards, with
 # their section and course headings and no empty paragraphs, and that Home
-# has its sections in order (with a News list of 5-6 dated items, newest
-# first), 7 interest tags, 3 organization cards and the
+# has its sections in order (with a News list of 7 dated items, newest
+# first, including the Reichman University talk), 7 interest tags, 3 organization cards and the
 # social icons with a CV button in the banner (no bottom icon row).
 # It also builds the github.io preview (_config.preview.yml) into _site_preview
 # and checks that its local links all start with /website/ and work.
@@ -213,7 +213,7 @@ elif ! [ "$p_bio" -lt "$p_ri" ] || ! [ "$p_ri" -lt "$p_pub" ] || ! [ "$p_pub" -l
   err "home/index.html: sections are not in the order bio, Research Interests, selected publications, Supported Organizations"
 fi
 # 19c. News on Home (T-35, from _news/ via _includes/home_news.liquid): a
-# "News" heading between the bio and Research Interests, with 5-6 items,
+# "News" heading between the bio and Research Interests, with 7 items (T-37),
 # each with a <time datetime="YYYY-MM" or "YYYY"> date shown as "Sep 2026"
 # or "2025", newest first (years never go up; months never go up within a
 # year when both items have one). Every link in the list is local (and has a
@@ -227,7 +227,12 @@ elif [ -n "$p_bio" ] && [ -n "$p_ri" ] && { ! [ "$p_bio" -lt "$p_news" ] || ! [ 
 fi
 news_html="$(echo "$home_main" | grep -o '<ul class="hm-news">.*' | sed 's:</ul>.*::')"
 n_news="$(echo "$news_html" | grep -o '<li class="hm-news-item">' | wc -l | tr -d ' ')"
-{ [ "$n_news" -ge 5 ] && [ "$n_news" -le 6 ]; } || err "home/index.html: $n_news News items, expected 5-6"
+[ "$n_news" -eq 7 ] || err "home/index.html: $n_news News items, expected 7"
+# T-37: the Reichman University talk is in the News, linking to its slides.
+reichman_url='https://docs.google.com/presentation/d/1c64eM0zZNFOd2uVuEXeiDCLWcfzDCsHr/edit?usp=sharing'
+echo "$news_html" | grep -q "Talk at Reichman University: <a href=\"$reichman_url\"[^>]*>From Quality to Safety to Security: A Research Trajectory in AI Evaluation</a>" ||
+  err "home/index.html: no Reichman University talk in the News linking to its slides"
+echo "$news_html" | grep -q 'ouid=' && err "home/index.html: a News link has the personal ouid= parameter"
 n_dated="$(echo "$news_html" | grep -Eo '<li class="hm-news-item"> *<time class="hm-news-date" datetime="[0-9]{4}(-[0-9]{2})?">([A-Z][a-z]{2} )?[0-9]{4}</time>' | wc -l | tr -d ' ')"
 [ "$n_dated" -eq "$n_news" ] || err "home/index.html: only $n_dated of $n_news News items start with a date"
 prev_y=9999
@@ -396,7 +401,15 @@ echo "$lr_html" | grep -q '<h3 id="h.p_9RovSi7yLXnI" class="lr-section">Talks an
   err "links-resources/index.html: no 'Talks and Presentations:' section heading (class lr-section)"
 lr_main="$(echo "$lr_html" | grep -o '<article>.*</article>')"
 n_talks="$(echo "$lr_main" | grep -o '<div class="lr-talks">.*' | sed 's:</div>.*::' | grep -o '<li>' | wc -l | tr -d ' ')"
-[ "$n_talks" -ge 8 ] || err "links-resources/index.html: $n_talks talks inside <div class=\"lr-talks\">, expected at least 8"
+[ "$n_talks" -ge 9 ] || err "links-resources/index.html: $n_talks talks inside <div class=\"lr-talks\">, expected at least 9"
+# T-37: the first talk is the Reichman University 2026 talk, linking to its
+# slides (without the personal ouid= parameter).
+first_talk="$(echo "$lr_main" | grep -o '<div class="lr-talks">.*' | sed 's:</div>.*::' | grep -o '<li>.*' | sed 's:</li>.*::' | head -n 1)"
+echo "$first_talk" | grep -q 'Reichman University, May 2026' ||
+  err "links-resources/index.html: the first talk is not the Reichman University May 2026 talk"
+echo "$first_talk" | grep -q 'href="https://docs.google.com/presentation/d/1c64eM0zZNFOd2uVuEXeiDCLWcfzDCsHr/edit?usp=sharing"[^>]*>slides</a>' ||
+  err "links-resources/index.html: the first talk does not link to the Reichman slides"
+echo "$lr_main" | grep -q 'ouid=' && err "links-resources/index.html: a link has the personal ouid= parameter"
 echo "$lr_main" | grep -Eq '<p[^>]*>[[:space:]]*(<br */?>[[:space:]]*)*</p>' &&
   err "links-resources/index.html: empty <p></p> in the main content"
 echo "$lr_main" | grep -q '<hr' && err "links-resources/index.html: stray <hr> in the main content"

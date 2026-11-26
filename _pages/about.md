@@ -16,7 +16,7 @@ social: true # social icons and a CV button in the Home banner (_includes/page_b
 
 announcements:
   enabled: true # the News list on Home, from the _news/ folder (one small file per item)
-  limit: 6 # show at most 6 items, newest first
+  limit: 7 # show at most 7 items, newest first
 
 latest_posts:
   enabled: false # the blog is turned off
